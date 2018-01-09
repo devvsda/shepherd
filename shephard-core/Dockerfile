@@ -1,5 +1,7 @@
 FROM java:8
 
+RUN ["uname", "-a"]
+
 RUN apt-get update
 
 RUN apt-get install -y maven
