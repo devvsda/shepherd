@@ -1,9 +1,11 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
+import com.devsda.platform.shephardcore.model.HealthCheck;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -33,7 +35,6 @@ public class HealthCheckReources {
         return Response.ok(stringifyResponse).build();
     }
 
-    @Path("")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -42,6 +43,22 @@ public class HealthCheckReources {
         Map<String, String> response = new HashMap<>();
 
         response.put("echoString", echoText);
+        response.put("hostName", InetAddress.getLocalHost().getHostName());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String stringifyResponse = objectMapper.writeValueAsString(response);
+
+        return Response.ok(stringifyResponse).build();
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response healthCheck(@NotNull HealthCheck healthCheck) throws Exception {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("echoString", healthCheck.getEchoText());
         response.put("hostName", InetAddress.getLocalHost().getHostName());
 
         ObjectMapper objectMapper = new ObjectMapper();
