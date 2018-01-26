@@ -32,4 +32,21 @@ public class HealthCheckReources {
 
         return Response.ok(stringifyResponse).build();
     }
+
+    @Path("")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response healthCheckWithParameters(@QueryParam("echoText") String echoText) throws Exception {
+
+        Map<String, String> response = new HashMap<>();
+
+        response.put("echoString", echoText);
+        response.put("hostName", InetAddress.getLocalHost().getHostName());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String stringifyResponse = objectMapper.writeValueAsString(response);
+
+        return Response.ok(stringifyResponse).build();
+    }
 }

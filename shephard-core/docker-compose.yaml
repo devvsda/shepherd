@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: devsda/docker_file_heirarchy:v2
+    image: devsda/hitesh_dev_docker_app:v2
     deploy:
       replicas: 5
       resources:
