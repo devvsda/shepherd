@@ -1,0 +1,5 @@
+FROM devsda/docker_file_heirarchy:v1
+
+EXPOSE 8080
+
+CMD ["/usr/lib/jvm/java-8-openjdk-amd64/bin/java", "-cp", "target/shephard-core-1.0-SNAPSHOT.jar", "com.devsda.platform.shephardcore.application.ShephardApplication", "server", "scripts/dev-shephard-configuration.yaml"]

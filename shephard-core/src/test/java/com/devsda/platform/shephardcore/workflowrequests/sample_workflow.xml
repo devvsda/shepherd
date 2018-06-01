@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+
+    <hostnames>
+        <hostname>
+            <id>PummyAntyFoodShop</id>
+            <url></url>
+            <port></port>
+            <headers>
+                <header></header>
+                <header></header>
+            </headers>
+        </hostname>
+    </hostnames>
+
+    <graph>
+
+        <node>
+            <name>ValidateOrder</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>OrderType</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>GetOrderType</name>
+            <connections>
+                <connection>
+                    <edge>NonVeg</edge>
+                    <node>AssignNonVegKitchen</node>
+                </connection>
+                <connection>
+                    <edge>Veg</edge>
+                    <node>AssignVegKitchen</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>AssignNonVegKitchen</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>AssignChef</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>AssignVegKitchen</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>AssignChef</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>AssignChef</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>GatherIngredients</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>GatherIngredients</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>CookFood</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>CookFood</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>NotifyClient</node>
+                </connection>
+            </connections>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+        <node>
+            <name>NotifyClient</name>
+            <hostname>PummyAntyFoodShop</hostname>
+        </node>
+
+    </graph>
+
+</workflow>

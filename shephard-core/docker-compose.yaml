@@ -3,7 +3,7 @@ services:
   web:
     image: devsda/hitesh_dev_docker_app:v2
     deploy:
-      replicas: 5
+      replicas: 2
       resources:
         limits:
           cpus: "0.2"

@@ -5,4 +5,8 @@ public class ShephardConstants {
     public static final class Resources {
         public static final String HealthCheck = "/healthCheck";
     }
+
+    public static final class URI {
+
+    }
 }

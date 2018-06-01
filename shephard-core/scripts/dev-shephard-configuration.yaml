@@ -1,17 +1,24 @@
-
 environment: dev
 applicationName: shephard-core
 
 # Database settings.
 database:
   # the name of your JDBC driver
-  driverClass: org.h2.Driver
+  driverClass: com.microsoft.sqlserver.jdbc.SQLServerDriver
   # the username
-  user: sa
+  user: mdlreports@reports-dev-db
   # the password
-  password: sa
+  password: reporting@123
   # the JDBC URL
-  url: jdbc:h2:./target/example
+  url: jdbc:sqlserver://reports-dev-db.database.windows.net:1433;database=hitesh_dev_testing;user=mdladmin;password=MDL@dmin!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+  # the minimum number of connections to keep open
+  minSize: 8
+  # the maximum number of connections to keep open
+  maxSize: 32
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: true
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "SELECT 1;"
 
 server:
   rootPath: /shephard-manager

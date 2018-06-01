@@ -5,8 +5,9 @@ import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
-public class ShephardConfiguration extends Configuration {
+public class ShephardConfiguration extends Configuration implements Serializable {
 
     @NotNull
     @JsonProperty("environment")
@@ -42,5 +43,14 @@ public class ShephardConfiguration extends Configuration {
 
     public void setDatabase(DataSourceFactory database) {
         this.database = database;
+    }
+
+    @Override
+    public String toString() {
+        return "ShephardConfiguration{" +
+                "environment=" + environment +
+                ", applicationName='" + applicationName + '\'' +
+                ", database=" + database +
+                '}';
     }
 }
