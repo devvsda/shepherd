@@ -1,20 +1,21 @@
 package com.devsda.platform.shephardcore;
 
+import com.codahale.metrics.MetricRegistry;
 import com.devsda.platform.shephardcore.application.ShephardApplication;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
-import com.devsda.platform.shephardcore.util.YamlLoader;
+import com.devsda.platform.shephardcore.loader.YamlLoader;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 
 import java.io.IOException;
 
-public class ApplicationSetupUtil {
+public class ApplicationContextUtil {
 
-    public static Injector setupApplication() throws IOException {
+    public static Injector createApplicationInjector() throws IOException {
         ShephardApplication shephardApplication = new ShephardApplication();
 
         ShephardConfiguration shephardConfiguration = YamlLoader.load("scripts/dev-shephard-configuration.yaml", ShephardConfiguration.class);
-        Environment environment = new Environment("ShephardCore", null, null, null, null);
+        Environment environment = new Environment("ShephardCore", null, null, new MetricRegistry(), null);
 
         return shephardApplication.createInjector(shephardConfiguration, environment);
     }

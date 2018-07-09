@@ -1,27 +1,22 @@
+
 environment: dev
 applicationName: shephard-core
 
 # Database settings.
 database:
   # the name of your JDBC driver
-  driverClass: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  driverClass: com.mysql.jdbc.Driver
   # the username
-  user: mdlreports@reports-dev-db
+  user: hitesh_dev
   # the password
-  password: reporting@123
+  password: hitesh_dev
   # the JDBC URL
-  url: jdbc:sqlserver://reports-dev-db.database.windows.net:1433;database=hitesh_dev_testing;user=mdladmin;password=MDL@dmin!;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-  # the minimum number of connections to keep open
-  minSize: 8
-  # the maximum number of connections to keep open
-  maxSize: 32
-  # whether or not idle connections should be validated
-  checkConnectionWhileIdle: true
-  # the SQL query to run when validating a connection's liveness
-  validationQuery: "SELECT 1;"
+  url: jdbc:mysql://shepherd.cbvymfaw9jpv.us-east-1.rds.amazonaws.com:3306/shepherd_db
+
+  initialSize: 1
 
 server:
-  rootPath: /shephard-manager
+  rootPath: /shephard-core
   applicationConnectors:
     - type: http
       port: 8080
@@ -32,14 +27,14 @@ server:
 # Logging settings.
 logging:
   # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-  level: DEBUG
+  level: INFO
   # Logger-specific levels.
   loggers:
     # Sets the level for 'com.example.app' to DEBUG.
-    com.example.app: DEBUG
+    com.example.app: INFO
     # Redirects SQL logs to a separate file
     org.hibernate.SQL:
-      level: DEBUG
+      level: INFO
 
 # Logback's Time Based Rolling Policy - archivedLogFilenamePattern: /tmp/shephard-core-application-%d{yyyy-MM-dd}.log.gz
 # Logback's Size and Time Based Rolling Policy -  archivedLogFilenamePattern: /tmp/shephard-core-application-%d{yyyy-MM-dd}-%i.log.gz
@@ -48,7 +43,7 @@ logging:
   appenders:
     - type: console
     - type: file
-      threshold: DEBUG
+      threshold: INFO
       logFormat: "%-6level [%d{HH:mm:ss.SSS}] [%t] %logger{5} - %X{code} %msg %n"
       currentLogFilename: /tmp/application.log
       archivedLogFilenamePattern: /tmp/shephard-core-application-%d{yyyy-MM-dd}-%i.log.gz

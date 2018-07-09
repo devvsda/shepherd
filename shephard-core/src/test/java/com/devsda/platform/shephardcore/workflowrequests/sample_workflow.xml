@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workflow>
 
-    <hostnames>
-        <hostname>
-            <id>PummyAntyFoodShop</id>
-            <url></url>
-            <port></port>
-            <headers>
-                <header></header>
-                <header></header>
-            </headers>
-        </hostname>
-    </hostnames>
-
     <graph>
 
         <node>
@@ -20,7 +8,7 @@
             <connections>
                 <connection>
                     <edge>Yes</edge>
-                    <node>OrderType</node>
+                    <node>GetOrderType</node>
                 </connection>
             </connections>
             <hostname>PummyAntyFoodShop</hostname>

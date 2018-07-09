@@ -1,7 +1,6 @@
 package com.devsda.platform.shephardcore.loader;
 
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
-import com.devsda.platform.shephardcore.util.YamlLoader;
 import org.junit.Test;
 
 import java.io.IOException;

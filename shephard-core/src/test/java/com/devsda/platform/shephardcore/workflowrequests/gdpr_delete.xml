@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+
+    <graph>
+
+        <node>
+            <name>ValidateUser</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteMileIqData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteVisitsIqData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteSpendIqData</node>
+                </connection>
+            </connections>
+            <hostname>Nucleus</hostname>
+        </node>
+
+        <node>
+            <name>DeleteMileIqData</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteReportsData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteAnalyticsData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteTimeIqData</node>
+                </connection>
+            </connections>
+            <hostname>MilesIq</hostname>
+        </node>
+
+        <node>
+            <name>DeleteTimeIqData</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteReportsData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteAnalyticsData</node>
+                </connection>
+            </connections>
+            <hostname>MilesIq</hostname>
+        </node>
+
+
+        <node>
+            <name>DeleteVisitsIqData</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteReportsData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteAnalyticsData</node>
+                </connection>
+            </connections>
+            <hostname>VisitsIq</hostname>
+        </node>
+
+        <node>
+            <name>DeleteSpendIqData</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteReportsData</node>
+                </connection>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>DeleteAnalyticsData</node>
+                </connection>
+            </connections>
+            <hostname>SpendIq</hostname>
+        </node>
+
+        <node>
+            <name>DeleteReportsData</name>
+            <hostname>RMS</hostname>
+        </node>
+
+        <node>
+            <name>DeleteAnalyticsData</name>
+            <hostname>Panda</hostname>
+        </node>
+
+    </graph>
+
+</workflow>

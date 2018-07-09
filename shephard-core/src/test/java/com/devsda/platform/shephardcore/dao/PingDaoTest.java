@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.dao;
 
-import com.devsda.platform.shephardcore.ApplicationSetupUtil;
+import com.devsda.platform.shephardcore.ApplicationContextUtil;
 import com.google.inject.Injector;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -18,7 +18,7 @@ public class PingDaoTest {
 
     @BeforeClass
     public static void setUp() throws IOException {
-        Injector injector = ApplicationSetupUtil.setupApplication();
+        Injector injector = ApplicationContextUtil.createApplicationInjector();
         pingDao = injector.getInstance(PingDao.class);
     }
 
