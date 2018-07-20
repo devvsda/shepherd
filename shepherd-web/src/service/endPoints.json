@@ -1,0 +1,72 @@
+[
+  {
+    "endpointName": "first endpoint",
+    "endpointId": "11000",
+    "clientId": "1000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "second endpoint",
+    "endpointId": "12000",
+    "clientId": "1000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "third endpoint",
+    "endpointId": "21000",
+    "clientId": "2000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "forth endpoint",
+    "endpointId": "22000",
+    "clientId": "2000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "fifth endpoint",
+    "endpointId": "31000",
+    "clientId": "3000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "sixth endpoint",
+    "endpointId": "32000",
+    "clientId": "3000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  },
+  {
+    "endpointName": "seventh endpoint",
+    "endpointId": "41000",
+    "clientId": "4000",
+    "workflowGraph": "1",
+    "endpointsDetails": "dummy",
+    "createdAt": "today",
+    "updatedAt": "today",
+    "createdBy": "hitesh"
+  }
+]

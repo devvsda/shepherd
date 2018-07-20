@@ -1,0 +1,35 @@
+{
+  "executionId": "412",
+  "attemptId": "1111",
+  "attempts": [{
+    "name": "Trigger delete from CX page",
+    "attributes": {
+      "keyA": "val A",
+      "keyB": "val B",
+      "keyC": "val C"
+    },
+    "nodeSvgShape": {
+      "shape": "circle",
+      "shapeProps": {
+        "r": 10,
+        "fill": "green"
+      }
+    },
+    "children": [{
+      "name": "Trigger delete from visits page",
+      "attributes": {
+        "keyA": "val A",
+        "keyB": "val B",
+        "keyC": "val C"
+      },
+      "nodeSvgShape": {
+        "shape": "circle",
+        "shapeProps": {
+          "r": 10,
+          "fill": "green"
+        }
+      }
+    }
+    ]
+  }]
+}

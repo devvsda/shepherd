@@ -1,0 +1,30 @@
+[
+  {
+    "clientId": "1000",
+    "clientName": "new client1",
+    "createdAt": "Monday",
+    "updatedAt": "Tuesday",
+    "createdBy": "Deepak"
+  },
+  {
+    "clientId": "2000",
+    "clientName": "new client 2",
+    "createdAt": "Monday",
+    "updatedAt": "Tuesday",
+    "createdBy": "Deepak"
+  },
+  {
+    "clientId": "3000",
+    "clientName": "new client 3",
+    "createdAt": "Monday",
+    "updatedAt": "Tuesday",
+    "createdBy": "Deepak"
+  },
+  {
+    "clientId": "4000",
+    "clientName": "new client 4",
+    "createdAt": "Monday",
+    "updatedAt": "Tuesday",
+    "createdBy": "Deepak"
+  }
+]

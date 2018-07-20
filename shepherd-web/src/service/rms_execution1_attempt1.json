@@ -1,0 +1,82 @@
+[
+  {
+    "name":"FetchDataFromAllIqs",
+    "connections":[
+      {
+        "edgeName":"Generated",
+        "nodeName":"IsRequestType"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"IsRequestType",
+    "connections":[
+      {
+        "edgeName":"Xero",
+        "nodeName":"Xero"
+      },
+      {
+        "edgeName":"Concur",
+        "nodeName":"Concur"
+      },
+      {
+        "edgeName":"Freshbooks",
+        "nodeName":"Freshbooks"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"Xero",
+    "connections":[
+      {
+        "edgeName":"Uploaded",
+        "nodeName":"InformClient"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"Concur",
+    "connections":[
+      {
+        "edgeName":"Uploaded",
+        "nodeName":"InformClient"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"Freshbooks",
+    "connections":[
+      {
+        "edgeName":"Uploaded",
+        "nodeName":"InformClient"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"InformClient",
+    "connections": [
+      {
+        "edgeName": "Informed",
+        "nodeName": "UpdateInternalState"
+      }
+    ],
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"UpdateInternalState",
+    "connections": null,
+    "hostname":"RMS",
+    "class": "type-OK"
+  }
+]

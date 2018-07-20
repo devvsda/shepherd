@@ -1,0 +1,78 @@
+[
+  {
+    "name":"ValidateUser",
+    "connections":[
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteMileIqData"
+      },
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteVisitsIqData"
+      },
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteSpendIqData"
+      }
+    ],
+    "hostname":"Nucleus",
+    "class": "type-OK"
+  },
+  {
+    "name":"DeleteMileIqData",
+    "connections":[
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteReportsData"
+      },
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteAnalyticsData"
+      }
+    ],
+    "hostname":"MilesIq",
+    "class": "type-OK"
+  },
+  {
+    "name":"DeleteVisitsIqData",
+    "connections":[
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteReportsData"
+      },
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteAnalyticsData"
+      }
+    ],
+    "hostname":"VisitsIq",
+    "class": "type-OK"
+  },
+  {
+    "name":"DeleteSpendIqData",
+    "connections":[
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteReportsData"
+      },
+      {
+        "edgeName":"Yes",
+        "nodeName":"DeleteAnalyticsData"
+      }
+    ],
+    "hostname":"SpendIq",
+    "class": "type-OK"
+  },
+  {
+    "name":"DeleteReportsData",
+    "connections": null,
+    "hostname":"RMS",
+    "class": "type-OK"
+  },
+  {
+    "name":"DeleteAnalyticsData",
+    "connections": null,
+    "hostname":"Panda",
+    "class": "type-OK"
+  }
+]
