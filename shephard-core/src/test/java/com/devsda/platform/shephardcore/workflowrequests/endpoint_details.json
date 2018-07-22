@@ -1,0 +1,66 @@
+[
+  {
+    "team" : "RMS",
+    "nodeDetails" : [
+      {
+        "name" : "FetchDataFromAllIqs",
+        "URI" : "/api/1/reports",
+        "method" : "POST",
+        "headers" : [
+          {
+            "content-type" : "application/pdf"
+          }
+        ]
+      } ,
+      {
+        "name" : "IsRequestType",
+        "URI" : "/api/1/fetchExpenseService",
+        "method" : "POST"
+      } ,
+      {
+        "name" : "Xero",
+        "URI" : "/api/1/execute/xero",
+        "method" : "POST"
+      } ,
+      {
+        "name" : "Concur",
+        "URI" : "/api/1/execute/concur",
+        "method" : "POST"
+      } ,
+      {
+        "name" : "Freshbooks",
+        "URI" : "/api/1/execute/freshbooks",
+        "method" : "POST"
+      } ,
+      {
+        "name" : "InformClient",
+        "URI" : "/api/1/informClient",
+        "method" : "POST"
+      } ,
+      {
+        "name" : "UpdateInternalState",
+        "URI" : "/api/1/updateInternalState",
+        "method" : "POST"
+      }
+    ],
+    "headers" : [
+      {
+        "key" : "content-type",
+        "value" : "application/json"
+      },
+      {
+        "key" : "X-MileIQ-API-Key",
+        "value" : "XYZ"
+      },
+      {
+        "key" : "X-MileIQ-Application-Id",
+        "value" : "ABC"
+      }
+    ] ,
+    "hostname" : {
+      "endpoint" : "http://reports-staging.mobiledatalabs.com",
+      "port" : 8000
+    }
+
+  }
+]
