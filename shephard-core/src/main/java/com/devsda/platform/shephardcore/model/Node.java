@@ -6,7 +6,7 @@ public class Node {
 
     private String name;
     private List<Connection> connections;
-    private String hostname;
+    private String owner;
 
     public String getName() {
         return name;
@@ -24,12 +24,12 @@ public class Node {
         this.connections = connections;
     }
 
-    public String getHostname() {
-        return hostname;
+    public String getOwner() {
+        return owner;
     }
 
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Node {
         return "Node{" +
                 "name='" + name + '\'' +
                 ", connections=" + connections +
-                ", hostname='" + hostname + '\'' +
+                ", owner='" + owner + '\'' +
                 '}';
     }
 }

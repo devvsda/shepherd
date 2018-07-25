@@ -1,7 +1,6 @@
 package com.devsda.platform.shephardcore.graphgenerator;
 
 import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +104,7 @@ public class DAGGenerator {
                 } else if(ShephardConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
                     node.setName(thisNodeInformation.getTextContent());
                 } else if(ShephardConstants.Graph.HOSTNAME.equals(thisNodeInformation.getNodeName())) {
-                    node.setHostname(thisNodeInformation.getTextContent());
+                    node.setOwner(thisNodeInformation.getTextContent());
                 }
             }
         }
