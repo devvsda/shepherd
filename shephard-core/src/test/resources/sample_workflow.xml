@@ -11,7 +11,7 @@
                     <node>GetOrderType</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -26,7 +26,7 @@
                     <node>AssignVegKitchen</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -37,7 +37,7 @@
                     <node>AssignChef</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -48,7 +48,7 @@
                     <node>AssignChef</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -59,7 +59,7 @@
                     <node>GatherIngredients</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -70,7 +70,7 @@
                     <node>CookFood</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
@@ -81,12 +81,12 @@
                     <node>NotifyClient</node>
                 </connection>
             </connections>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
         <node>
             <name>NotifyClient</name>
-            <hostname>PummyAntyFoodShop</hostname>
+            <owner>PummyAntyFoodShop</owner>
         </node>
 
     </graph>
