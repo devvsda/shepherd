@@ -103,7 +103,7 @@ public class DAGGenerator {
                     node.setConnections(connections);
                 } else if(ShephardConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
                     node.setName(thisNodeInformation.getTextContent());
-                } else if(ShephardConstants.Graph.HOSTNAME.equals(thisNodeInformation.getNodeName())) {
+                } else if(ShephardConstants.Graph.OWNER.equals(thisNodeInformation.getNodeName())) {
                     node.setOwner(thisNodeInformation.getTextContent());
                 }
             }

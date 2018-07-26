@@ -1,12 +1,16 @@
 package com.devsda.platform.shephardcore.model;
 
+import com.devsda.platform.shephardcore.constants.NodeState;
+
 import java.util.List;
 
 public class Node {
 
     private String name;
     private List<Connection> connections;
+    private List<Node> parentNodes;
     private String owner;
+    private NodeState nodeState = NodeState.NOT_PROCESSED;
 
     public String getName() {
         return name;
@@ -32,12 +36,30 @@ public class Node {
         this.owner = owner;
     }
 
+    public NodeState getNodeState() {
+        return nodeState;
+    }
+
+    public void setNodeState(NodeState nodeState) {
+        this.nodeState = nodeState;
+    }
+
+    public List<Node> getParentNodes() {
+        return parentNodes;
+    }
+
+    public void setParentNodes(List<Node> parentNodes) {
+        this.parentNodes = parentNodes;
+    }
+
     @Override
     public String toString() {
         return "Node{" +
                 "name='" + name + '\'' +
                 ", connections=" + connections +
+                ", parentNodes=" + parentNodes +
                 ", owner='" + owner + '\'' +
+                ", nodeState=" + nodeState +
                 '}';
     }
 }
