@@ -20,7 +20,7 @@ public class ShephardConstants {
         public static final String GRAPH = "graph";
         public static final String NODE = "node";
         public static final String NAME = "name";
-        public static final String HOSTNAME = "hostname";
+        public static final String OWNER = "owner";
         public static final String CONNECTIONS = "connections";
         public static final String CONNECTION = "connection";
         public static final String EDGE = "edge";
