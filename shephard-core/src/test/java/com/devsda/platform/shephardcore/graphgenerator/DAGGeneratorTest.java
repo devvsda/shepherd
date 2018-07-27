@@ -23,7 +23,7 @@ public class DAGGeneratorTest {
     @Test
     public void generateDAGTest() throws Exception {
 
-        Graph graph = dagGenerator.generate("src/test/java/com/devsda/platform/shephardcore/workflowrequests/sample_workflow.xml");
+        Graph graph = dagGenerator.generate("./src/test/resources/sample_workflow.xml");
 
         System.out.println(graph);
     }

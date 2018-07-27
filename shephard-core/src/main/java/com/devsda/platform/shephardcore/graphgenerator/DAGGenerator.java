@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.Connection;
 import com.devsda.platform.shephardcore.model.Graph;
+import com.devsda.platform.shephardcore.model.GraphType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,6 +33,9 @@ public class DAGGenerator {
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document doc = dBuilder.parse(file);
         doc.getDocumentElement().normalize();
+
+        Node workflowType = doc.getDocumentElement().getElementsByTagName(ShephardConstants.Graph.TYPE).item(0);
+        graph.setGraphType(GraphType.valueOf(workflowType.getTextContent()));
 
         Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShephardConstants.Graph.GRAPH).item(0);
 

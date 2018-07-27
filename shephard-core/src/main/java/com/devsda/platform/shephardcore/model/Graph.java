@@ -4,6 +4,8 @@ import java.util.List;
 
 public class Graph {
 
+    private GraphType graphType;
+
     private List<Node> nodes;
 
     public List<Node> getNodes() {
@@ -14,10 +16,19 @@ public class Graph {
         this.nodes = nodes;
     }
 
+    public GraphType getGraphType() {
+        return graphType;
+    }
+
+    public void setGraphType(GraphType graphType) {
+        this.graphType = graphType;
+    }
+
     @Override
     public String toString() {
         return "Graph{" +
-                "nodes=" + nodes +
+                "graphType=" + graphType +
+                ", nodes=" + nodes +
                 '}';
     }
 }

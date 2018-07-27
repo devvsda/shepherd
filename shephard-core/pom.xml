@@ -108,6 +108,12 @@
             <version>8.0.11</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.devsda.platform</groupId>
+            <artifactId>shepherd-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
