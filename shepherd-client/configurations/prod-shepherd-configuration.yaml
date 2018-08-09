@@ -1,0 +1,6 @@
+server :
+  hostname : https://dev.shepherd.devsda.com
+  port : 8080
+
+headers :
+  Content-Type : application/json

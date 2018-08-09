@@ -17,6 +17,7 @@ public class ShephardConstants {
     }
 
     public static final class Graph {
+        public static final String TYPE = "type";
         public static final String GRAPH = "graph";
         public static final String NODE = "node";
         public static final String NAME = "name";
