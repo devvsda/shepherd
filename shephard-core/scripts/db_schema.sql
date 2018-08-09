@@ -2,8 +2,8 @@ CREATE DATABASE IF NOT EXISTS shepherd_db;
 
 use shepherd_db;
 
-CREATE TABLE IF NOT EXISTS client_details (
-client_id int primary key,
+CREATE TABLE IF NOT EXISTS client_details(
+client_id int AUTO_INCREMENT primary key,
 client_name varchar(255) NOT NULL,
 created_at DATETIME,
 updated_at DATETIME,

@@ -27,7 +27,6 @@ public class ClientRegisterationResources {
     @Inject
     public ResourceHelper resourceHelper;
 
-
     @POST
     @Path(ShephardConstants.Resources.CLIENT)
     @Consumes(MediaType.APPLICATION_JSON)

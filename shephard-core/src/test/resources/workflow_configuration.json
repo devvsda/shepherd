@@ -18,37 +18,37 @@
       "nodeConfigurations" : [
         {
           "name" : "ValidateOrder",
-          "URI" : "/validateOrder",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/validateOrder",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "GetOrderType",
-          "URI" : "/getOrderType",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/getOrderType",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "AssignNonVegKitchen",
-          "URI" : "/assignNonVegKitchen",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/assignNonVegKitchen",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "AssignVegKitchen",
-          "URI" : "/assignVegKitchen",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/assignVegKitchen",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "AssignChef",
-          "URI" : "/assignChef",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/assignChef",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "GatherIngredients",
-          "URI" : "/gatherIngredients",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/gatherIngredients",
           "httpMethod" : "POST"
         } ,
         {
           "name" : "CookFood",
-          "URI" : "/cookFood",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/cookFood",
           "httpMethod" : "POST",
           "headers" : {
             "content-type" : "application/pdf"
@@ -56,7 +56,7 @@
         },
         {
           "name" : "NotifyClient",
-          "URI" : "/notifyClient",
+          "URI" : "/dominos-shepherd-client/order-management-workflow/notifyClient",
           "httpMethod" : "POST"
         }
       ]
