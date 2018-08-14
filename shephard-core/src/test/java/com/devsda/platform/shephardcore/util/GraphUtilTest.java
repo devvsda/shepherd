@@ -13,7 +13,7 @@ public class GraphUtilTest {
     public void getNodeToParentNodeRelationTest() throws Exception {
         DAGGenerator dagGenerator = new DAGGenerator();
         Graph graph = dagGenerator.generate("./src/test/resources/sample_workflow.xml");
-        Map<String, List<String>> nodeToParentRelation = GraphUtil.getNodeToParentNodeRelation(graph);
+        Map<String, List<String>> nodeToParentRelation = GraphUtil.getNodeToParentNodesMapping(graph);
         System.out.println(nodeToParentRelation);
     }
 }

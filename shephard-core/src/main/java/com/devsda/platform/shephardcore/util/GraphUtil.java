@@ -1,6 +1,8 @@
 package com.devsda.platform.shephardcore.util;
 
 import com.devsda.platform.shephardcore.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +11,9 @@ import java.util.Map;
 
 public class GraphUtil {
 
-    public static Map<String, List<String>> getNodeToParentNodeRelation(Graph graph) {
+    private static final Logger log = LoggerFactory.getLogger(GraphUtil.class);
+
+    public static Map<String, List<String>> getNodeToParentNodesMapping(Graph graph) {
 
         Map<String, List<String>> nodeToParentNodesRelation = new HashMap<>();
 
@@ -37,7 +41,9 @@ public class GraphUtil {
         return nodeToParentNodesRelation;
     }
 
-    public static Map<String, Node> nameWiseMapping(Graph graph) {
+    public static Map<String, Node> getNodeNameToNodeMapping(Graph graph) {
+
+        log.debug(String.format("Generating node name to node details mapping."));
 
         Map<String, Node> nameWiseNodeMapping = new HashMap<>();
 
@@ -51,7 +57,7 @@ public class GraphUtil {
 
     public static String getRootNode(Graph graph) {
 
-        Map<String, List<String>> nodeToParentNodeRelation = getNodeToParentNodeRelation(graph);
+        Map<String, List<String>> nodeToParentNodeRelation = getNodeToParentNodesMapping(graph);
 
         for(Map.Entry<String, List<String>> relation : nodeToParentNodeRelation.entrySet()) {
 
@@ -63,7 +69,9 @@ public class GraphUtil {
         return null;
     }
 
-    public static Map<String, NodeConfiguration> getNodeNameToConfigurationMapping(GraphConfiguration graphConfiguration) {
+    public static Map<String, NodeConfiguration> getNodeNameToNodeConfigurationMapping(GraphConfiguration graphConfiguration) {
+
+        log.debug(String.format("Generating node name to node configuration mapping."));
 
         Map<String, NodeConfiguration> nodeNameToConfigurationMapping = new HashMap<>();
 
@@ -86,7 +94,9 @@ public class GraphUtil {
         return nodeNameToConfigurationMapping;
     }
 
-    public static Map<String, TeamConfiguration> getTeamNameToConfigurationMapping(GraphConfiguration graphConfiguration) {
+    public static Map<String, TeamConfiguration> getTeamNameToTeamConfigurationMapping(GraphConfiguration graphConfiguration) {
+
+        log.debug(String.format("Generating team name to team configuration mapping."));
 
         Map<String, TeamConfiguration> teamNameToConfigurationMapping = new HashMap<>();
 
