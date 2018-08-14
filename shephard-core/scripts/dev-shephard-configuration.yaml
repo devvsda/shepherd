@@ -7,11 +7,11 @@ database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver
   # the username
-  user: hitesh_dev
+  user: shepherd
   # the password
-  password: hitesh_dev
+  password: shepherd
   # the JDBC URL
-  url: jdbc:mysql://shepherd.cbvymfaw9jpv.us-east-1.rds.amazonaws.com:3306/shepherd_db
+  url: jdbc:mysql://shepherd.cpdwhawnvczl.us-east-1.rds.amazonaws.com:3306/shepherd_master
 
   initialSize: 1
 
