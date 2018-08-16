@@ -11,7 +11,7 @@ public class ShepherdClientTest {
     private static ShepherdClient shepherdClient;
 
     @BeforeClass
-    public static void setUp() {
+    public static void setUp() throws Exception {
         shepherdClient = new ShepherdClient(Environment.DEV);
     }
 
@@ -22,6 +22,8 @@ public class ShepherdClientTest {
 
     @Test
     public void registerClientTest() {
+
+        shepherdClient.registerClient("hitesh_dev");
 
     }
 }

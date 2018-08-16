@@ -1,5 +1,5 @@
 server :
-  hostname : https://dev.shepherd.devsda.com
+  hostname : http://localhost
   port : 8080
 
 headers :
