@@ -43,6 +43,7 @@ public class ShepherdClient {
         try {
             log.info(String.format("Going to register client with name : %s", clientName));
             registerClientRequest = new RegisterClientRequest();
+            registerClientRequest.setClientName(clientName);
 
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
@@ -54,9 +55,6 @@ public class ShepherdClient {
             log.error(String.format("Problem while hotting Shepherd service for client : %s", clientName), e);
             throw new ShepherdInternalException(e);
         }
-
-
-
 
     }
 

@@ -1,4 +1,4 @@
-version: "3"
+ version: "3"
 services:
   web:
     image: devsda/hitesh_dev_docker_app:v2

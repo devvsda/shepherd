@@ -4,7 +4,6 @@ import com.devsda.platform.shephardcore.ApplicationContextUtil;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.model.RegisterClientRequest;
 import com.devsda.platform.shephardcore.util.DateUtil;
 import com.google.inject.Injector;
 import org.junit.AfterClass;

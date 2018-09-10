@@ -1,13 +1,5 @@
 package com.devsda.platform.shephardcore.graphgenerator;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.Connection;
 import com.devsda.platform.shephardcore.model.Graph;
@@ -19,10 +11,29 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * This class helps to generate @{@link Graph} object from user defined graph xml.
+ */
 public class DAGGenerator {
 
+    /**
+     * This method generate @{@link Graph} object after loading given xml file.
+     *
+     * @param filePath
+     * @return
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     */
     public Graph generate(String filePath) throws ParserConfigurationException, SAXException, IOException {
 
         Graph graph = new Graph();
@@ -57,6 +68,15 @@ public class DAGGenerator {
         return graph;
     }
 
+    /**
+     * This method generate @{@link Graph} object from srtingified version of xml
+     *
+     * @param stringifyXML
+     * @return
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     */
     public Graph generateFromString(String stringifyXML) throws ParserConfigurationException, SAXException, IOException {
 
         Graph graph = new Graph();
@@ -90,6 +110,11 @@ public class DAGGenerator {
         return graph;
     }
 
+    /**
+     * This method builds @{@link com.devsda.platform.shephardcore.model.Node} by extracting data from corresponding xml field.
+     * @param element
+     * @return
+     */
     private com.devsda.platform.shephardcore.model.Node buildNode(Element element) {
 
         com.devsda.platform.shephardcore.model.Node node = new com.devsda.platform.shephardcore.model.Node();
@@ -116,6 +141,11 @@ public class DAGGenerator {
         return node;
     }
 
+    /**
+     * This method builds @{@link Connection} by iterating all child nodes.
+     * @param element
+     * @return
+     */
     private List<Connection> buildConnections(Element element) {
 
         List<Connection> connections = new ArrayList<>();
@@ -130,16 +160,18 @@ public class DAGGenerator {
                 Connection connection = buildConnection((Element) thisDOMConnection);
                 connections.add(connection);
             }
-
         }
-
         return connections;
     }
 
+    /**
+     * This method builds @{@link Connection} object of every edge between parent and child node
+     * @param element
+     * @return
+     */
     private Connection buildConnection(Element element) {
 
         Connection connection = new Connection();
-
         NodeList connectionDOMDetails = element.getChildNodes();
 
         for(int iter = 0; iter < connectionDOMDetails.getLength(); iter++) {
@@ -152,6 +184,7 @@ public class DAGGenerator {
 
                 if(ShephardConstants.Graph.EDGE.equals(thisDOMConnection.getNodeName())) {
                     connection.setEdgeName(thisElement.getTextContent());
+
                 } else if (ShephardConstants.Graph.NODE.equals(thisDOMConnection.getNodeName())) {
                     connection.setNodeName(thisElement.getTextContent());
                 }

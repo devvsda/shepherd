@@ -1,5 +1,5 @@
 server :
-  hostname : http://localhost
+  hostname : localhost
   port : 8080
 
 headers :

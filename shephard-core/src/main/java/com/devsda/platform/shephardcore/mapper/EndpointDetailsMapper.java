@@ -8,8 +8,19 @@ import javax.xml.ws.Endpoint;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class helps to map endpoint_details table raw data into @{@link EndpointDetails} model.
+ */
 public class EndpointDetailsMapper implements ResultSetMapper<EndpointDetails> {
 
+    /**
+     * This method helps to map endpoint_details table raw data into @{@link EndpointDetails} model.
+     * @param i
+     * @param resultSet
+     * @param statementContext
+     * @return
+     * @throws SQLException
+     */
     @Override
     public EndpointDetails map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
 

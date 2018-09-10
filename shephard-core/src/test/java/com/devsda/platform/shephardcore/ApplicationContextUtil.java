@@ -14,7 +14,7 @@ public class ApplicationContextUtil {
     public static Injector createApplicationInjector() throws IOException {
         ShephardApplication shephardApplication = new ShephardApplication();
 
-        ShephardConfiguration shephardConfiguration = YamlLoader.load("scripts/dev-shephard-configuration.yaml", ShephardConfiguration.class);
+        ShephardConfiguration shephardConfiguration = YamlLoader.load("scripts/dev-shepherd-configuration.yaml", ShephardConfiguration.class);
         Environment environment = new Environment("ShephardCore", null, null, new MetricRegistry(), null);
 
         return shephardApplication.createInjector(shephardConfiguration, environment);

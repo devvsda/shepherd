@@ -13,6 +13,9 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.util.List;
 
+/**
+ * This is a Data Accessor class to communicate with DB.
+ */
 public interface RegisterationDao {
 
     @SqlUpdate("insert into client_details(client_name, created_at, updated_at, created_by) values(:clientDetails.clientName, :clientDetails.createdAt, :clientDetails.updatedAt, :clientDetails.submittedBy)")

@@ -9,18 +9,34 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * This class helps to load json from file/string and vice-versa.
+ */
 public class JSONLoader {
 
+    /**
+     * This method helps to convert any object to stringified json.
+     * @param object
+     * @return
+     * @throws IOException
+     */
     public static String stringify(Object object) throws IOException {
 
         ObjectMapper objectMapper = Jackson.newObjectMapper();
-
 
         String stringify = objectMapper.writeValueAsString(object);
 
         return stringify;
     }
 
+    /**
+     * This method helps to load json file into given data class object.
+     * @param filePath
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
     public static <T> T load(String filePath, Class<T> clazz) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -38,6 +54,14 @@ public class JSONLoader {
         return obj;
     }
 
+    /**
+     * This method helps to load json file from resources folder into given data class object.
+     * @param fileName
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
     public static <T> T loadFromResources(String fileName, Class<T> clazz) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();

@@ -2,15 +2,18 @@ package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ResourceName;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.model.RegisterClientRequest;
 import com.devsda.platform.shephardcore.model.RegisterEndpointRequest;
 import com.devsda.platform.shephardcore.service.ClientRegisterationService;
+import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -27,6 +30,10 @@ public class ClientRegisterationResources {
     @Inject
     public ResourceHelper resourceHelper;
 
+    /**
+     * @param registerClientRequest
+     * @return
+     */
     @POST
     @Path(ShephardConstants.Resources.CLIENT)
     @Consumes(MediaType.APPLICATION_JSON)
