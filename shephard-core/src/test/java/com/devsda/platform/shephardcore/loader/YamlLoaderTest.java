@@ -12,7 +12,7 @@ public class YamlLoaderTest {
     @Test
     public void loadTest() throws IOException {
 
-        ShephardConfiguration shephardConfiguration = YamlLoader.load("scripts/dev-shephard-configuration.yaml", ShephardConfiguration.class);
+        ShephardConfiguration shephardConfiguration = YamlLoader.load("scripts/dev-shepherd-configuration.yaml", ShephardConfiguration.class);
 
         System.out.println(shephardConfiguration);
 

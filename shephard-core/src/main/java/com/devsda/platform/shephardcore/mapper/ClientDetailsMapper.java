@@ -7,8 +7,19 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class helps to map client_details table raw data into @{@link ClientDetails} model.
+ */
 public class ClientDetailsMapper implements ResultSetMapper<ClientDetails>{
 
+    /***
+     * This method helps to map client_details table raw data into @{@link ClientDetails} model.
+     * @param i
+     * @param resultSet
+     * @param statementContext
+     * @return
+     * @throws SQLException
+     */
     @Override
     public ClientDetails map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
 
