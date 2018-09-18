@@ -10,7 +10,7 @@ import java.io.IOException;
 public class YAMLLoader {
 
     public static <T> T load(String filePath, Class<T> clazz) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());//new ObjectMapper(new YAMLFactory());
+        ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
         File file = new File(filePath);
 

@@ -43,7 +43,7 @@ public class ClientRegisterationResources {
         try {
             log.info(String.format("Processing register client for %s", registerClientRequest));
 
-            clientRegisterationService.registerClient(registerClientRequest);
+            Integer clientId = clientRegisterationService.registerClient(registerClientRequest);
 
             log.info(String.format("Processing successfully completed for register client for %s", registerClientRequest));
 
