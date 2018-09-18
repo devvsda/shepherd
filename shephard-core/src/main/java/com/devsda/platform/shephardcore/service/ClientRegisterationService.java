@@ -20,7 +20,7 @@ public class ClientRegisterationService {
     @Inject
     public RegisterationDao registerationDao;
 
-    public void registerClient(RegisterClientRequest registerClientRequest) {
+    public Integer registerClient(RegisterClientRequest registerClientRequest) {
 
         log.info(String.format("Processing register client for %s", registerClientRequest));
 
@@ -28,11 +28,15 @@ public class ClientRegisterationService {
 
         ClientDetails isItRegistered = registerationDao.getClientDetails(registerClientRequest.getClientName());
 
+        Integer clientId = null;
+
         if(isItRegistered == null) {
-            registerationDao.registerClient(clientDetails);
+            clientId = registerationDao.registerClient(clientDetails);
         } else {
             throw new ClientInvalidRequestException(String.format("Username %s already exists.", registerClientRequest.getClientName()));
         }
+
+        return clientId;
     }
 
     public void registerEndpoint(RegisterEndpointRequest registerEndpointRequest) {

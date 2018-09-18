@@ -1,15 +1,22 @@
 package com.devsda.platform.shepherd.model;
 
+import com.devsda.platform.shepherd.constants.ResourceName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class ShepherdRequest {
 
+    @JsonProperty("created_at")
     private Date createdAt;
 
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
+    @JsonProperty("resource_name")
     private ResourceName resourceName;
 
+    @JsonProperty("submitted_by")
     private String submittedBy;
 
     public ShepherdRequest(ResourceName resourceName) {
