@@ -15,6 +15,7 @@ import com.devsda.platform.shepherdclient.model.ServerDetails;
 import com.devsda.platform.shepherdclient.model.ShepherdServerConfiguration;
 import com.devsda.utils.httputils.HttpMethod;
 import com.devsda.utils.httputils.loader.JsonLoader;
+import com.devsda.utils.httputils.methods.HttpGetMethod;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShepherdClient {
 
@@ -86,6 +89,24 @@ public class ShepherdClient {
             throw new ShepherdInternalException(String.format("Problem while hitting Register Endpoint API for client : %s, endpointName : %s", clientName, endpointName), ex);
         }
 
+    }
+
+    public ShepherdResponse retrieveEndpoint(String clientName, String endpointName) {
+
+        try {
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("clientName", clientName);
+            parameters.put("endpointName", endpointName);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            HttpMethod httpMethod = new HttpGetMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.RETRIEVE_ENDPOINT, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
+            return shepherdResponse;
+        } catch (Exception e) {
+            log.error("Retrival endpoint failed", e);
+            throw new ShepherdInternalException("dscasdc");
+        }
     }
 
 //    public void executeEndpoint(String clientName, String endpointName, Map<String, Object> initialPayload) {

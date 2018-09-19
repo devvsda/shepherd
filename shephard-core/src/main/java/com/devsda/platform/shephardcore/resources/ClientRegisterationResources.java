@@ -81,7 +81,7 @@ public class ClientRegisterationResources {
 
         } catch(Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_ENDPOINT, null, null, e.getLocalizedMessage())).build();
         }
 
     }

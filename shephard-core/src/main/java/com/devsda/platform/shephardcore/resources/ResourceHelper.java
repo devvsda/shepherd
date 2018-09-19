@@ -16,8 +16,9 @@ public class ResourceHelper {
 
     public ShepherdResponse createShepherdResponse(ResourceName resourceName, Map<String, Object> resourceResponse, String message, String errorMessage) {
 
-        ShepherdResponse shepherdResponse = new ShepherdResponse(resourceName);
+        ShepherdResponse shepherdResponse = new ShepherdResponse();
 
+        shepherdResponse.setResourceName(resourceName);
         shepherdResponse.setMessage(message);
         shepherdResponse.setErrorMessage(errorMessage);
         shepherdResponse.setResponseData(resourceResponse);

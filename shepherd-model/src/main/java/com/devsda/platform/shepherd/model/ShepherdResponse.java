@@ -27,9 +27,8 @@ public class ShepherdResponse {
     @JsonProperty("response_data")
     private Map<String, Object> responseData;
 
-    public ShepherdResponse(ResourceName resourceName) {
+    public ShepherdResponse() {
         this.responseTime = DateUtil.currentDate();
-        this.resourceName = resourceName;
     }
 
     public Date getResponseTime() {
