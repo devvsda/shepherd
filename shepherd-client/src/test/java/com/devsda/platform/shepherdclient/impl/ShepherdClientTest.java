@@ -23,7 +23,20 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() {
 
-        ShepherdResponse shepherdResponse = shepherdClient.registerClient("hitesh_dev");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("hitesh_dev_1");
+        System.out.println(shepherdResponse);
+
+    }
+    
+
+    @Test
+    public void retrieveEndpointTest() {
+
+        String clientName = "hitesh_dev_1";
+        String endpointName = "sdk_testing";
+
+        ShepherdResponse shepherdResponse = shepherdClient.retrieveEndpoint(clientName, endpointName);
+
         System.out.println(shepherdResponse);
 
     }

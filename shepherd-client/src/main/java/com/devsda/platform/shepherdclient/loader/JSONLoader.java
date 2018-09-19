@@ -28,6 +28,15 @@ public class JSONLoader {
         return stringify;
     }
 
+    public static <T> T loadFromStringifiedObject(String stringifiedObject, Class<T> clazz) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        T object = objectMapper.readValue(stringifiedObject, clazz);
+
+        return object;
+    }
+
     /**
      * This method helps to load json file into given data class object.
      * @param filePath

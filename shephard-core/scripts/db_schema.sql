@@ -11,7 +11,8 @@ created_by varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS endpoint_details(
-endpoint_id int primary key,
+endpoint_id int AUTO_INCREMENT primary key,
+endpoint_name varchar(255),
 client_id int,
 workflow_graph BLOB,
 endpoint_details BLOB,
