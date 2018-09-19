@@ -27,18 +27,7 @@ public class ShepherdClientTest {
         System.out.println(shepherdResponse);
 
     }
-
-    @Test
-    public void registerEndpointTest() {
-
-        String graphFilePath = "./src/test/resources/sample_workflow.xml";
-        String endpointFilePath = "./src/test/resources/workflow_configuration.json";
-        //ShepherdResponse registerClientResponse = shepherdClient.registerClient("hitesh_dev");
-        //System.out.println(registerClientResponse);
-
-        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev_1", "sdk_testing", graphFilePath, endpointFilePath);
-        System.out.println(registerEndpointResponse);
-    }
+    
 
     @Test
     public void retrieveEndpointTest() {
@@ -50,5 +39,17 @@ public class ShepherdClientTest {
 
         System.out.println(shepherdResponse);
 
+    }
+
+    @Test
+    public void registerEndpointTest() {
+
+        String graphFilePath = "./src/test/resources/sample_workflow.xml";
+        String endpointFilePath = "./src/test/resources/workflow_configuration.json";
+        ShepherdResponse registerClientResponse = shepherdClient.registerClient("hitesh_dev");
+        System.out.println(registerClientResponse);
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev", "sdk_testing", graphFilePath, endpointFilePath);
+        System.out.println(registerEndpointResponse);
     }
 }
