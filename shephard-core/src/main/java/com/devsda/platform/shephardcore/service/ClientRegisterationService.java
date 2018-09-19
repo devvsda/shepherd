@@ -39,7 +39,7 @@ public class ClientRegisterationService {
         return clientId;
     }
 
-    public void registerEndpoint(RegisterEndpointRequest registerEndpointRequest) {
+    public Integer registerEndpoint(RegisterEndpointRequest registerEndpointRequest) {
 
 
         ClientDetails clientDetails = registerationDao.getClientDetails(registerEndpointRequest.getClientName());
@@ -51,8 +51,9 @@ public class ClientRegisterationService {
         EndpointDetails endpointDetails = convertToEndpointDetails(registerEndpointRequest);
         endpointDetails.setClientId(clientDetails.getClientId());
 
-        registerationDao.registerEndpoint(endpointDetails);
+        Integer endpointId = registerationDao.registerEndpoint(endpointDetails);
 
+        return endpointId;
     }
 
 
