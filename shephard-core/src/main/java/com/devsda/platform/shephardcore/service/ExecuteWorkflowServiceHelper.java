@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.service;
 
-import com.devsda.platform.shephardcore.constants.NodeState;
-import com.devsda.platform.shephardcore.model.Node;
+import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.model.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,10 +1,9 @@
 package com.devsda.platform.shephardcore.resources;
 
-import com.devsda.platform.shephardcore.constants.ResourceName;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.model.RegisterEndpointRequest;
 import com.devsda.platform.shephardcore.service.ClientRegisterationService;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
+import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

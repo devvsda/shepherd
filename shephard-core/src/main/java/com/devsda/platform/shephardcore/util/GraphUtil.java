@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.util;
 
-import com.devsda.platform.shephardcore.model.*;
+import com.devsda.platform.shepherd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

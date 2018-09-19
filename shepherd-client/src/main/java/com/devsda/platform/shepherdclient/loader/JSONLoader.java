@@ -1,8 +1,7 @@
-package com.devsda.platform.shephardcore.loader;
+package com.devsda.platform.shepherdclient.loader;
 
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +21,7 @@ public class JSONLoader {
      */
     public static String stringify(Object object) throws IOException {
 
-        ObjectMapper objectMapper = Jackson.newObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
         String stringify = objectMapper.writeValueAsString(object);
 

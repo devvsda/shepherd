@@ -1,8 +1,8 @@
-package com.devsda.platform.shephardcore.graphgenerator;
+package com.devsda.platform.shepherd.graphgenerator;
 
-import com.devsda.platform.shephardcore.model.Graph;
+import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
+import com.devsda.platform.shepherd.model.Graph;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

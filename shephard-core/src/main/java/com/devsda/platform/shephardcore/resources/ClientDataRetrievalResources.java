@@ -1,20 +1,21 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.model.Graph;
+import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.model.Graph;
 import com.devsda.platform.shephardcore.service.ClientDataRetrievelService;
 import com.google.inject.Inject;
-import com.sun.org.apache.regexp.internal.RE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path(ShephardConstants.Resources.RETRIEVE)
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,9 +44,12 @@ public class ClientDataRetrievalResources {
 
             log.info(String.format("Successfully completed get all clients data"));
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, clientDetails, null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("registered_clients", clientDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, shepherdResponse, "Successfully retrieved registered clients", null)).build();
         } catch(Throwable e) {
-            return Response.ok(resourceHelper.createShepherdResponse(null, null, "Failed to fetch registered clients data")).build();
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, null, null,"Failed to retrieve registered clients")).build();
         }
 
     }
@@ -64,11 +68,14 @@ public class ClientDataRetrievalResources {
 
             log.info(String.format("Successfully completed get all endpoints for given client %s", clientName));
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, endpointDetails, null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("registered_endpoints", endpointDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_ENDPOINTS, shepherdResponse, String.format("Successfully retrieved registered endpoints for client : %s", clientName), null)).build();
 
         } catch(Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, null, "Failed to fetch registered endpoints for given client data")).build();
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_ENDPOINTS, null, null, String.format("Failed to retrieve registered endpoints for client : %s", clientName))).build();
 
         }
 
@@ -88,11 +95,14 @@ public class ClientDataRetrievalResources {
 
             log.info(String.format("Successfully completed get given endpoint for given client %s", clientName));
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, endpointDetails, null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("endpoint", endpointDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_ENDPOINT, shepherdResponse, "Successfully retrieved endpoint details", null)).build();
 
         } catch(Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, null, "Failed to fetch registered endpoints for given client data")).build();
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_ENDPOINT, null, null, "Failed to retrieve endpoint details")).build();
 
         }
 
@@ -113,13 +123,14 @@ public class ClientDataRetrievalResources {
 
             log.info(String.format("Successfully completed get graph JSON %s", clientName));
 
-            return Response.ok(resourceHelper.createShepherdResponse(null, graph.getNodes(), null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("graph", graph.getNodes());
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_GRAPH, shepherdResponse, "Successfully retrieved graph details", null)).build();
 
         } catch(Throwable e) {
 
-            log.error("Failed", e);
-
-            return Response.ok(resourceHelper.createShepherdResponse(null, null, "Failed to convert graph xml into json data")).build();
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_GRAPH, null, null, "Failed to retrieve graph details")).build();
 
         }
 

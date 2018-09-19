@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore.model;
+package com.devsda.platform.shepherd.constants;
 
 public enum GraphType {
     UNCONDITIONAL,

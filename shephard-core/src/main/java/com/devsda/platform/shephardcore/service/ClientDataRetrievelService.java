@@ -1,11 +1,11 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.exception.ClientInvalidRequestException;
-import com.devsda.platform.shephardcore.graphgenerator.DAGGenerator;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
+import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.model.Graph;
+import com.devsda.platform.shepherd.model.Graph;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,8 +1,8 @@
 package com.devsda.platform.shephardcore.service;
 
-import com.devsda.platform.shephardcore.model.NodeConfiguration;
+import com.devsda.platform.shepherd.model.NodeConfiguration;
 import com.devsda.platform.shephardcore.model.NodeResponse;
-import com.devsda.platform.shephardcore.model.ServerDetails;
+import com.devsda.platform.shepherd.model.ServerDetails;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

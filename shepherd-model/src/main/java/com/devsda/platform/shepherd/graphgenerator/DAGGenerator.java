@@ -1,9 +1,9 @@
-package com.devsda.platform.shephardcore.graphgenerator;
+package com.devsda.platform.shepherd.graphgenerator;
 
-import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.model.Connection;
-import com.devsda.platform.shephardcore.model.Graph;
-import com.devsda.platform.shephardcore.model.GraphType;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
+import com.devsda.platform.shepherd.model.Connection;
+import com.devsda.platform.shepherd.model.Graph;
+import com.devsda.platform.shepherd.constants.GraphType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -37,7 +37,7 @@ public class DAGGenerator {
     public Graph generate(String filePath) throws ParserConfigurationException, SAXException, IOException {
 
         Graph graph = new Graph();
-        List<com.devsda.platform.shephardcore.model.Node> nodes = new ArrayList<>();
+        List<com.devsda.platform.shepherd.model.Node> nodes = new ArrayList<>();
 
         File file = new File(filePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -45,10 +45,10 @@ public class DAGGenerator {
         Document doc = dBuilder.parse(file);
         doc.getDocumentElement().normalize();
 
-        Node workflowType = doc.getDocumentElement().getElementsByTagName(ShephardConstants.Graph.TYPE).item(0);
+        Node workflowType = doc.getDocumentElement().getElementsByTagName(ShepherdConstants.Graph.TYPE).item(0);
         graph.setGraphType(GraphType.valueOf(workflowType.getTextContent()));
 
-        Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShephardConstants.Graph.GRAPH).item(0);
+        Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShepherdConstants.Graph.GRAPH).item(0);
 
         NodeList nodesOfGraph = graphRoot.getChildNodes();
 
@@ -58,7 +58,7 @@ public class DAGGenerator {
 
             if(thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
 
-                com.devsda.platform.shephardcore.model.Node thisNode = buildNode((Element) thisDOMNode);
+                com.devsda.platform.shepherd.model.Node thisNode = buildNode((Element) thisDOMNode);
                 nodes.add(thisNode);
             }
 
@@ -80,7 +80,7 @@ public class DAGGenerator {
     public Graph generateFromString(String stringifyXML) throws ParserConfigurationException, SAXException, IOException {
 
         Graph graph = new Graph();
-        List<com.devsda.platform.shephardcore.model.Node> nodes = new ArrayList<>();
+        List<com.devsda.platform.shepherd.model.Node> nodes = new ArrayList<>();
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -90,7 +90,7 @@ public class DAGGenerator {
         // DocumentBuilder.parse(new StringBufferInputStream(stringifyXML));
         doc.getDocumentElement().normalize();
 
-        Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShephardConstants.Graph.GRAPH).item(0);
+        Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShepherdConstants.Graph.GRAPH).item(0);
 
         NodeList nodesOfGraph = graphRoot.getChildNodes();
 
@@ -100,7 +100,7 @@ public class DAGGenerator {
 
             if(thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
 
-                com.devsda.platform.shephardcore.model.Node thisNode = buildNode((Element) thisDOMNode);
+                com.devsda.platform.shepherd.model.Node thisNode = buildNode((Element) thisDOMNode);
                 nodes.add(thisNode);
             }
 
@@ -111,13 +111,13 @@ public class DAGGenerator {
     }
 
     /**
-     * This method builds @{@link com.devsda.platform.shephardcore.model.Node} by extracting data from corresponding xml field.
+     * This method builds @{@link com.devsda.platform.shepherd.model.Node} by extracting data from corresponding xml field.
      * @param element
      * @return
      */
-    private com.devsda.platform.shephardcore.model.Node buildNode(Element element) {
+    private com.devsda.platform.shepherd.model.Node buildNode(Element element) {
 
-        com.devsda.platform.shephardcore.model.Node node = new com.devsda.platform.shephardcore.model.Node();
+        com.devsda.platform.shepherd.model.Node node = new com.devsda.platform.shepherd.model.Node();
 
         NodeList nodeInformation = element.getChildNodes();
 
@@ -127,12 +127,12 @@ public class DAGGenerator {
 
             if(thisNodeInformation.getNodeType() == Node.ELEMENT_NODE) {
 
-                if(ShephardConstants.Graph.CONNECTIONS.equals(thisNodeInformation.getNodeName())) {
+                if(ShepherdConstants.Graph.CONNECTIONS.equals(thisNodeInformation.getNodeName())) {
                     List<Connection> connections = buildConnections((Element) thisNodeInformation);
                     node.setConnections(connections);
-                } else if(ShephardConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
+                } else if(ShepherdConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
                     node.setName(thisNodeInformation.getTextContent());
-                } else if(ShephardConstants.Graph.OWNER.equals(thisNodeInformation.getNodeName())) {
+                } else if(ShepherdConstants.Graph.OWNER.equals(thisNodeInformation.getNodeName())) {
                     node.setOwner(thisNodeInformation.getTextContent());
                 }
             }
@@ -182,10 +182,10 @@ public class DAGGenerator {
 
                 Element thisElement = (Element) thisDOMConnection;
 
-                if(ShephardConstants.Graph.EDGE.equals(thisDOMConnection.getNodeName())) {
+                if(ShepherdConstants.Graph.EDGE.equals(thisDOMConnection.getNodeName())) {
                     connection.setEdgeName(thisElement.getTextContent());
 
-                } else if (ShephardConstants.Graph.NODE.equals(thisDOMConnection.getNodeName())) {
+                } else if (ShepherdConstants.Graph.NODE.equals(thisDOMConnection.getNodeName())) {
                     connection.setNodeName(thisElement.getTextContent());
                 }
             }

@@ -2,12 +2,12 @@ package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.exception.ClientInvalidRequestException;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.model.RegisterEndpointRequest;
 import com.devsda.platform.shephardcore.util.DateUtil;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
+import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class ClientRegisterationService {
         ClientDetails clientDetails = registerationDao.getClientDetails(registerEndpointRequest.getClientName());
 
         if(clientDetails == null) {
-            throw new ClientInvalidRequestException("Invalid clienrt name");
+            throw new ClientInvalidRequestException("Invalid client name");
         }
 
         EndpointDetails endpointDetails = convertToEndpointDetails(registerEndpointRequest);

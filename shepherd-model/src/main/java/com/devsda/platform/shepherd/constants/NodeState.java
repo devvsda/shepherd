@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore.constants;
+package com.devsda.platform.shepherd.constants;
 
 public enum NodeState {
 

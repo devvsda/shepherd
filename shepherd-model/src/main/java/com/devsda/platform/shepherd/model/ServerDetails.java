@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore.model;
+package com.devsda.platform.shepherd.model;
 
 public class ServerDetails {
 
