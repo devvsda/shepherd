@@ -2,8 +2,6 @@ package com.devsda.platform.shephardcore.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 public class RegisterEndpointRequest {
 
     @JsonProperty("endpointName")

@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.loader;
 
-import com.devsda.platform.shephardcore.exception.ClientInvalidRequestException;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.dropwizard.jackson.Jackson;

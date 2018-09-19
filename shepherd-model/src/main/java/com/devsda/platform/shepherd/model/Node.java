@@ -1,6 +1,6 @@
-package com.devsda.platform.shephardcore.model;
+package com.devsda.platform.shepherd.model;
 
-import com.devsda.platform.shephardcore.constants.NodeState;
+import com.devsda.platform.shepherd.constants.NodeState;
 
 import java.util.List;
 

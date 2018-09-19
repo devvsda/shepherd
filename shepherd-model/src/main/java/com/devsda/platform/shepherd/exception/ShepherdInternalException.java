@@ -13,5 +13,4 @@ public class ShepherdInternalException extends ShepherdException {
     public ShepherdInternalException(Throwable cause) {
         super(cause);
     }
-
 }

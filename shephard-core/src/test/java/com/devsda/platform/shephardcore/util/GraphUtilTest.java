@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.util;
 
-import com.devsda.platform.shephardcore.graphgenerator.DAGGenerator;
-import com.devsda.platform.shephardcore.model.Graph;
+import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
+import com.devsda.platform.shepherd.model.Graph;
 import org.junit.Test;
 
 import java.util.List;

@@ -8,5 +8,8 @@ public class ShepherdClientConstants {
 
     public static final String CONFIGURATION_FILE_NAME = "configurations/" + PlaceHolders.Environment + "-shepherd-configuration.yaml";
 
-
+    public static final class Resources {
+        public static final String REGISTER_CLIENT = "/shephard-core/register/client";
+        public static final String REGISTER_ENDPOINT = "/shephard-core/register/endpoint";
+    }
 }

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+
+    <type>UNCONDITIONAL</type>
+
+    <graph>
+
+        <node>
+            <name>ValidateOrder</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>GetOrderType</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>GetOrderType</name>
+            <connections>
+                <connection>
+                    <edge>NonVeg</edge>
+                    <node>AssignNonVegKitchen</node>
+                </connection>
+                <connection>
+                    <edge>Veg</edge>
+                    <node>AssignVegKitchen</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>AssignNonVegKitchen</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>AssignChef</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>AssignVegKitchen</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>AssignChef</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>AssignChef</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>GatherIngredients</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>GatherIngredients</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>CookFood</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>CookFood</name>
+            <connections>
+                <connection>
+                    <edge>Yes</edge>
+                    <node>NotifyClient</node>
+                </connection>
+            </connections>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+        <node>
+            <name>NotifyClient</name>
+            <owner>PummyAntyFoodShop</owner>
+        </node>
+
+    </graph>
+
+</workflow>

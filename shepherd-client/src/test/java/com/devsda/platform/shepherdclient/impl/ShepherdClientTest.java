@@ -1,8 +1,8 @@
 package com.devsda.platform.shepherdclient.impl;
 
+import com.devsda.platform.shepherd.model.ShepherdResponse;
 import com.devsda.platform.shepherdclient.constants.Environment;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,7 +23,20 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() {
 
-        shepherdClient.registerClient("hitesh_dev");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("hitesh_dev");
+        System.out.println(shepherdResponse);
 
+    }
+
+    @Test
+    public void registerEndpointTest() {
+
+        String graphFilePath = "./src/test/resources/sample_workflow.xml";
+        String endpointFilePath = "./src/test/resources/workflow_configuration.json";
+        ShepherdResponse registerClientResponse = shepherdClient.registerClient("hitesh_dev");
+        System.out.println(registerClientResponse);
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev", "sdk_testing", graphFilePath, endpointFilePath);
+        System.out.println(registerEndpointResponse);
     }
 }

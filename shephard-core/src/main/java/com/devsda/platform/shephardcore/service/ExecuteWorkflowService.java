@@ -1,10 +1,11 @@
 package com.devsda.platform.shephardcore.service;
 
-import com.devsda.platform.shephardcore.constants.NodeState;
-import com.devsda.platform.shephardcore.graphgenerator.DAGGenerator;
+import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.*;
 import com.devsda.platform.shephardcore.util.GraphUtil;
+import com.devsda.platform.shepherd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
