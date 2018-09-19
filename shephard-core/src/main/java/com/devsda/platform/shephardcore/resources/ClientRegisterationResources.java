@@ -16,6 +16,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path(ShephardConstants.Resources.REGISTRATION)
 @Produces(MediaType.APPLICATION_JSON)
@@ -47,11 +49,14 @@ public class ClientRegisterationResources {
 
             log.info(String.format("Processing successfully completed for register client for %s", registerClientRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.REGISTER_CLIENT, "Stored successfully", null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("ClientId", clientId);
+
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
 
         } catch(Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.REGISTER_CLIENT, null, e.getLocalizedMessage())).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
         }
 
     }
@@ -66,15 +71,18 @@ public class ClientRegisterationResources {
         try {
             log.info(String.format("Processing register endpoint for %s", registerEndpointRequest));
 
-            clientRegisterationService.registerEndpoint(registerEndpointRequest);
+            Integer endpointId = clientRegisterationService.registerEndpoint(registerEndpointRequest);
 
             log.info(String.format("Processing successfully completed for register client for %s", registerEndpointRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.REGISTER_ENDPOINT, "Registered endpoint successfully", null)).build();
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("endpointId", endpointId);
+
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_ENDPOINT, shepherdResponse,"Registered endpoint successfully", null)).build();
 
         } catch(Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.REGISTER_CLIENT, null, e.getLocalizedMessage())).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
         }
 
     }
