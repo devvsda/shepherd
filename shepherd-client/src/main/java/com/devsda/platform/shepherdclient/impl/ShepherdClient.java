@@ -2,10 +2,7 @@ package com.devsda.platform.shepherdclient.impl;
 
 import com.devsda.platform.shepherd.exception.GraphLoaderException;
 import com.devsda.platform.shepherd.exception.ShepherdInternalException;
-import com.devsda.platform.shepherd.model.GraphConfiguration;
-import com.devsda.platform.shepherd.model.RegisterClientRequest;
-import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
-import com.devsda.platform.shepherd.model.ShepherdResponse;
+import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherdclient.constants.Environment;
 import com.devsda.platform.shepherdclient.constants.ShepherdClientConstants;
 import com.devsda.platform.shepherdclient.loader.JSONLoader;
@@ -74,7 +71,7 @@ public class ShepherdClient {
             String graphData = XMLLoader.strigify(workflowPath);
             GraphConfiguration graphConfiguration = JSONLoader.load(endpointPath, GraphConfiguration.class);
             String strigifiedEndpointDetails = JSONLoader.stringify(graphConfiguration);
-            RegisterEndpointRequest registerEndpointRequest = shepherdClientHelper.createregisterEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
+            RegisterEndpointRequest registerEndpointRequest = shepherdClientHelper.createRegisterEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
             ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.REGISTER_ENDPOINT, null, shepherdServerDetails.getHeaders(), JsonLoader.loadObject(registerEndpointRequest), ShepherdResponse.class);
@@ -110,7 +107,29 @@ public class ShepherdClient {
         }
     }
 
-//    public void executeEndpoint(String clientName, String endpointName, Map<String, Object> initialPayload) {
-//
-//    }
+    public ShepherdResponse executeEndpoint(String clientName, String endpointName, Map<String, Object> initialPayload) {
+
+        try {
+            // TODO: Validate.
+
+            ExecuteWorkflowRequest executeWorkflowRequest = shepherdClientHelper.createExecuteWorkflowRequest(clientName, endpointName, initialPayload);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            // Call Shepherd Server.
+            HttpMethod httpMethod = new HttpPostMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.EXECUTE_ENDPOINT, null, shepherdServerDetails.getHeaders(), JSONLoader.stringify(executeWorkflowRequest), ShepherdResponse.class);
+
+            // Return response.
+            return shepherdResponse;
+
+        } catch(IOException e) {
+            log.error("Failed to stringify object.", e);
+            throw new ShepherdInternalException(e);
+        } catch(URISyntaxException e) {
+            log.error("Failed to hit given endpoint", e);
+            throw new ShepherdInternalException(e);
+        }
+
+    }
 }
