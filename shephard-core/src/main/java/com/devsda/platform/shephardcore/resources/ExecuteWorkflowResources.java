@@ -1,7 +1,8 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.model.ExecuteWorkflowRequest;
+import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
+import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 public class ExecuteWorkflowResources {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowResources.class);
+    private ExecuteWorkflowService executeWorkflowService = new ExecuteWorkflowService();
 
     @POST
     @Path(ShephardConstants.Resources.EXECUTE)
@@ -27,6 +29,8 @@ public class ExecuteWorkflowResources {
     public Response executeWorkflow(@NotNull ExecuteWorkflowRequest executeWorkflowRequest) {
 
         log.info(String.format("Processing execute request for %s", executeWorkflowRequest));
+
+        executeWorkflowService.executeWorkflow(executeWorkflowRequest);
 
         // TODO : File to shared
 

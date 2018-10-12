@@ -36,6 +36,6 @@ public interface RegisterationDao {
     List<EndpointDetails> getAllEndpoints(@Bind("clientId") Integer clientId);
 
     @RegisterMapper(EndpointDetailsMapper.class)
-    @SqlQuery("select * from endpoint_details where client_id = :clientId and endpoint_name = :endpointName")
-    EndpointDetails getEndpointDetails(@Bind("clientId") Integer clientId, @Bind("endpointName") String endpointName);
+    @SqlQuery("select * from endpoint_details where client_id = :clientId and endpoint_id = :endpointName")
+    EndpointDetails getEndpointDetails(@Bind("clientId") Integer clientId, @Bind("endpointName") Integer endpointId);
 }
