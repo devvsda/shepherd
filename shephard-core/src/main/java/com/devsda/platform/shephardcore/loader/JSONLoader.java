@@ -72,4 +72,13 @@ public class JSONLoader {
         return obj;
     }
 
+    public static <T> T loadFromStringifiedObject(String stringifiedObject, Class<T> clazz) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        T obj = objectMapper.readValue(stringifiedObject, clazz);
+
+        return obj;
+    }
+
 }

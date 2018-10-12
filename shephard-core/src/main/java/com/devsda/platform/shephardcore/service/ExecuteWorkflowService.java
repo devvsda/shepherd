@@ -1,11 +1,13 @@
 package com.devsda.platform.shephardcore.service;
 
+import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.*;
 import com.devsda.platform.shephardcore.util.GraphUtil;
 import com.devsda.platform.shepherd.model.*;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,19 @@ public class ExecuteWorkflowService {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowService.class);
 
+    @Inject
+    private RegisterationDao registerationDao;
+
+
+    /**
+     * This method helps to execute workflow.
+     * @param executeWorkflowRequest ExecuteWorkflow request from client.
+     */
+    public void executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
+        executeWorkflow(executeWorkflowRequest.getClientId(), executeWorkflowRequest.getEndpointId(), executeWorkflowRequest.getInitialPayload());
+    }
+
+
     /**
      * This method helps to execute workflow.
      * @param clientId Execute workflow for given client.
@@ -26,26 +41,26 @@ public class ExecuteWorkflowService {
      * @param initialPayload Initial payload, which will be consumed by root node of workflow.
      * @throws Exception
      */
-    public void executeWorkflow(String clientId, String endpointId, Map<String, Object> initialPayload) throws Exception {
+    public void executeWorkflow(Integer clientId, Integer endpointId, Map<String, Object> initialPayload) throws Exception {
 
 
         // TODO : Fetch required details from Database layer.
         // TODO : For now, I am using sample workflow , and its configurations.
 
+        // Get endpoint details.
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointId);
+
         // Generate graph details.
         DAGGenerator dagGenerator = new DAGGenerator();
-        String workflowFilePath = "./src/test/resources/sample_workflow.xml";
-        Graph graph = dagGenerator.generate(workflowFilePath);
+        Graph graph = dagGenerator.generateFromString(endpointDetails.getDAGGraph());
 
         // Load graph configurations.
-        String workflowConfigurationPath = "./src/test/resources/workflow_configuration.json";
-        GraphConfiguration graphConfiguration = JSONLoader.load(workflowConfigurationPath, GraphConfiguration.class);
+        GraphConfiguration graphConfiguration = JSONLoader.loadFromStringifiedObject(endpointDetails.getEndpointDetails(), GraphConfiguration.class);
 
         log.info(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
 
         // Graph
         executeGraph(graph, graphConfiguration);
-
     }
 
 

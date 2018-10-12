@@ -27,7 +27,7 @@ public class ShepherdClientTest {
         System.out.println(shepherdResponse);
 
     }
-    
+
 
     @Test
     public void retrieveEndpointTest() {
