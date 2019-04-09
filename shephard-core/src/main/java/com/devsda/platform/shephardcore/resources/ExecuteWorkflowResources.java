@@ -14,6 +14,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 @Path(ShephardConstants.Resources.MANAGE)
 @Produces(MediaType.APPLICATION_JSON)
@@ -38,11 +40,13 @@ public class ExecuteWorkflowResources {
 
             Integer executionId = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
 
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("execution_id", executionId);
+
             log.info(String.format("Successfully started processing  execute request for %s", executeWorkflowRequest));
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
 
-            return null;
         } catch(Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();

@@ -3,7 +3,9 @@ package com.devsda.platform.shephardcore.service;
 import com.devsda.platform.shepherd.model.NodeConfiguration;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shepherd.model.ServerDetails;
+import com.devsda.utils.httputils.constants.Protocol;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
+import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +33,9 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
         try {
 
-            response = new HttpPostMethod().call(serverDetails.getHostName(), serverDetails.getPort(),
+            response = new HttpPostMethod().call(Protocol.HTTPS, serverDetails.getHostName(), serverDetails.getPort(),
                     nodeConfiguration.getURI(), null, nodeConfiguration.getHeaders(),
-                    "", String.class);
+                    new StringEntity(""), String.class);
 
             log.info(String.format("Response of Node : %s is %s", nodeConfiguration.getName(), response));
 
