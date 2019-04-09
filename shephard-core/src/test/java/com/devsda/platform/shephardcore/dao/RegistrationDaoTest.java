@@ -74,7 +74,7 @@ public class RegistrationDaoTest {
     @Test
     public void getEndpointDetailsTest() {
 
-        System.out.println(registerationDao.getEndpointDetails(29, "random_endpoint"));
+        System.out.println(registerationDao.getEndpointDetails("hitesh_dev", "random_endpoint"));
 
     }
 

@@ -68,10 +68,13 @@ public class ExecuteWorkflowService {
 
         log.info(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
 
-        // workflowOperationDao.
+        // TODO : workflowOperationDao. Create Execution row.
+        Integer executionId = null;
 
         // Graph
         executeGraph(graph, graphConfiguration);
+
+        return executionId;
     }
 
 
@@ -82,7 +85,7 @@ public class ExecuteWorkflowService {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    private Integer executeGraph(Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
+    private void executeGraph(Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
 
         Map<String, NodeConfiguration> nodeNameToNodeConfigurationMapping = GraphUtil.getNodeNameToNodeConfigurationMapping(graphConfiguration);
         Map<String, TeamConfiguration> teamNameToTeamConfigurationMapping = GraphUtil.getTeamNameToTeamConfigurationMapping(graphConfiguration);
@@ -154,7 +157,5 @@ public class ExecuteWorkflowService {
                 futureObjects.addLast(thisFutureObject);
             }
         }
-
-        return;
     }
 }
