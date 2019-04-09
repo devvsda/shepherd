@@ -3,6 +3,7 @@ package com.devsda.platform.shephardcore.resources;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
+import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,20 +23,31 @@ public class ExecuteWorkflowResources {
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowResources.class);
     private ExecuteWorkflowService executeWorkflowService = new ExecuteWorkflowService();
 
+    @Inject
+    public ResourceHelper resourceHelper;
+
+
     @POST
     @Path(ShephardConstants.Resources.EXECUTE)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response executeWorkflow(@NotNull ExecuteWorkflowRequest executeWorkflowRequest) {
 
-        log.info(String.format("Processing execute request for %s", executeWorkflowRequest));
+        try {
+            log.info(String.format("Processing execute request for %s", executeWorkflowRequest));
 
-        executeWorkflowService.executeWorkflow(executeWorkflowRequest);
+            Integer executionId = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
 
-        // TODO : File to shared
+            log.info(String.format("Successfully started processing  execute request for %s", executeWorkflowRequest));
 
-        log.info(String.format("Successfully processed execute request for %s", executeWorkflowRequest));
-        return null;
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
+
+            return null;
+        } catch(Throwable e) {
+
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
+
+        }
 
     }
 }
