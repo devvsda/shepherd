@@ -21,9 +21,9 @@ updated_at DATETIME,
 created_by varchar(255)
 );
 
-CREATE TABLE IF NOT EXISTS object_details(
-object_id int primary key,
-execution_id int,
+CREATE TABLE IF NOT EXISTS execution_details(
+execution_id int primary key,
+client_id int,
 endpoint_id int,
 status varchar(255),
 error_message varchar(255),

@@ -6,6 +6,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ShepherdClientTest {
 
     private static ShepherdClient shepherdClient;
@@ -51,5 +54,22 @@ public class ShepherdClientTest {
 
         ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev", "sdk_testing", graphFilePath, endpointFilePath);
         System.out.println(registerEndpointResponse);
+    }
+
+    @Test
+    public void executeEndpointTest() {
+
+        String clientName = "hitesh_dev";
+        String endpointName = "dominos_beta";
+
+        Map<String, Object> initialPayload = new HashMap<String, Object>()
+        {{
+            put("size", "medium");
+            put("base", "cheese_crust");
+            put("name", "farm_hosue");
+        }};
+
+        ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, initialPayload);
+        System.out.println(executeEndpointResponse);
     }
 }

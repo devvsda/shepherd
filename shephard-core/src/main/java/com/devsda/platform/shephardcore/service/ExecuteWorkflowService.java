@@ -1,7 +1,9 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
+import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.*;
@@ -24,31 +26,38 @@ public class ExecuteWorkflowService {
     @Inject
     private RegisterationDao registerationDao;
 
+    @Inject
+    private WorkflowOperationDao workflowOperationDao;
+
 
     /**
      * This method helps to execute workflow.
      * @param executeWorkflowRequest ExecuteWorkflow request from client.
      */
-    public void executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
-        executeWorkflow(executeWorkflowRequest.getClientId(), executeWorkflowRequest.getEndpointId(), executeWorkflowRequest.getInitialPayload());
+    public Integer executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
+        return executeWorkflow(executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName(), executeWorkflowRequest.getInitialPayload());
     }
 
 
     /**
      * This method helps to execute workflow.
-     * @param clientId Execute workflow for given client.
-     * @param endpointId Execute endpoint of above client.
+     * @param clientName Execute workflow for given client.
+     * @param endpointName Execute endpoint of above client.
      * @param initialPayload Initial payload, which will be consumed by root node of workflow.
      * @throws Exception
      */
-    public void executeWorkflow(Integer clientId, Integer endpointId, Map<String, Object> initialPayload) throws Exception {
+    public Integer executeWorkflow(String clientName, String endpointName, Map<String, Object> initialPayload) throws Exception {
 
 
-        // TODO : Fetch required details from Database layer.
-        // TODO : For now, I am using sample workflow , and its configurations.
+        // Get ClientId , and EndpointId.
 
         // Get endpoint details.
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointId);
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientName, clientName);
+
+        if(endpointDetails == null) {
+            log.error(String.format("Client + Endpoint combination not registered. ClientName : %s. EndpointName : %s", clientName, endpointName));
+            throw new ClientInvalidRequestException(String.format("Client + Endpoint combination not registered. ClientName : %s. EndpointName : %s", clientName, endpointName));
+        }
 
         // Generate graph details.
         DAGGenerator dagGenerator = new DAGGenerator();
@@ -58,6 +67,8 @@ public class ExecuteWorkflowService {
         GraphConfiguration graphConfiguration = JSONLoader.loadFromStringifiedObject(endpointDetails.getEndpointDetails(), GraphConfiguration.class);
 
         log.info(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
+
+        // workflowOperationDao.
 
         // Graph
         executeGraph(graph, graphConfiguration);
@@ -71,7 +82,7 @@ public class ExecuteWorkflowService {
      * @throws InterruptedException
      * @throws ExecutionException
      */
-    private void executeGraph(Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
+    private Integer executeGraph(Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
 
         Map<String, NodeConfiguration> nodeNameToNodeConfigurationMapping = GraphUtil.getNodeNameToNodeConfigurationMapping(graphConfiguration);
         Map<String, TeamConfiguration> teamNameToTeamConfigurationMapping = GraphUtil.getTeamNameToTeamConfigurationMapping(graphConfiguration);
