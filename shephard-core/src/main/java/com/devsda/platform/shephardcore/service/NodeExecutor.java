@@ -31,19 +31,18 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
         String response = null;
 
-        try {
+        // 1. Create entry in Node table.
+        // TODO
 
-            response = new HttpPostMethod().call(Protocol.HTTPS, serverDetails.getHostName(), serverDetails.getPort(),
-                    nodeConfiguration.getURI(), null, nodeConfiguration.getHeaders(),
-                    new StringEntity(""), String.class);
+        // 2. Execute Node.
+        response = new HttpPostMethod().call(Protocol.HTTPS, serverDetails.getHostName(), serverDetails.getPort(),
+                nodeConfiguration.getURI(), null, nodeConfiguration.getHeaders(),
+                new StringEntity(""), String.class);
 
-            log.info(String.format("Response of Node : %s is %s", nodeConfiguration.getName(), response));
+        log.info(String.format("Response of Node : %s is %s", nodeConfiguration.getName(), response));
 
-            Thread.sleep(10);
-
-        } catch(InterruptedException e) {
-            log.error("Thread interrupted by third party", e);
-        }
+        // 3. Update Node status as Completed in Node table.
+        // TODO
 
         return new NodeResponse(nodeConfiguration.getName(), response);
     }

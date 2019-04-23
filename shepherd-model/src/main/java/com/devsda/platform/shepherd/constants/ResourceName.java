@@ -2,6 +2,7 @@ package com.devsda.platform.shepherd.constants;
 
 public enum ResourceName {
 
+    EXECUTE_WORKFLOW,
     REGISTER_CLIENT,
     REGISTER_ENDPOINT,
     RETRIEVE_REGISTERED_CLIENTS,

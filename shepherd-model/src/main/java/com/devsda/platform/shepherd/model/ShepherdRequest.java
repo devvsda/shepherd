@@ -1,6 +1,7 @@
 package com.devsda.platform.shepherd.model;
 
 import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -21,6 +22,8 @@ public class ShepherdRequest {
 
     public ShepherdRequest(ResourceName resourceName) {
         this.resourceName = resourceName;
+        this.createdAt = DateUtil.currentDate();
+        this.updatedAt = DateUtil.currentDate();
     }
 
     public Date getCreatedAt() {

@@ -1,8 +1,9 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
+import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,11 +46,12 @@ public class ExecuteWorkflowResources {
 
             log.info(String.format("Successfully started processing  execute request for %s", executeWorkflowRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(
+                    ResourceName.EXECUTE_WORKFLOW, shepherdResponse, "Workflow triggered successfully.", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.EXECUTE_WORKFLOW, null, "Workflow trigger failed.", e.getLocalizedMessage())).build();
 
         }
 
