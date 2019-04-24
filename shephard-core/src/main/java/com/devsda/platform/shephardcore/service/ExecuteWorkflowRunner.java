@@ -60,7 +60,10 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         ServerDetails rootNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(rootNode).getOwner()).getServerDetails();
 
         log.info(String.format("Submitting node : %s to thread-pool for execution", rootNode));
-        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(this.executeWorkflowRequest.getExecutionId(), rootNodeConfiguration, rootNodeServerDetails));
+
+        Node rootNodeObj = nodeNameToNodeMapping.get(rootNode);
+        rootNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
+        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNodeObj, rootNodeConfiguration, rootNodeServerDetails));
 
         Deque<Future<NodeResponse>> futureObjects = new LinkedList<>();
         futureObjects.addFirst(rootNodeFuture);
@@ -74,8 +77,6 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                 String nodeName = nodeResponse.getNodeName();
                 log.info(String.format("Node : %s successfully completed", nodeName));
-
-                nodeNameToNodeMapping.get(nodeName).setNodeState(NodeState.COMPLETED);
 
                 // TODO : This will use in CONDITIONAL workflow execution.
                 String clientResponse = nodeResponse.getClientResponse();
@@ -101,7 +102,9 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                         NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
                         ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
 
-                        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(this.executeWorkflowRequest.getExecutionId(), childNodeConfiguration, childNodeServerDetails));
+                        Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
+                        rootNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
+                        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
                         futureObjects.addLast(childNodeResponse);
                     } else {
                         // Nothing to do.

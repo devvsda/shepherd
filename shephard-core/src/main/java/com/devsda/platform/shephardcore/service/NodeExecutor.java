@@ -26,13 +26,13 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
     private NodeConfiguration nodeConfiguration;
     private ServerDetails serverDetails;
-    private Integer executionId;
+    private Node node;
 
     @Inject
     private static WorkflowOperationDao workflowOperationDao;
 
-    public NodeExecutor(Integer executionId, NodeConfiguration nodeConfiguration, ServerDetails serverDetails) {
-        this.executionId = executionId;
+    public NodeExecutor(Node node, NodeConfiguration nodeConfiguration, ServerDetails serverDetails) {
+        this.node = node;
         this.nodeConfiguration = nodeConfiguration;
         this.serverDetails = serverDetails;
     }
@@ -49,8 +49,10 @@ public class NodeExecutor implements Callable<NodeResponse> {
         try {
 
             // 1. Create entry in Node table.
-            node = ObjectFactory.createNode(this.nodeConfiguration.getName(), null, this.executionId, NodeState.PROCESSING, null);
-            workflowOperationDao.createNode(node);
+            this.node.setUpdatedAt(DateUtil.currentDate());
+            this.node.setNodeState(NodeState.PROCESSING);
+            Integer nodeId = workflowOperationDao.createNode(this.node);
+            this.node.setNodeId(nodeId);
 
             // 2. Execute Node.
             response = new HttpPostMethod().call(Protocol.HTTPS, serverDetails.getHostName(), serverDetails.getPort(),
@@ -60,26 +62,26 @@ public class NodeExecutor implements Callable<NodeResponse> {
             log.info(String.format("Response of Node : %s is %s", nodeConfiguration.getName(), response));
 
             // 3. Update Node status as Completed in Node table.
-            node.setNodeState(NodeState.COMPLETED);
-            node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(node);
+            this.node.setNodeState(NodeState.COMPLETED);
+            this.node.setUpdatedAt(DateUtil.currentDate());
+            workflowOperationDao.updateNode(this.node);
 
             return new NodeResponse(nodeConfiguration.getName(), response);
 
         } catch(HttpResponseException e) {
 
             log.error(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
-            node.setNodeState(NodeState.FAILED);
-            node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(node);
+            this.node.setNodeState(NodeState.FAILED);
+            this.node.setUpdatedAt(DateUtil.currentDate());
+            workflowOperationDao.updateNode(this.node);
             throw new ClientNodeFailureException(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
 
         } catch(Exception e) {
 
             log.error(String.format("Node : {} failed internally.", this.nodeConfiguration.getName()));
-            node.setNodeState(NodeState.FAILED);
-            node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(node);
+            this.node.setNodeState(NodeState.FAILED);
+            this.node.setUpdatedAt(DateUtil.currentDate());
+            workflowOperationDao.updateNode(this.node);
             throw new NodeFailureException(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
 
         }

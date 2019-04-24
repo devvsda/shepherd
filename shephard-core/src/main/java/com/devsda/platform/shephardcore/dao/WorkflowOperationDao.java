@@ -1,13 +1,12 @@
 package com.devsda.platform.shephardcore.dao;
 
 
+import com.devsda.platform.shephardcore.mapper.NodeDetailsMapper;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.Node;
-import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.BindBean;
-import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
-import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.*;
+import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 import java.util.List;
 
@@ -31,4 +30,8 @@ public interface WorkflowOperationDao {
 
     @SqlUpdate("update node_details set status = :node.nodeState, error_message = :node.errorMessage, updated_at = :node.updatedAt where execution_id = :node.executionId and node_id = :node.node_id")
     public int updateNode(@BindBean("node") Node node);
+
+    @RegisterMapper(NodeDetailsMapper.class)
+    @SqlQuery("select * from node_details where execution_id = :nodeId and node_id = :nodeId")
+    public Node getNode(@Bind("nodeId") Integer nodeId, @Bind("executionId") Integer executionId);
 }

@@ -15,10 +15,11 @@ public class Node extends ShepherdRequest {
     private List<Connection> connections;
     private List<Node> parentNodes;
     private String owner;
-    private NodeState nodeState = NodeState.NOT_PROCESSED;
+    private NodeState nodeState;
 
     public Node() {
         super(ResourceName.EXECUTE_WORKFLOW);
+        this.nodeState = NodeState.NOT_PROCESSED;
     }
 
     public String getName() {
