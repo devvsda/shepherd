@@ -60,7 +60,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         ServerDetails rootNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(rootNode).getOwner()).getServerDetails();
 
         log.info(String.format("Submitting node : %s to thread-pool for execution", rootNode));
-        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNodeConfiguration, rootNodeServerDetails));
+        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(this.executeWorkflowRequest.getExecutionId(), rootNodeConfiguration, rootNodeServerDetails));
 
         Deque<Future<NodeResponse>> futureObjects = new LinkedList<>();
         futureObjects.addFirst(rootNodeFuture);
@@ -101,7 +101,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                         NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
                         ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
 
-                        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(childNodeConfiguration, childNodeServerDetails));
+                        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(this.executeWorkflowRequest.getExecutionId(), childNodeConfiguration, childNodeServerDetails));
                         futureObjects.addLast(childNodeResponse);
                     } else {
                         // Nothing to do.

@@ -3,6 +3,7 @@ package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
+import com.devsda.platform.shepherd.model.Node;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.GetGeneratedKeys;
@@ -23,4 +24,11 @@ public interface WorkflowOperationDao {
 
     @SqlUpdate("update execution_details set processed_nodes=:processedNodes.toString(), inProcessingNodes=:inProcessingNodes.toString() where execution_id = :executionId")
     public int updateNodeStatus(@Bind("executionId") Integer executionId, @Bind("processedNodes") List<Integer> processedNodes, @Bind("inProcessingNodes") List<Integer> inProcessingNodes);
+
+
+    @SqlUpdate("insert into node_details(node_id, node_name, execution_id, status, error_message, created_at, updated_at, created_by) values(:node.nodeId,:node.nodeName,:node.executionId,:node.nodeState,:node.errorMessage,:node.createdAt,:node.updatedAt,:node.createdBy)")
+    public int createNode(@BindBean("node") Node node);
+
+    @SqlUpdate("update node_details set status = :node.nodeState, error_message = :node.errorMessage, updated_at = :node.updatedAt where execution_id = :node.executionId and node_id = :node.node_id")
+    public int updateNode(@BindBean("node") Node node);
 }

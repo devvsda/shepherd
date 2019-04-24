@@ -1,16 +1,25 @@
 package com.devsda.platform.shepherd.model;
 
 import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.constants.ResourceName;
 
 import java.util.List;
 
-public class Node {
+public class Node extends ShepherdRequest {
 
+    private Integer nodeId;
     private String name;
+
+    private Integer executionId;
+
     private List<Connection> connections;
     private List<Node> parentNodes;
     private String owner;
     private NodeState nodeState = NodeState.NOT_PROCESSED;
+
+    public Node() {
+        super(ResourceName.EXECUTE_WORKFLOW);
+    }
 
     public String getName() {
         return name;
@@ -52,10 +61,28 @@ public class Node {
         this.parentNodes = parentNodes;
     }
 
+    public Integer getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(Integer nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public Integer getExecutionId() {
+        return executionId;
+    }
+
+    public void setExecutionId(Integer executionId) {
+        this.executionId = executionId;
+    }
+
     @Override
     public String toString() {
         return "Node{" +
-                "name='" + name + '\'' +
+                "nodeId=" + nodeId +
+                ", name='" + name + '\'' +
+                ", executionId=" + executionId +
                 ", connections=" + connections +
                 ", parentNodes=" + parentNodes +
                 ", owner='" + owner + '\'' +

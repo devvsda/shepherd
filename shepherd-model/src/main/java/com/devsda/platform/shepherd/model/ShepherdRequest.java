@@ -20,6 +20,9 @@ public class ShepherdRequest {
     @JsonProperty("submitted_by")
     private String submittedBy;
 
+    @JsonProperty("error_message")
+    private String errorMessage;
+
     public ShepherdRequest(ResourceName resourceName) {
         this.resourceName = resourceName;
         this.createdAt = DateUtil.currentDate();
@@ -58,6 +61,14 @@ public class ShepherdRequest {
         this.resourceName = resourceName;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @Override
     public String toString() {
         return "ShepherdRequest{" +
@@ -65,6 +76,7 @@ public class ShepherdRequest {
                 ", updatedAt=" + updatedAt +
                 ", resourceName=" + resourceName +
                 ", submittedBy='" + submittedBy + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }
