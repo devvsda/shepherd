@@ -3,7 +3,13 @@ package com.devsda.platform.shepherd.model;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
+
 public class RegisterClientRequest extends ShepherdRequest {
+
+
+    @JsonProperty("clientId")
+    private Integer clientId;
 
     @JsonProperty("clientName")
     private String clientName;
@@ -20,11 +26,19 @@ public class RegisterClientRequest extends ShepherdRequest {
         this.clientName = clientName;
     }
 
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public String toString() {
         return "RegisterClientRequest{" +
-                "clientName='" + clientName + '\'' +
+                "clientId=" + clientId +
+                ", clientName='" + clientName + '\'' +
                 '}';
     }
-
 }

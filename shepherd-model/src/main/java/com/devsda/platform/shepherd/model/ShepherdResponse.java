@@ -13,7 +13,7 @@ public class ShepherdResponse {
     private ResourceName resourceName;
 
     @JsonProperty("response_time")
-    private Date responseTime;
+    private String responseTime;
 
     @JsonProperty("server_name")
     private String serverName;
@@ -28,14 +28,14 @@ public class ShepherdResponse {
     private Map<String, Object> responseData;
 
     public ShepherdResponse() {
-        this.responseTime = DateUtil.currentDate();
+        this.responseTime = DateUtil.convertDate(DateUtil.currentDate());
     }
 
-    public Date getResponseTime() {
+    public String getResponseTime() {
         return responseTime;
     }
 
-    public void setResponseTime(Date responseTime) {
+    public void setResponseTime(String responseTime) {
         this.responseTime = responseTime;
     }
 
@@ -83,7 +83,7 @@ public class ShepherdResponse {
     public String toString() {
         return "ShepherdResponse{" +
                 "resourceName=" + resourceName +
-                ", responseTime=" + responseTime +
+                ", responseTime='" + responseTime + '\'' +
                 ", serverName='" + serverName + '\'' +
                 ", message='" + message + '\'' +
                 ", errorMessage='" + errorMessage + '\'' +

@@ -1,7 +1,10 @@
 package com.devsda.platform.shepherdclient.model;
 
+import com.devsda.utils.httputils.constants.Protocol;
+
 public class ServerDetails {
 
+    private Protocol protocol;
     private String hostname;
     private String port;
 
@@ -21,10 +24,19 @@ public class ServerDetails {
         this.port = port;
     }
 
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = Protocol.getProtocol(protocol);
+    }
+
     @Override
     public String toString() {
         return "ServerDetails{" +
-                "hostname='" + hostname + '\'' +
+                "protocol=" + protocol +
+                ", hostname='" + hostname + '\'' +
                 ", port='" + port + '\'' +
                 '}';
     }

@@ -14,6 +14,7 @@ import com.devsda.utils.httputils.HttpMethod;
 import com.devsda.utils.httputils.loader.JsonLoader;
 import com.devsda.utils.httputils.methods.HttpGetMethod;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
+import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -53,7 +54,11 @@ public class ShepherdClient {
             registerClientRequest = shepherdClientHelper.createRegisterClientRequest(clientName);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
-            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.REGISTER_CLIENT, null, shepherdServerDetails.getHeaders(), JsonLoader.loadObject(registerClientRequest), ShepherdResponse.class);
+            ShepherdResponse shepherdResponse = httpMethod.call(
+                    serverDetails.getProtocol(), serverDetails.getHostname(), serverDetails.getPort(),
+                    ShepherdClientConstants.Resources.REGISTER_CLIENT, null,
+                    shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(registerClientRequest)),
+                    ShepherdResponse.class);
             return shepherdResponse;
         } catch(IOException  e) {
             log.error(String.format("Problem while serialising Client Request : %s", registerClientRequest), e);
@@ -74,7 +79,11 @@ public class ShepherdClient {
             RegisterEndpointRequest registerEndpointRequest = shepherdClientHelper.createRegisterEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
-            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.REGISTER_ENDPOINT, null, shepherdServerDetails.getHeaders(), JsonLoader.loadObject(registerEndpointRequest), ShepherdResponse.class);
+            ShepherdResponse shepherdResponse = httpMethod.call(
+                    serverDetails.getProtocol(), serverDetails.getHostname(), serverDetails.getPort(),
+                    ShepherdClientConstants.Resources.REGISTER_ENDPOINT, null,
+                    shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(registerEndpointRequest)),
+                    ShepherdResponse.class);
             return shepherdResponse;
         } catch(TransformerException | SAXException | ParserConfigurationException ex) {
             log.error("Problem in stringifying of xml file.", ex);
@@ -99,7 +108,7 @@ public class ShepherdClient {
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
 
             HttpMethod httpMethod = new HttpGetMethod();
-            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.RETRIEVE_ENDPOINT, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(), serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.RETRIEVE_ENDPOINT, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
             return shepherdResponse;
         } catch (Exception e) {
             log.error("Retrival endpoint failed", e);
@@ -118,7 +127,7 @@ public class ShepherdClient {
 
             // Call Shepherd Server.
             HttpMethod httpMethod = new HttpPostMethod();
-            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.EXECUTE_ENDPOINT, null, shepherdServerDetails.getHeaders(), JSONLoader.stringify(executeWorkflowRequest), ShepherdResponse.class);
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(), serverDetails.getHostname(), serverDetails.getPort(), ShepherdClientConstants.Resources.EXECUTE_ENDPOINT, null, shepherdServerDetails.getHeaders(), new StringEntity(JSONLoader.stringify(executeWorkflowRequest)), ShepherdResponse.class);
 
             // Return response.
             return shepherdResponse;

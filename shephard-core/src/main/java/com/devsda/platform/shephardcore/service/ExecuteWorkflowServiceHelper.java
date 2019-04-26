@@ -15,9 +15,9 @@ public class ExecuteWorkflowServiceHelper {
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowServiceHelper.class);
 
     @Inject
-    private static WorkflowOperationDao workflowOperationDao;
+    private WorkflowOperationDao workflowOperationDao;
 
-    public static Boolean isNodeReadyToExecute(String nodeName, Map<String, List<String>> nodeToParentNodeMapping, Map<String, Node> nameToNodeMapping) {
+    public Boolean isNodeReadyToExecute(String nodeName, Map<String, List<String>> nodeToParentNodeMapping, Map<String, Node> nameToNodeMapping) {
 
         log.info(String.format("Checking weather node : %s is ready to execute", nodeName));
 

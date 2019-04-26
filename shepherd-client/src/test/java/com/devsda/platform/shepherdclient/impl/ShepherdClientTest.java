@@ -26,17 +26,16 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() {
 
-        ShepherdResponse shepherdResponse = shepherdClient.registerClient("hitesh_dev_1");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("amazon");
         System.out.println(shepherdResponse);
 
     }
 
-
     @Test
     public void retrieveEndpointTest() {
 
-        String clientName = "hitesh_dev_1";
-        String endpointName = "sdk_testing";
+        String clientName = "amazon";
+        String endpointName = "prime";
 
         ShepherdResponse shepherdResponse = shepherdClient.retrieveEndpoint(clientName, endpointName);
 
@@ -49,10 +48,10 @@ public class ShepherdClientTest {
 
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
-        ShepherdResponse registerClientResponse = shepherdClient.registerClient("hitesh_dev");
+        ShepherdResponse registerClientResponse = shepherdClient.registerClient("amazon");
         System.out.println(registerClientResponse);
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev", "sdk_testing", graphFilePath, endpointFilePath);
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("amazon", "prime", graphFilePath, endpointFilePath);
         System.out.println(registerEndpointResponse);
     }
 

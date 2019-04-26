@@ -4,7 +4,6 @@ import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shephardcore.util.GraphUtil;
-import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.model.*;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-// TODO : https://stackoverflow.com/questions/33698211/how-to-use-guice-injection-to-inject-a-class-in-a-class-with-static-methods
 public class ExecuteWorkflowRunner implements Callable<Void> {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowRunner.class);
@@ -26,6 +24,9 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
     @Inject
     private static WorkflowOperationDao workflowOperationDao;
+
+    @Inject
+    private static ExecuteWorkflowServiceHelper executeWorkflowServiceHelper;
 
     private ExecuteWorkflowRequest executeWorkflowRequest;
     private Graph graph;
@@ -96,7 +97,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                     String childNodeName = connection.getNodeName();
 
-                    Boolean isNodeReadyToExecute = ExecuteWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
+                    Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
 
                     if (Boolean.TRUE.equals(isNodeReadyToExecute)) {
                         NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);

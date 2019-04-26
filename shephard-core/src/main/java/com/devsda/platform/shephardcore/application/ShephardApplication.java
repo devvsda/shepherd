@@ -2,10 +2,13 @@ package com.devsda.platform.shephardcore.application;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
+import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
 import com.devsda.platform.shephardcore.resources.ClientDataRetrievalResources;
 import com.devsda.platform.shephardcore.resources.ClientRegisterationResources;
 import com.devsda.platform.shephardcore.resources.HealthCheckReources;
+import com.devsda.platform.shephardcore.service.ExecuteWorkflowRunner;
+import com.devsda.platform.shephardcore.service.ExecuteWorkflowServiceHelper;
 import com.google.inject.*;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
@@ -69,8 +72,13 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
                 final DBIFactory factory = new DBIFactory();
                 final DBI jdbi = factory.build(environment, shephardConfiguration.getDatabase(), ShephardConstants.DB.MYSQL);
                 final RegisterationDao registerationDao = jdbi.onDemand(RegisterationDao.class);
+                final WorkflowOperationDao workflowOperationDao = jdbi.onDemand(WorkflowOperationDao.class);
 
                 bind(RegisterationDao.class).toInstance(registerationDao);
+                bind(WorkflowOperationDao.class).toInstance(workflowOperationDao);
+
+                requestStaticInjection(ExecuteWorkflowRunner.class);
+                requestStaticInjection(ExecuteWorkflowServiceHelper.class);
 
                 // Other objects
                 bind(ShephardConfiguration.class).toInstance(shephardConfiguration);

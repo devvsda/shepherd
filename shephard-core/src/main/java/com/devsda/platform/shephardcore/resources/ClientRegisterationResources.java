@@ -51,7 +51,7 @@ public class ClientRegisterationResources {
             Map<String, Object> shepherdResponse = new HashMap<>();
             shepherdResponse.put("ClientId", clientId);
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Client registered successfully", null)).build();
 
         } catch(Throwable e) {
 
