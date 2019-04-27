@@ -10,6 +10,7 @@ import com.devsda.platform.shephardcore.resources.ExecuteWorkflowResources;
 import com.devsda.platform.shephardcore.resources.HealthCheckReources;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowServiceHelper;
+import com.devsda.platform.shephardcore.service.NodeExecutor;
 import com.google.inject.*;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
@@ -81,6 +82,7 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
 
                 requestStaticInjection(ExecuteWorkflowRunner.class);
                 requestStaticInjection(ExecuteWorkflowServiceHelper.class);
+                requestStaticInjection(NodeExecutor.class);
 
                 // Other objects
                 bind(ShephardConfiguration.class).toInstance(shephardConfiguration);
