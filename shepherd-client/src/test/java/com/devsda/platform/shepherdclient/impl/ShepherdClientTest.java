@@ -58,8 +58,8 @@ public class ShepherdClientTest {
     @Test
     public void executeEndpointTest() {
 
-        String clientName = "hitesh_dev";
-        String endpointName = "dominos_beta";
+        String clientName = "amazon";
+        String endpointName = "prime";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>()
         {{

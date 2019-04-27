@@ -36,14 +36,20 @@ public class ExecuteWorkflowService {
      */
     public Integer executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
 
+
+        // validate.
         // Get ClientId , and EndpointId.
+        ClientDetails clientDetails = registerationDao.getClientDetails(executeWorkflowRequest.getClientName());
+
+        if (clientDetails == null) {
+            throw new ClientInvalidRequestException(String.format("ClientName : %s does not exists.", executeWorkflowRequest.getClientName()));
+        }
 
         // Get endpoint details.
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName());
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), executeWorkflowRequest.getEndpointName());
 
         if(endpointDetails == null) {
-            log.error(String.format("Client + Endpoint combination not registered. ClientName : %s. EndpointName : %s",
-                    executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName()));
+            log.error(String.format("Endpoint : %s is not present for client : %s", endpointDetails.getEndpointName(), endpointDetails.getClientName()));
             throw new ClientInvalidRequestException(String.format("Client + Endpoint combination not registered." +
                     " ClientName : %s. EndpointName : %s", executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName()));
         }

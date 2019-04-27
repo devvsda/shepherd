@@ -6,6 +6,7 @@ import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
 import com.devsda.platform.shephardcore.resources.ClientDataRetrievalResources;
 import com.devsda.platform.shephardcore.resources.ClientRegisterationResources;
+import com.devsda.platform.shephardcore.resources.ExecuteWorkflowResources;
 import com.devsda.platform.shephardcore.resources.HealthCheckReources;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowServiceHelper;
@@ -54,6 +55,7 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
         environment.jersey().register(HealthCheckReources.class);
         environment.jersey().register(injector.getInstance(ClientRegisterationResources.class));
         environment.jersey().register(injector.getInstance(ClientDataRetrievalResources.class));
+        environment.jersey().register(injector.getInstance(ExecuteWorkflowResources.class));
     }
 
     /**

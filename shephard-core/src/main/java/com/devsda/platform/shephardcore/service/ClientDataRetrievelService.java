@@ -54,7 +54,7 @@ public class ClientDataRetrievelService {
 
         int clientId = clientDetails.getClientId();
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientName, endpointName);
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointName);
 
         return endpointDetails;
     }
@@ -70,7 +70,7 @@ public class ClientDataRetrievelService {
         int clientId = clientDetails.getClientId();
 
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientName, endpointName);
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointName);
 
         String stringifyGRaph = endpointDetails.getDAGGraph();
 

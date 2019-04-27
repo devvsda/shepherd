@@ -24,7 +24,9 @@ import java.util.Map;
 public class ExecuteWorkflowResources {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowResources.class);
-    private ExecuteWorkflowService executeWorkflowService = new ExecuteWorkflowService();
+
+    @Inject
+    private ExecuteWorkflowService executeWorkflowService;
 
     @Inject
     public ResourceHelper resourceHelper;
@@ -51,6 +53,7 @@ public class ExecuteWorkflowResources {
 
         } catch (Throwable e) {
 
+            log.error(String.format("Execute workflow failed for client : %s, and endpoint : %s", executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName()), e);
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.EXECUTE_WORKFLOW, null, "Workflow trigger failed.", e.getLocalizedMessage())).build();
 
         }

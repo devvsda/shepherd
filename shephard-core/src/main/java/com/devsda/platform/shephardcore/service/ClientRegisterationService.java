@@ -48,10 +48,21 @@ public class ClientRegisterationService {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
-        EndpointDetails endpointDetails = convertToEndpointDetails(registerEndpointRequest);
-        endpointDetails.setClientId(clientDetails.getClientId());
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), registerEndpointRequest.getEndpointName());
 
-        Integer endpointId = registerationDao.registerEndpoint(endpointDetails);
+        Integer endpointId = null;
+
+        if(endpointDetails == null) {
+
+            endpointDetails = convertToEndpointDetails(registerEndpointRequest);
+            endpointDetails.setClientId(clientDetails.getClientId());
+
+            endpointId = registerationDao.registerEndpoint(endpointDetails);
+
+        } else {
+            throw new ClientInvalidRequestException(String.format("Endpoint with name : %s already exists for client %s",
+                    registerEndpointRequest.getEndpointName(), registerEndpointRequest.getClientName()));
+        }
 
         return endpointId;
     }
