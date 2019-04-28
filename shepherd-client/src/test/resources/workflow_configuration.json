@@ -4,6 +4,7 @@
       "owner" : "PummyAntyFoodShop",
 
       "serverDetails" : {
+        "protocol" : "http",
         "hostName" : "localhost",
         "port" : "9090"
       },

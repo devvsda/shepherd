@@ -1,8 +1,5 @@
 package com.devsda.platform.shepherd.model;
 
-import com.devsda.platform.shepherd.model.NodeConfiguration;
-import com.devsda.platform.shepherd.model.ServerDetails;
-
 import java.util.List;
 import java.util.Map;
 

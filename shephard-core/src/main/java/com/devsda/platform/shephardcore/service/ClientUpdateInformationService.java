@@ -33,6 +33,7 @@ public class ClientUpdateInformationService {
         }
 
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
+        endpointDetails.setDAGGraph(endpointRequest.getDAGGraph());
         registerationDao.updateWorkflowDetails(endpointDetails);
 
     }
@@ -57,6 +58,7 @@ public class ClientUpdateInformationService {
         }
 
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
+        endpointDetails.setEndpointDetails(endpointRequest.getEndpointDetails());
         registerationDao.updateEndpointDetails(endpointDetails);
 
     }

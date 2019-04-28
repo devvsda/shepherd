@@ -21,7 +21,7 @@ public class ShepherdClientHelper {
         return registerClientRequest;
     }
 
-    public EndpointRequest createRegisterEndpointRequest(String clientName, String endpointName, String graphData, String endpointDetails) {
+    public EndpointRequest createEndpointRequest(String clientName, String endpointName, String graphData, String endpointDetails) {
         EndpointRequest registerEndpointRequest = new EndpointRequest();
         registerEndpointRequest.setClientName(clientName);
         registerEndpointRequest.setEndpointName(endpointName);

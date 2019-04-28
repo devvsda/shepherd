@@ -56,7 +56,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setNodeId(nodeId);
 
             // 2. Execute Node.
-            response = new HttpPostMethod().call(Protocol.HTTPS, serverDetails.getHostName(), serverDetails.getPort(),
+            response = new HttpPostMethod().call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
                     nodeConfiguration.getURI(), null, nodeConfiguration.getHeaders(),
                     new StringEntity(""), String.class);
 

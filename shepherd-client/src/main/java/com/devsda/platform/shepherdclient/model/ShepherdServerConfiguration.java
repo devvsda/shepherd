@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdclient.model;
 
+import com.devsda.platform.shepherd.model.ServerDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;

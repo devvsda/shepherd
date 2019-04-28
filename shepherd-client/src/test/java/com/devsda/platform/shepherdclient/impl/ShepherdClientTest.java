@@ -55,6 +55,23 @@ public class ShepherdClientTest {
         System.out.println(registerEndpointResponse);
     }
 
+
+    @Test
+    public void updateWorkflowDetailsTest() {
+        String graphFilePath = "./src/test/resources/sample_workflow.xml";
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateWorkflowDetails("amazon", "prime", graphFilePath);
+        System.out.println(registerEndpointResponse);
+    }
+
+    @Test
+    public void updateEndpointDetailsTest() {
+        String endpointFilePath = "./src/test/resources/workflow_configuration.json";
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("amazon", "prime", endpointFilePath);
+        System.out.println(registerEndpointResponse);
+    }
+
     @Test
     public void executeEndpointTest() {
 
