@@ -4,8 +4,12 @@ import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shephardcore.util.GraphUtil;
+import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.*;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
+import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,11 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
     @Override
     public Void call() throws InterruptedException, ExecutionException {
 
+        executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.PROCESSING);
+        executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
+        workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
+                executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
+
         Map<String, NodeConfiguration> nodeNameToNodeConfigurationMapping = GraphUtil.getNodeNameToNodeConfigurationMapping(this.graphConfiguration);
         Map<String, TeamConfiguration> teamNameToTeamConfigurationMapping = GraphUtil.getTeamNameToTeamConfigurationMapping(this.graphConfiguration);
 
@@ -77,6 +86,12 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                 NodeResponse nodeResponse = thisFutureObject.get(1000l, TimeUnit.MILLISECONDS);
 
                 String nodeName = nodeResponse.getNodeName();
+                NodeState nodeState = nodeResponse.getNodeState();
+
+                if(!NodeState.COMPLETED.equals(nodeState)) {
+                    continue;
+                }
+
                 log.info(String.format("Node : %s successfully completed", nodeName));
 
                 // TODO : This will use in CONDITIONAL workflow execution.
@@ -108,7 +123,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                         Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
                         futureObjects.addLast(childNodeResponse);
                     } else {
-                        // Nothing to do.
+                        // TODO : NEed to maintain secondary Queue to avoid this node becoming Zombie.
                     }
 
                 }
@@ -116,8 +131,28 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
             } catch(TimeoutException e) {
                 log.info(String.format("Node failed because of timeOut. Pushing it again."));
                 futureObjects.addLast(thisFutureObject);
+            } catch(HttpResponseException e) {
+
+                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId(), e);
+                executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
+                executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
+                executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
+                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
+                        executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
+
+            } catch(Exception e) {
+
+                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId(), e);
+                executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
+                executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
+                executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
+                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
+                        executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
+
             }
         }
+
+        executorService.shutdown();
 
         return null;
     }

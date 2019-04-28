@@ -72,8 +72,8 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
         return workflowExecutionState;
     }
 
-    public void setWorkflowExecutionState(String workflowExecutionState) {
-        this.workflowExecutionState = WorkflowExecutionState.valueOf(workflowExecutionState);
+    public void setWorkflowExecutionState(WorkflowExecutionState workflowExecutionState) {
+        this.workflowExecutionState = workflowExecutionState;
     }
 
     public Map<String, Object> getInitialPayload() {

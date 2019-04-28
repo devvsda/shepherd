@@ -1,7 +1,9 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shephardcore.model.ExecutionDetails;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
+import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
@@ -48,6 +50,18 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
         try {
 
+            ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getExecutionId());
+
+            if(WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState())) {
+                log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
+                        this.node.getExecutionId(), this.node.getName()));
+                this.node.setUpdatedAt(DateUtil.currentDate());
+                this.node.setNodeState(NodeState.KILLED);
+                this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+                workflowOperationDao.createNode(this.node);
+                return new NodeResponse(nodeConfiguration.getName(), NodeState.KILLED, response);
+            }
+
             // 1. Create entry in Node table.
             this.node.setUpdatedAt(DateUtil.currentDate());
             this.node.setNodeState(NodeState.PROCESSING);
@@ -67,7 +81,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
 
-            return new NodeResponse(nodeConfiguration.getName(), response);
+            return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
 
         } catch(HttpResponseException e) {
 
@@ -75,7 +89,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setNodeState(NodeState.FAILED);
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
-            throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()));
+            throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
 
         } catch(Exception e) {
 
@@ -83,7 +97,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setNodeState(NodeState.FAILED);
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
-            throw new NodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()));
+            throw new NodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
 
         }
     }
