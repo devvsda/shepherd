@@ -7,13 +7,17 @@ public class ShephardConstants {
 
         public static final String REGISTRATION = "/register";
         public static final String RETRIEVE = "/retrieve";
-        public static final String MANAGE = "/manage";
+        public static final String EXECUTE = "/execute";
+        public static final String UPDATE = "/update";
 
         public static final String CLIENT = "/client";
         public static final String ENDPOINT = "/endpoint";
         public static final String GRAPH_JSON = "/graphJSON";
         public static final String ENDPOINTS = "/endpoints";
-        public static final String EXECUTE = "/execute";
+
+        public static final String WORKFLOW_DETAILS = "/workflowDetails";
+        public static final String ENDPOINT_DETAILS = "/endpointDetails";
+
     }
 
     public static final class ServletFilter {
@@ -31,5 +35,4 @@ public class ShephardConstants {
     public static class DB {
         public static final String MYSQL = "mysql";
     }
-    public static final String PROCESS_OWNER = "shepherd-core";
 }

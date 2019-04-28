@@ -3,7 +3,7 @@ package com.devsda.platform.shepherd.model;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RegisterEndpointRequest extends ShepherdRequest {
+public class EndpointRequest extends ShepherdRequest {
 
     @JsonProperty("endpointName")
     private String endpointName;
@@ -17,7 +17,7 @@ public class RegisterEndpointRequest extends ShepherdRequest {
     @JsonProperty("nodesDetails")
     private String endpointDetails;
 
-    public RegisterEndpointRequest() {
+    public EndpointRequest() {
         super(ResourceName.REGISTER_ENDPOINT);
     }
 
@@ -55,7 +55,7 @@ public class RegisterEndpointRequest extends ShepherdRequest {
 
     @Override
     public String toString() {
-        return "RegisterEndpointRequest{" +
+        return "EndpointRequest{" +
                 "endpointName='" + endpointName + '\'' +
                 ", clientName='" + clientName + '\'' +
                 ", DAGGraph='" + DAGGraph + '\'' +

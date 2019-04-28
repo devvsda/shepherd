@@ -4,6 +4,7 @@ import com.devsda.platform.shephardcore.ApplicationContextUtil;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Injector;
 import org.junit.AfterClass;
@@ -36,7 +37,7 @@ public class RegistrationDaoTest {
     @Test
     public void registerClientTest() {
 
-        ClientDetails clientDetails = new ClientDetails("hitesh_dev", ShephardConstants.PROCESS_OWNER);
+        ClientDetails clientDetails = new ClientDetails("hitesh_dev", ShepherdConstants.PROCESS_OWNER);
         clientDetails.setCreatedAt(DateUtil.currentDate());
         clientDetails.setUpdatedAt(DateUtil.currentDate());
 
@@ -66,7 +67,7 @@ public class RegistrationDaoTest {
         endpointDetails.setEndpointDetails("nodes_details");
         endpointDetails.setCreatedAt(DateUtil.currentDate());
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
-        endpointDetails.setSubmittedBy(ShephardConstants.PROCESS_OWNER);
+        endpointDetails.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
 
         registerationDao.registerEndpoint(endpointDetails);
     }

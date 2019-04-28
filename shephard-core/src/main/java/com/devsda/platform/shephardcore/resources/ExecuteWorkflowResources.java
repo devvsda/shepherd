@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path(ShephardConstants.Resources.MANAGE)
+@Path(ShephardConstants.Resources.EXECUTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ExecuteWorkflowResources {
@@ -33,7 +33,7 @@ public class ExecuteWorkflowResources {
 
 
     @POST
-    @Path(ShephardConstants.Resources.EXECUTE)
+    @Path(ShephardConstants.Resources.ENDPOINT)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response executeWorkflow(@NotNull ExecuteWorkflowRequest executeWorkflowRequest) {

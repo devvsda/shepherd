@@ -76,7 +76,7 @@ public class ShepherdClient {
             String graphData = XMLLoader.strigify(workflowPath);
             GraphConfiguration graphConfiguration = JSONLoader.load(endpointPath, GraphConfiguration.class);
             String strigifiedEndpointDetails = JSONLoader.stringify(graphConfiguration);
-            RegisterEndpointRequest registerEndpointRequest = shepherdClientHelper.createRegisterEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
+            EndpointRequest registerEndpointRequest = shepherdClientHelper.createRegisterEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
             ShepherdResponse shepherdResponse = httpMethod.call(

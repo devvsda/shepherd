@@ -1,6 +1,7 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
@@ -50,6 +51,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             // 1. Create entry in Node table.
             this.node.setUpdatedAt(DateUtil.currentDate());
             this.node.setNodeState(NodeState.PROCESSING);
+            this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
             Integer nodeId = workflowOperationDao.createNode(this.node);
             this.node.setNodeId(nodeId);
 
@@ -69,19 +71,19 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
         } catch(HttpResponseException e) {
 
-            log.error(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
+            log.error(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
             this.node.setNodeState(NodeState.FAILED);
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
-            throw new ClientNodeFailureException(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
+            throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()));
 
         } catch(Exception e) {
 
-            log.error(String.format("Node : {} failed internally.", this.nodeConfiguration.getName()));
+            log.error(String.format("Node : %s failed internally.", this.nodeConfiguration.getName()), e);
             this.node.setNodeState(NodeState.FAILED);
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
-            throw new NodeFailureException(String.format("Node : {} failed at client side.", this.nodeConfiguration.getName()));
+            throw new NodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()));
 
         }
     }

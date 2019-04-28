@@ -12,4 +12,6 @@ public class ShepherdConstants {
         public static final String CONNECTION = "connection";
         public static final String EDGE = "edge";
     }
+
+    public static final String PROCESS_OWNER = "shepherd-core";
 }
