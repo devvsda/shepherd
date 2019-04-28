@@ -6,6 +6,8 @@ import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shephardcore.util.GraphUtil;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
+import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
+import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
@@ -131,9 +133,9 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
             } catch(TimeoutException e) {
                 log.info(String.format("Node failed because of timeOut. Pushing it again."));
                 futureObjects.addLast(thisFutureObject);
-            } catch(HttpResponseException e) {
+            } catch(ClientNodeFailureException | NodeFailureException e) {
 
-                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId(), e);
+                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId()), e);
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
                 executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
                 executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
@@ -142,7 +144,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
             } catch(Exception e) {
 
-                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId(), e);
+                log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId()), e);
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
                 executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
                 executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
