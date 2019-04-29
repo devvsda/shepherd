@@ -1,8 +1,9 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
+import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,20 +18,22 @@ import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path(ShephardConstants.Resources.MANAGE)
+@Path(ShephardConstants.Resources.EXECUTE)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ExecuteWorkflowResources {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowResources.class);
-    private ExecuteWorkflowService executeWorkflowService = new ExecuteWorkflowService();
+
+    @Inject
+    private ExecuteWorkflowService executeWorkflowService;
 
     @Inject
     public ResourceHelper resourceHelper;
 
 
     @POST
-    @Path(ShephardConstants.Resources.EXECUTE)
+    @Path(ShephardConstants.Resources.ENDPOINT)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response executeWorkflow(@NotNull ExecuteWorkflowRequest executeWorkflowRequest) {
@@ -45,11 +48,13 @@ public class ExecuteWorkflowResources {
 
             log.info(String.format("Successfully started processing  execute request for %s", executeWorkflowRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(
+                    ResourceName.EXECUTE_WORKFLOW, shepherdResponse, "Workflow triggered successfully.", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
+            log.error(String.format("Execute workflow failed for client : %s, and endpoint : %s", executeWorkflowRequest.getClientName(), executeWorkflowRequest.getEndpointName()), e);
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.EXECUTE_WORKFLOW, null, "Workflow trigger failed.", e.getLocalizedMessage())).build();
 
         }
 

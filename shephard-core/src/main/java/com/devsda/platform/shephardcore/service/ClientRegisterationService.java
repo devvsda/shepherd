@@ -1,13 +1,13 @@
 package com.devsda.platform.shephardcore.service;
 
-import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.util.DateUtil;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
-import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
+import com.devsda.platform.shepherd.model.EndpointRequest;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class ClientRegisterationService {
         return clientId;
     }
 
-    public Integer registerEndpoint(RegisterEndpointRequest registerEndpointRequest) {
+    public Integer registerEndpoint(EndpointRequest registerEndpointRequest) {
 
 
         ClientDetails clientDetails = registerationDao.getClientDetails(registerEndpointRequest.getClientName());
@@ -48,16 +48,27 @@ public class ClientRegisterationService {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
-        EndpointDetails endpointDetails = convertToEndpointDetails(registerEndpointRequest);
-        endpointDetails.setClientId(clientDetails.getClientId());
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), registerEndpointRequest.getEndpointName());
 
-        Integer endpointId = registerationDao.registerEndpoint(endpointDetails);
+        Integer endpointId = null;
+
+        if(endpointDetails == null) {
+
+            endpointDetails = convertToEndpointDetails(registerEndpointRequest);
+            endpointDetails.setClientId(clientDetails.getClientId());
+
+            endpointId = registerationDao.registerEndpoint(endpointDetails);
+
+        } else {
+            throw new ClientInvalidRequestException(String.format("Endpoint with name : %s already exists for client %s",
+                    registerEndpointRequest.getEndpointName(), registerEndpointRequest.getClientName()));
+        }
 
         return endpointId;
     }
 
 
-    private EndpointDetails convertToEndpointDetails(RegisterEndpointRequest registerEndpointRequest) {
+    private EndpointDetails convertToEndpointDetails(EndpointRequest registerEndpointRequest) {
 
         EndpointDetails endpointDetails = new EndpointDetails();
         endpointDetails.setEndpointName(registerEndpointRequest.getEndpointName());
@@ -66,14 +77,14 @@ public class ClientRegisterationService {
         endpointDetails.setEndpointDetails(registerEndpointRequest.getEndpointDetails());
         endpointDetails.setCreatedAt(DateUtil.currentDate());
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
-        endpointDetails.setSubmittedBy(ShephardConstants.PROCESS_OWNER);
+        endpointDetails.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
 
         return endpointDetails;
     }
 
     private ClientDetails convertToClientDetails(RegisterClientRequest registerClientRequest) {
 
-        ClientDetails clientDetails = new ClientDetails(registerClientRequest.getClientName(), ShephardConstants.PROCESS_OWNER);
+        ClientDetails clientDetails = new ClientDetails(registerClientRequest.getClientName(), ShepherdConstants.PROCESS_OWNER);
         clientDetails.setCreatedAt(DateUtil.currentDate());
         clientDetails.setUpdatedAt(DateUtil.currentDate());
 

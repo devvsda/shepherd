@@ -3,7 +3,7 @@ package com.devsda.platform.shephardcore.resources;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.service.ClientRegisterationService;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
-import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
+import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class ClientRegisterationResources {
             Map<String, Object> shepherdResponse = new HashMap<>();
             shepherdResponse.put("ClientId", clientId);
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Stored successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Client registered successfully", null)).build();
 
         } catch(Throwable e) {
 
@@ -65,7 +65,7 @@ public class ClientRegisterationResources {
     @Path(ShephardConstants.Resources.ENDPOINT)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerEndpoint(@NotNull RegisterEndpointRequest registerEndpointRequest) {
+    public Response registerEndpoint(@NotNull EndpointRequest registerEndpointRequest) {
 
         try {
             log.info(String.format("Processing register endpoint for %s", registerEndpointRequest));
@@ -85,5 +85,4 @@ public class ClientRegisterationResources {
         }
 
     }
-
 }

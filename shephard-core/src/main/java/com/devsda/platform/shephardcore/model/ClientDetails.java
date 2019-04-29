@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.model;
 
-import com.devsda.platform.shephardcore.util.DateUtil;
+import com.devsda.platform.shepherd.util.DateUtil;
 
 import java.util.Date;
 

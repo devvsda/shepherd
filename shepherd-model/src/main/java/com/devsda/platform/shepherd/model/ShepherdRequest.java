@@ -1,6 +1,8 @@
 package com.devsda.platform.shepherd.model;
 
 import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -19,8 +21,13 @@ public class ShepherdRequest {
     @JsonProperty("submitted_by")
     private String submittedBy;
 
+    @JsonProperty("error_message")
+    private String errorMessage;
+
     public ShepherdRequest(ResourceName resourceName) {
         this.resourceName = resourceName;
+        this.createdAt = DateUtil.currentDate();
+        this.updatedAt = DateUtil.currentDate();
     }
 
     public Date getCreatedAt() {
@@ -55,6 +62,14 @@ public class ShepherdRequest {
         this.resourceName = resourceName;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @Override
     public String toString() {
         return "ShepherdRequest{" +
@@ -62,6 +77,7 @@ public class ShepherdRequest {
                 ", updatedAt=" + updatedAt +
                 ", resourceName=" + resourceName +
                 ", submittedBy='" + submittedBy + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
                 '}';
     }
 }

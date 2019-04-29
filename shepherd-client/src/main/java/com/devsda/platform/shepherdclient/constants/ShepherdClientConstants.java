@@ -11,7 +11,9 @@ public class ShepherdClientConstants {
     public static final class Resources {
         public static final String REGISTER_CLIENT = "/shephard-core/register/client";
         public static final String REGISTER_ENDPOINT = "/shephard-core/register/endpoint";
+        public static final String UPDATE_WORKFLOW_DETAILS = "/shephard-core/update/endpoint/workflowDetails";
+        public static final String UPDATE_ENDPOINT_DETAILS = "/shephard-core/update/endpoint/endpointDetails";
         public static final String RETRIEVE_ENDPOINT = "/shephard-core/retrieve/endpoint";
-        public static final String EXECUTE_ENDPOINT = "/shephard-core/manage/execute";
+        public static final String EXECUTE_ENDPOINT = "/shephard-core/execute/endpoint";
     }
 }

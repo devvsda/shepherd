@@ -40,6 +40,12 @@ public interface RegisterationDao {
     EndpointDetails getEndpointDetails(@Bind("clientId") Integer clientId, @Bind("endpointId") Integer endpointId);
 
     @RegisterMapper(EndpointDetailsMapper.class)
-    @SqlQuery("select * from endpoint_details where client_name = :clientName and endpoint_name = :endpointName")
-    EndpointDetails getEndpointDetails(@Bind("clientName") String clientName, @Bind("endpointName") String endpointName);
+    @SqlQuery("select * from endpoint_details where client_id = :clientId and endpoint_name = :endpointName")
+    EndpointDetails getEndpointDetails(@Bind("clientId") Integer clientId, @Bind("endpointName") String endpointName);
+
+    @SqlUpdate("update endpoint_details set workflow_graph = :endpointDetails.DAGGraph, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
+    int updateWorkflowDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
+
+    @SqlUpdate("update endpoint_details set endpoint_details = :endpointDetails.endpointDetails, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
+    int updateEndpointDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
 }

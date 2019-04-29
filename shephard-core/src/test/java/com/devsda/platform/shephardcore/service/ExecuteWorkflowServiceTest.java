@@ -20,6 +20,6 @@ public class ExecuteWorkflowServiceTest {
 
     @Test
     public void executeWorkflowTest() throws Exception {
-        executeWorkflowService.executeWorkflow(null, null, null);
+        executeWorkflowService.executeWorkflow(null);
     }
 }

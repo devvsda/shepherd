@@ -26,17 +26,16 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() {
 
-        ShepherdResponse shepherdResponse = shepherdClient.registerClient("hitesh_dev_1");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("dominos");
         System.out.println(shepherdResponse);
 
     }
 
-
     @Test
     public void retrieveEndpointTest() {
 
-        String clientName = "hitesh_dev_1";
-        String endpointName = "sdk_testing";
+        String clientName = "amazon";
+        String endpointName = "prime";
 
         ShepherdResponse shepherdResponse = shepherdClient.retrieveEndpoint(clientName, endpointName);
 
@@ -49,18 +48,33 @@ public class ShepherdClientTest {
 
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
-        ShepherdResponse registerClientResponse = shepherdClient.registerClient("hitesh_dev");
-        System.out.println(registerClientResponse);
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("hitesh_dev", "sdk_testing", graphFilePath, endpointFilePath);
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos", "logistics_dev", graphFilePath, endpointFilePath);
+        System.out.println(registerEndpointResponse);
+    }
+
+
+    @Test
+    public void updateWorkflowDetailsTest() {
+        String graphFilePath = "./src/test/resources/sample_workflow.xml";
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateWorkflowDetails("amazon", "prime", graphFilePath);
+        System.out.println(registerEndpointResponse);
+    }
+
+    @Test
+    public void updateEndpointDetailsTest() {
+        String endpointFilePath = "./src/test/resources/workflow_configuration.json";
+
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("amazon", "prime", endpointFilePath);
         System.out.println(registerEndpointResponse);
     }
 
     @Test
     public void executeEndpointTest() {
 
-        String clientName = "hitesh_dev";
-        String endpointName = "dominos_beta";
+        String clientName = "dominos";
+        String endpointName = "logistics_dev";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>()
         {{

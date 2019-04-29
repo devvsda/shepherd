@@ -1,8 +1,8 @@
 package com.devsda.platform.shepherdclient.impl;
 
+import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
-import com.devsda.platform.shepherd.model.RegisterEndpointRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +21,8 @@ public class ShepherdClientHelper {
         return registerClientRequest;
     }
 
-    public RegisterEndpointRequest createRegisterEndpointRequest(String clientName, String endpointName, String graphData, String endpointDetails) {
-        RegisterEndpointRequest registerEndpointRequest = new RegisterEndpointRequest();
+    public EndpointRequest createEndpointRequest(String clientName, String endpointName, String graphData, String endpointDetails) {
+        EndpointRequest registerEndpointRequest = new EndpointRequest();
         registerEndpointRequest.setClientName(clientName);
         registerEndpointRequest.setEndpointName(endpointName);
         registerEndpointRequest.setDAGGraph(graphData);
