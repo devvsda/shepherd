@@ -31,12 +31,13 @@ public interface WorkflowOperationDao {
 
 
     @SqlUpdate("insert into node_details(node_name, execution_id, status, error_message, created_at, updated_at, created_by) values(:node.name,:node.executionId,:node.nodeState,:node.errorMessage,:node.createdAt,:node.updatedAt,:node.submittedBy)")
+    @GetGeneratedKeys
     public int createNode(@BindBean("node") Node node);
 
     @SqlUpdate("update node_details set status = :node.nodeState, error_message = :node.errorMessage, updated_at = :node.updatedAt where execution_id = :node.executionId and node_id = :node.nodeId")
     public int updateNode(@BindBean("node") Node node);
 
     @RegisterMapper(NodeDetailsMapper.class)
-    @SqlQuery("select * from node_details where execution_id = :nodeId and node_id = :nodeId")
+    @SqlQuery("select * from node_details where execution_id = :executionId and node_id = :nodeId")
     public Node getNode(@Bind("nodeId") Integer nodeId, @Bind("executionId") Integer executionId);
 }

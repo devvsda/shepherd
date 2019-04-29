@@ -26,7 +26,7 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() {
 
-        ShepherdResponse shepherdResponse = shepherdClient.registerClient("amazon");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("dominos");
         System.out.println(shepherdResponse);
 
     }
@@ -48,10 +48,8 @@ public class ShepherdClientTest {
 
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
-        ShepherdResponse registerClientResponse = shepherdClient.registerClient("amazon");
-        System.out.println(registerClientResponse);
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("amazon", "prime", graphFilePath, endpointFilePath);
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos", "logistics_dev", graphFilePath, endpointFilePath);
         System.out.println(registerEndpointResponse);
     }
 
@@ -75,8 +73,8 @@ public class ShepherdClientTest {
     @Test
     public void executeEndpointTest() {
 
-        String clientName = "amazon";
-        String endpointName = "prime";
+        String clientName = "dominos";
+        String endpointName = "logistics_dev";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>()
         {{

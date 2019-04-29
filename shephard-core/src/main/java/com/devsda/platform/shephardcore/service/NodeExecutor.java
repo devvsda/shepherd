@@ -97,7 +97,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setNodeState(NodeState.FAILED);
             this.node.setUpdatedAt(DateUtil.currentDate());
             workflowOperationDao.updateNode(this.node);
-            throw new NodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
+            throw new NodeFailureException(String.format("Node : %s failed internally.", this.nodeConfiguration.getName()), e);
 
         }
     }

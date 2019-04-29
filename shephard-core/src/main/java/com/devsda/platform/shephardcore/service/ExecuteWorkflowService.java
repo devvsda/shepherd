@@ -3,12 +3,15 @@ package com.devsda.platform.shephardcore.service;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
+import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.*;
 import com.devsda.platform.shephardcore.util.GraphUtil;
 import com.devsda.platform.shepherd.model.*;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +60,11 @@ public class ExecuteWorkflowService {
         executeWorkflowRequest.setClientId(endpointDetails.getClientId());
         executeWorkflowRequest.setEndpointId(endpointDetails.getEndpointId());
 
+        executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.PROCESSING);
+        executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
+        executeWorkflowRequest.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+        Integer executionId = workflowOperationDao.executeWorkflow(executeWorkflowRequest);
+        executeWorkflowRequest.setExecutionId(executionId);
 
         // Generate graph details, and load graph configurations.
         DAGGenerator dagGenerator = new DAGGenerator();
@@ -64,9 +72,6 @@ public class ExecuteWorkflowService {
         GraphConfiguration graphConfiguration = JSONLoader.loadFromStringifiedObject(endpointDetails.getEndpointDetails(), GraphConfiguration.class);
 
         log.debug(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
-
-        Integer executionId = workflowOperationDao.executeWorkflow(executeWorkflowRequest);
-        executeWorkflowRequest.setExecutionId(executionId);
 
         // Create document for given executionId.
         // TODO : Store initial payload in documentDb corresponding to executionId.

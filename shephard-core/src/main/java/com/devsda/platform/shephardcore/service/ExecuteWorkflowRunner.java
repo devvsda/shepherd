@@ -52,11 +52,6 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
     @Override
     public Void call() throws InterruptedException, ExecutionException {
 
-        executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.PROCESSING);
-        executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
-        workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
-                executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
-
         Map<String, NodeConfiguration> nodeNameToNodeConfigurationMapping = GraphUtil.getNodeNameToNodeConfigurationMapping(this.graphConfiguration);
         Map<String, TeamConfiguration> teamNameToTeamConfigurationMapping = GraphUtil.getTeamNameToTeamConfigurationMapping(this.graphConfiguration);
 
@@ -85,7 +80,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
             Future<NodeResponse> thisFutureObject = futureObjects.removeFirst();
 
             try {
-                NodeResponse nodeResponse = thisFutureObject.get(1000l, TimeUnit.MILLISECONDS);
+                NodeResponse nodeResponse = thisFutureObject.get(10000l, TimeUnit.MILLISECONDS);
 
                 String nodeName = nodeResponse.getNodeName();
                 NodeState nodeState = nodeResponse.getNodeState();
@@ -117,11 +112,13 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                     Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
 
                     if (Boolean.TRUE.equals(isNodeReadyToExecute)) {
+
+                        log.info(String.format("Pushing node : %s to Queue", childNodeName));
                         NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
                         ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
 
                         Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
-                        rootNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
+                        thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
                         Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
                         futureObjects.addLast(childNodeResponse);
                     } else {

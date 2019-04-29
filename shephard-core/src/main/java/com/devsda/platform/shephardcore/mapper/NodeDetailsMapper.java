@@ -21,7 +21,7 @@ public class NodeDetailsMapper implements ResultSetMapper<Node> {
         node.setErrorMessage(resultSet.getString("error_message"));
         node.setCreatedAt(resultSet.getDate("created_at"));
         node.setUpdatedAt(resultSet.getDate("updated_at"));
-        node.setSubmittedBy(resultSet.getString("submitted_by"));
+        node.setSubmittedBy(resultSet.getString("created_by"));
 
         return node;
     }

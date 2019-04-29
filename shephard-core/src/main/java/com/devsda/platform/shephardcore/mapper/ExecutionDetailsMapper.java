@@ -24,6 +24,6 @@ public class ExecutionDetailsMapper implements ResultSetMapper<ExecutionDetails>
         executionDetails.setErrorMessage(resultSet.getString("error_message"));
         executionDetails.setWorkflowExecutionState(WorkflowExecutionState.valueOf(resultSet.getString("status")));
 
-        return null;
+        return executionDetails;
     }
 }
