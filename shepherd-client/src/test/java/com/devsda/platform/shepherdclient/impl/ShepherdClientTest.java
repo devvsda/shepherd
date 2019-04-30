@@ -2,6 +2,8 @@ package com.devsda.platform.shepherdclient.impl;
 
 import com.devsda.platform.shepherd.model.ShepherdResponse;
 import com.devsda.platform.shepherdclient.constants.Environment;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,10 +26,11 @@ public class ShepherdClientTest {
     }
 
     @Test
-    public void registerClientTest() {
+    public void registerClientTest() throws JsonProcessingException {
 
         ShepherdResponse shepherdResponse = shepherdClient.registerClient("dominos");
-        System.out.println(shepherdResponse);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(shepherdResponse));
 
     }
 
@@ -44,34 +47,38 @@ public class ShepherdClientTest {
     }
 
     @Test
-    public void registerEndpointTest() {
+    public void registerEndpointTest() throws Exception {
 
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
 
         ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos", "logistics_dev", graphFilePath, endpointFilePath);
-        System.out.println(registerEndpointResponse);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
     }
 
 
     @Test
-    public void updateWorkflowDetailsTest() {
+    public void updateWorkflowDetailsTest() throws Exception {
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.updateWorkflowDetails("amazon", "prime", graphFilePath);
-        System.out.println(registerEndpointResponse);
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateWorkflowDetails("dominos", "logistics_dev", graphFilePath);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
     }
 
     @Test
-    public void updateEndpointDetailsTest() {
+    public void updateEndpointDetailsTest() throws Exception {
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("amazon", "prime", endpointFilePath);
-        System.out.println(registerEndpointResponse);
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("dominos", "logistics_dev", endpointFilePath);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
     }
 
     @Test
-    public void executeEndpointTest() {
+    public void executeEndpointTest() throws Exception {
 
         String clientName = "dominos";
         String endpointName = "logistics_dev";
@@ -84,6 +91,7 @@ public class ShepherdClientTest {
         }};
 
         ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, initialPayload);
-        System.out.println(executeEndpointResponse);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(executeEndpointResponse));
     }
 }
