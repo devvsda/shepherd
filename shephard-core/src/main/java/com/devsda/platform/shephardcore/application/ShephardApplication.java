@@ -55,6 +55,7 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
         environment.jersey().register(injector.getInstance(ClientDataRetrievalResources.class));
         environment.jersey().register(injector.getInstance(ExecuteWorkflowResources.class));
         environment.jersey().register(injector.getInstance(ClientUpdateInformationResources.class));
+        environment.jersey().register(injector.getInstance(WorkflowManagementResources.class));
     }
 
     /**

@@ -14,7 +14,8 @@ public class ResourceHelper {
 
     private static final Logger log = LoggerFactory.getLogger(ResourceHelper.class);
 
-    public ShepherdResponse createShepherdResponse(ResourceName resourceName, Map<String, Object> resourceResponse, String message, String errorMessage) {
+    public ShepherdResponse createShepherdResponse(ResourceName resourceName, Map<String, Object> resourceResponse,
+                                                   String message, String errorMessage) {
 
         ShepherdResponse shepherdResponse = new ShepherdResponse();
 
