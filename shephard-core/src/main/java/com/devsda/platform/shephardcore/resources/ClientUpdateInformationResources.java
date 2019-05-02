@@ -1,8 +1,6 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
 import com.devsda.platform.shephardcore.service.ClientUpdateInformationService;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.google.inject.Inject;

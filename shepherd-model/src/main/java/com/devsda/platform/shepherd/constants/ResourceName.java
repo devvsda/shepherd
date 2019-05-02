@@ -3,6 +3,9 @@ package com.devsda.platform.shepherd.constants;
 public enum ResourceName {
 
     EXECUTE_WORKFLOW,
+    KILL_EXECUTION,
+    RESUME_EXECUTION,
+    RESTART_EXECUTION,
     REGISTER_CLIENT,
     REGISTER_ENDPOINT,
     UPDATE_ENDPOINT,
