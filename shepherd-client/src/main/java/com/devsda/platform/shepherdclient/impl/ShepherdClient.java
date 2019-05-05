@@ -11,20 +11,34 @@ import com.devsda.platform.shepherdclient.loader.YAMLLoader;
 import com.devsda.platform.shepherd.model.ServerDetails;
 import com.devsda.platform.shepherdclient.model.ShepherdServerConfiguration;
 import com.devsda.utils.httputils.HttpMethod;
+import com.devsda.utils.httputils.constants.Protocol;
 import com.devsda.utils.httputils.loader.JsonLoader;
 import com.devsda.utils.httputils.methods.HttpGetMethod;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
+import com.mongodb.*;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import com.mongodb.client.result.UpdateResult;
+import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.mongodb.client.model.Filters.eq;
 
 
 public class ShepherdClient {
@@ -36,6 +50,9 @@ public class ShepherdClient {
     private ShepherdServerConfiguration shepherdServerDetails;
     private ShepherdClientHelper shepherdClientHelper;
 
+    private MongoClient mongoClient;
+
+
     public ShepherdClient(Environment environment) throws IOException {
 
         this.environment = environment;
@@ -43,6 +60,7 @@ public class ShepherdClient {
         String shepherdServerConfigurationFile = ShepherdClientConstants.CONFIGURATION_FILE_NAME.replace(ShepherdClientConstants.PlaceHolders.Environment, this.environment.name().toLowerCase());
         this.shepherdServerDetails = YAMLLoader.load(shepherdServerConfigurationFile, ShepherdServerConfiguration.class);
         this.shepherdClientHelper = new ShepherdClientHelper();
+        this.mongoClient = getMongoClient();
     }
 
     public ShepherdResponse registerClient(String clientName) {
@@ -149,9 +167,6 @@ public class ShepherdClient {
 
     }
 
-
-
-
     public ShepherdResponse retrieveEndpoint(String clientName, String endpointName) {
 
         try {
@@ -185,7 +200,6 @@ public class ShepherdClient {
                     ShepherdClientConstants.Resources.EXECUTE_ENDPOINT,
                     null, shepherdServerDetails.getHeaders(),
                     new StringEntity(JSONLoader.stringify(executeWorkflowRequest)), ShepherdResponse.class);
-
             // Return response.
             return shepherdResponse;
 
@@ -197,5 +211,50 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
 
+    }
+
+    public boolean saveExecutionDetails(String executionID, String updatedInput) {
+        try {
+            MongoCollection<Document> collection = MongoDBHandler.getMongoCollection(this.mongoClient, this.shepherdServerDetails.getDataSourceDetails().getDb_name(), this.shepherdServerDetails.getDataSourceDetails().getCollection_name());
+
+            if (collection != null) {
+                Document dbObjectInput =  new Document();
+                dbObjectInput.append("exec_id",executionID);
+                final Document dbObjectUpdateInput = Document.parse(updatedInput);
+                dbObjectUpdateInput.append("exec_id",executionID);
+                dbObjectUpdateInput.append("lastUpdatedDate",new Date());
+                UpdateResult updateResult = collection.replaceOne(dbObjectInput, dbObjectUpdateInput);
+                log.debug("updateDocument() :: database: " + this.shepherdServerDetails.getDataSourceDetails().getDb_name() + " and collection: " + this.shepherdServerDetails.getDataSourceDetails().getCollection_name()
+                        + " is document Updated :" + updateResult.wasAcknowledged());
+                boolean ack = updateResult.wasAcknowledged();
+                return ack;
+            }
+        } catch (MongoWriteException e) {
+            log.error(e.getMessage(), e);
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public Document fetchExecutionDetails(String executionID){
+        try
+        {
+            MongoCollection<Document> collection = MongoDBHandler.getMongoCollection(this.mongoClient, this.shepherdServerDetails.getDataSourceDetails().getDb_name(), this.shepherdServerDetails.getDataSourceDetails().getCollection_name());
+            if (collection != null) {
+                Document result = collection.find(new Document().append("exec_id",executionID)).first();
+                return result;
+            }
+
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private MongoClient getMongoClient() {
+        String mongoConnectionUri = MongoDBHandler.createMongoConnectionUri(this.shepherdServerDetails.getDataSourceDetails());
+        MongoClientURI uri = new MongoClientURI(mongoConnectionUri);
+        return new MongoClient(uri);
     }
 }

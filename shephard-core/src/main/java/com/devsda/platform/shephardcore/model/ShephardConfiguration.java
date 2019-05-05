@@ -1,5 +1,6 @@
 package com.devsda.platform.shephardcore.model;
 
+import com.devsda.platform.shepherd.model.DataSourceDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
@@ -20,6 +21,10 @@ public class ShephardConfiguration extends Configuration implements Serializable
     @NotNull
     @JsonProperty("database")
     private DataSourceFactory database = new DataSourceFactory();
+
+    @NotNull
+    @JsonProperty("datasource")
+    private DataSourceDetails dataSourceDetails;
 
     public Environment getEnvironment() {
         return environment;
@@ -45,12 +50,22 @@ public class ShephardConfiguration extends Configuration implements Serializable
         this.database = database;
     }
 
+    public DataSourceDetails getDataSourceDetails() {
+        return dataSourceDetails;
+    }
+
+    public void setDataSourceDetails(DataSourceDetails dataSourceDetails) {
+        this.dataSourceDetails = dataSourceDetails;
+    }
+
+
     @Override
     public String toString() {
         return "ShephardConfiguration{" +
                 "environment=" + environment +
                 ", applicationName='" + applicationName + '\'' +
                 ", database=" + database +
+                ", dataSourceDetails=" + dataSourceDetails +
                 '}';
     }
 }

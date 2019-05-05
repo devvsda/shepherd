@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdclient.model;
 
+import com.devsda.platform.shepherd.model.DataSourceDetails;
 import com.devsda.platform.shepherd.model.ServerDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,6 +10,17 @@ public class ShepherdServerConfiguration {
 
     @JsonProperty("server")
     private ServerDetails serverDetails;
+
+    public DataSourceDetails getDataSourceDetails() {
+        return dataSourceDetails;
+    }
+
+    public void setDataSourceDetails(DataSourceDetails dataSourceDetails) {
+        this.dataSourceDetails = dataSourceDetails;
+    }
+
+    @JsonProperty("datasource")
+    private DataSourceDetails dataSourceDetails;
 
     @JsonProperty("headers")
     private Map<String, String> headers;

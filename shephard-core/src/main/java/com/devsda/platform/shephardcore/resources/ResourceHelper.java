@@ -24,7 +24,7 @@ public class ResourceHelper {
         shepherdResponse.setResponseData(resourceResponse);
 
         try {
-            shepherdResponse.setServerName(InetAddress.getLocalHost().getHostName());
+            shepherdResponse.setServerName(InetAddress.getLocalHost().getHostName()+"ASHUTOSH ");
         } catch(UnknownHostException e) {
             log.error("Not able to fetch DNS name of Shepherd server.");
         }
