@@ -2,7 +2,7 @@ package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
-import com.devsda.platform.shephardcore.service.MongoDBService;
+import com.devsda.platform.shephardcore.service.ExecutionDocumentService;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.google.inject.Inject;
@@ -39,7 +39,7 @@ public class ExecuteWorkflowResources {
     @Path(ShephardConstants.Resources.ENDPOINT)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) {
+    public Response executeWorkflow(@NotNull ExecuteWorkflowRequest executeWorkflowRequest) {
 
         try {
             log.info(String.format("Processing execute request for %s", executeWorkflowRequest));

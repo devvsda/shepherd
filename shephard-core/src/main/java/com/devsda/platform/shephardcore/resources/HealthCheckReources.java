@@ -18,6 +18,7 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HealthCheckReources {
+    // TODO: apply proper indentation.
     private static final Logger log = LoggerFactory.getLogger(HealthCheckReources.class);
 
     @Path("/{echoText}")

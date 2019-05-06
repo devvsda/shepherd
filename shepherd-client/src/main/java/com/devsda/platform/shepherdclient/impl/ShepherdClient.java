@@ -60,7 +60,6 @@ public class ShepherdClient {
         String shepherdServerConfigurationFile = ShepherdClientConstants.CONFIGURATION_FILE_NAME.replace(ShepherdClientConstants.PlaceHolders.Environment, this.environment.name().toLowerCase());
         this.shepherdServerDetails = YAMLLoader.load(shepherdServerConfigurationFile, ShepherdServerConfiguration.class);
         this.shepherdClientHelper = new ShepherdClientHelper();
-        this.mongoClient = getMongoClient();
     }
 
     public ShepherdResponse registerClient(String clientName) {
@@ -211,50 +210,5 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
 
-    }
-
-    public boolean saveExecutionDetails(String executionID, String updatedInput) {
-        try {
-            MongoCollection<Document> collection = MongoDBHandler.getMongoCollection(this.mongoClient, this.shepherdServerDetails.getDataSourceDetails().getDb_name(), this.shepherdServerDetails.getDataSourceDetails().getCollection_name());
-
-            if (collection != null) {
-                Document dbObjectInput =  new Document();
-                dbObjectInput.append("exec_id",executionID);
-                final Document dbObjectUpdateInput = Document.parse(updatedInput);
-                dbObjectUpdateInput.append("exec_id",executionID);
-                dbObjectUpdateInput.append("lastUpdatedDate",new Date());
-                UpdateResult updateResult = collection.replaceOne(dbObjectInput, dbObjectUpdateInput);
-                log.debug("updateDocument() :: database: " + this.shepherdServerDetails.getDataSourceDetails().getDb_name() + " and collection: " + this.shepherdServerDetails.getDataSourceDetails().getCollection_name()
-                        + " is document Updated :" + updateResult.wasAcknowledged());
-                boolean ack = updateResult.wasAcknowledged();
-                return ack;
-            }
-        } catch (MongoWriteException e) {
-            log.error(e.getMessage(), e);
-        } catch (Exception ex){
-            ex.printStackTrace();
-        }
-        return false;
-    }
-
-    public Document fetchExecutionDetails(String executionID){
-        try
-        {
-            MongoCollection<Document> collection = MongoDBHandler.getMongoCollection(this.mongoClient, this.shepherdServerDetails.getDataSourceDetails().getDb_name(), this.shepherdServerDetails.getDataSourceDetails().getCollection_name());
-            if (collection != null) {
-                Document result = collection.find(new Document().append("exec_id",executionID)).first();
-                return result;
-            }
-
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    private MongoClient getMongoClient() {
-        String mongoConnectionUri = MongoDBHandler.createMongoConnectionUri(this.shepherdServerDetails.getDataSourceDetails());
-        MongoClientURI uri = new MongoClientURI(mongoConnectionUri);
-        return new MongoClient(uri);
     }
 }

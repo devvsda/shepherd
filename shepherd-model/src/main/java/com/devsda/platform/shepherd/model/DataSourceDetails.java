@@ -14,26 +14,25 @@ public class DataSourceDetails {
 
     private String path;
     private String params;
+    private String dbname;
 
-    public String getDb_name() {
-        return db_name;
+    public String getDbname() {
+        return dbname;
     }
 
-    public void setDb_name(String db_name) {
-        this.db_name = db_name;
+    public void setDbname(String dbname) {
+        this.dbname = dbname;
     }
 
-    public String getCollection_name() {
-        return collection_name;
+    public String getCollectionname() {
+        return collectionname;
     }
 
-    public void setCollection_name(String collection_name) {
-        this.collection_name = collection_name;
+    public void setCollectionname(String collectionname) {
+        this.collectionname = collectionname;
     }
 
-    private String db_name;
-    private String collection_name;
-
+    private String collectionname;
 
     public String getPrefix() {
         return prefix;
@@ -92,8 +91,8 @@ public class DataSourceDetails {
                 ", clusters=" + clusters +
                 ", path='" + path + '\'' +
                 ", params='" + params + '\'' +
-                ", db_name='" + db_name + '\'' +
-                ", collection_name='" + collection_name + '\'' +
+                ", dbName='" + dbname + '\'' +
+                ", collectionName='" + collectionname + '\'' +
                 '}';
     }
 }

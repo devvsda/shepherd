@@ -18,6 +18,8 @@ public class ShephardConstants {
         public static final String WORKFLOW_DETAILS = "/workflowDetails";
         public static final String ENDPOINT_DETAILS = "/endpointDetails";
 
+        public static final String EXECUTION_DETAILS = "/executionDetails";
+
     }
 
     public static final class ServletFilter {

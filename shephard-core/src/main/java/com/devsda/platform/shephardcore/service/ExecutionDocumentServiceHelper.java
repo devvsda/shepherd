@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
-public class MongoDBServiceHelper {
+public class ExecutionDocumentServiceHelper {
 
-    private static final Logger log = LoggerFactory.getLogger(MongoDBServiceHelper.class);
+    private static final Logger log = LoggerFactory.getLogger(ExecutionDocumentServiceHelper.class);
 
     public static String createMongoConnectionUri(DataSourceDetails dataSourceDetails) {
         StringBuilder uriBuilder = new StringBuilder("");
@@ -29,7 +29,6 @@ public class MongoDBServiceHelper {
         }
 
         uriBuilder.append(dataSourceDetails.getPath()).append("?").append(dataSourceDetails.getParams());
-        String hello = uriBuilder.toString();
         return uriBuilder.toString();
     }
 

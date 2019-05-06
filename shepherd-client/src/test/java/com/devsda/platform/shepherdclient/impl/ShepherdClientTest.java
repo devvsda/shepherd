@@ -95,22 +95,4 @@ public class ShepherdClientTest {
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(executeEndpointResponse));
     }
-
-    @Test public void saveDocumentTest() {
-
-        int [] arr = {1,2,3,4};
-        PayLoad payLoad = new PayLoad("payloadByNode1",new Date(),true, arr);
-
-        DocumentInputClass inputObject = new DocumentInputClass("Ashutosh", "Awesome", payLoad);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false);
-        String jsonString = "";
-        try {
-            jsonString = mapper.writeValueAsString(inputObject);
-        }catch(JsonProcessingException ex){
-            ex.printStackTrace();
-        }
-        shepherdClient.saveExecutionDetails("mongodbYay", jsonString);
-    }
-
 }

@@ -45,7 +45,7 @@ public class ExecuteWorkflowService {
     private WorkflowOperationDao workflowOperationDao;
 
     @Inject
-    private MongoDBService mongoDBService;
+    private ExecutionDocumentService executionDocumentService;
 
     /**
      * This method helps to execute workflow.
@@ -80,7 +80,7 @@ public class ExecuteWorkflowService {
         Integer executionId = workflowOperationDao.executeWorkflow(executeWorkflowRequest);
         executeWorkflowRequest.setExecutionId(executionId);
 
-        mongoDBService.insertExecutionDetails(executeWorkflowRequest.getExecutionId(),executeWorkflowRequest.getInitialPayload());
+        executionDocumentService.insertExecutionDetails(executeWorkflowRequest.getExecutionId(),executeWorkflowRequest.getInitialPayload());
 
         // Generate graph details, and load graph configurations.
         DAGGenerator dagGenerator = new DAGGenerator();
