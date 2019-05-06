@@ -50,3 +50,16 @@ logging:
       archivedFileCount: 7
       timeZone: UTC
       maxFileSize: 10MB
+
+datasource :
+  prefix: mongodb
+  user: ashutosh
+  password: xyz
+  clusters:
+    - shepherd-cluster0-shard-00-00-lovgv.mongodb.net:27017
+    - shepherd-cluster0-shard-00-01-lovgv.mongodb.net:27017
+    - shepherd-cluster0-shard-00-02-lovgv.mongodb.net:27017
+  path: /test
+  params: ssl=true&replicaSet=Shepherd-Cluster0-shard-0&authSource=admin&retryWrites=true
+  dbname: shepherd
+  collectionname: execution_details

@@ -11,20 +11,34 @@ import com.devsda.platform.shepherdclient.loader.YAMLLoader;
 import com.devsda.platform.shepherd.model.ServerDetails;
 import com.devsda.platform.shepherdclient.model.ShepherdServerConfiguration;
 import com.devsda.utils.httputils.HttpMethod;
+import com.devsda.utils.httputils.constants.Protocol;
 import com.devsda.utils.httputils.loader.JsonLoader;
 import com.devsda.utils.httputils.methods.HttpGetMethod;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
+import com.mongodb.*;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import com.mongodb.client.result.UpdateResult;
+import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.mongodb.client.model.Filters.eq;
 
 
 public class ShepherdClient {
@@ -35,6 +49,9 @@ public class ShepherdClient {
     private Environment environment;
     private ShepherdServerConfiguration shepherdServerDetails;
     private ShepherdClientHelper shepherdClientHelper;
+
+    private MongoClient mongoClient;
+
 
     public ShepherdClient(Environment environment) throws IOException {
 
@@ -149,9 +166,6 @@ public class ShepherdClient {
 
     }
 
-
-
-
     public ShepherdResponse retrieveEndpoint(String clientName, String endpointName) {
 
         try {
@@ -185,7 +199,6 @@ public class ShepherdClient {
                     ShepherdClientConstants.Resources.EXECUTE_ENDPOINT,
                     null, shepherdServerDetails.getHeaders(),
                     new StringEntity(JSONLoader.stringify(executeWorkflowRequest)), ShepherdResponse.class);
-
             // Return response.
             return shepherdResponse;
 

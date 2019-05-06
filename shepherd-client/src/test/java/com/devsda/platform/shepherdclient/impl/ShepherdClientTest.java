@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class ShepherdClientTest {
     @Test
     public void registerClientTest() throws JsonProcessingException {
 
-        ShepherdResponse shepherdResponse = shepherdClient.registerClient("dominos");
+        ShepherdResponse shepherdResponse = shepherdClient.registerClient("dominos11");
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(shepherdResponse));
 
@@ -37,8 +38,8 @@ public class ShepherdClientTest {
     @Test
     public void retrieveEndpointTest() {
 
-        String clientName = "amazon";
-        String endpointName = "prime";
+        String clientName = "dominos11";
+        String endpointName = "validate_dev";
 
         ShepherdResponse shepherdResponse = shepherdClient.retrieveEndpoint(clientName, endpointName);
 
@@ -52,7 +53,7 @@ public class ShepherdClientTest {
         String graphFilePath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos", "logistics_dev", graphFilePath, endpointFilePath);
+        ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos11", "validate_dev", graphFilePath, endpointFilePath);
 
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
@@ -80,8 +81,8 @@ public class ShepherdClientTest {
     @Test
     public void executeEndpointTest() throws Exception {
 
-        String clientName = "dominos";
-        String endpointName = "logistics_dev";
+        String clientName = "dominos11";
+        String endpointName = "validate_dev";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>()
         {{

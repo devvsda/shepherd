@@ -31,7 +31,6 @@ public class ExecuteWorkflowResources {
     @Inject
     public ResourceHelper resourceHelper;
 
-
     @POST
     @Path(ShephardConstants.Resources.ENDPOINT)
     @Produces(MediaType.APPLICATION_JSON)

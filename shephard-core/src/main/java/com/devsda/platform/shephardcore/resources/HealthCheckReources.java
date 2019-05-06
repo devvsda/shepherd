@@ -2,8 +2,9 @@ package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.HealthCheck;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -17,6 +18,8 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HealthCheckReources {
+    // TODO: apply proper indentation.
+    private static final Logger log = LoggerFactory.getLogger(HealthCheckReources.class);
 
     @Path("/{echoText}")
     @GET
@@ -46,8 +49,8 @@ public class HealthCheckReources {
         response.put("hostName", InetAddress.getLocalHost().getHostName());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String stringifyResponse = objectMapper.writeValueAsString(response);
 
+        String stringifyResponse = objectMapper.writeValueAsString(response);
         return Response.ok(stringifyResponse).build();
     }
 
