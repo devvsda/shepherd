@@ -1,19 +1,10 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.service.ExecuteWorkflowService;
 import com.devsda.platform.shephardcore.service.ExecutionDocumentService;
-import com.devsda.platform.shepherd.constants.ResourceName;
-import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
-import com.devsda.utils.httputils.loader.JsonLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
-import com.mongodb.MongoWriteException;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.util.JSON;
 import org.bson.Document;
-import org.bson.json.JsonMode;
-import org.bson.json.JsonWriterSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,14 +12,12 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path(ShephardConstants.Resources.EXECUTION_DETAILS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ExecutionDocumentResources {
+    private static final Logger log = LoggerFactory.getLogger(HealthCheckReources.class);
 
     @Inject
     private ExecutionDocumentService executeWorkflowService;
@@ -59,7 +48,7 @@ public class ExecutionDocumentResources {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateExecutionDetails(@PathParam("executionID") Integer executionID,  String updatedExecutionDetails) throws Exception {
+    public Response updateExecutionDetails(@PathParam("executionID") Integer executionID, @NotNull String updatedExecutionDetails) throws Exception {
 
         try{
             boolean result =  this.executeWorkflowService.updateExecutionDetails(executionID, updatedExecutionDetails);
