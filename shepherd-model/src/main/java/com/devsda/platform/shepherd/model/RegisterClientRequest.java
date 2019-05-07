@@ -3,8 +3,6 @@ package com.devsda.platform.shepherd.model;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
-
 public class RegisterClientRequest extends ShepherdRequest {
 
 

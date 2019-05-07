@@ -21,7 +21,7 @@ public class ClientUpdateInformationService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(endpointRequest.getClientName());
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
@@ -46,7 +46,7 @@ public class ClientUpdateInformationService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(endpointRequest.getClientName());
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 

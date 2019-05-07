@@ -8,7 +8,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,8 +83,7 @@ public class ShepherdClientTest {
         String clientName = "dominos11";
         String endpointName = "validate_dev";
 
-        Map<String, Object> initialPayload = new HashMap<String, Object>()
-        {{
+        Map<String, Object> initialPayload = new HashMap<String, Object>() {{
             put("size", "medium");
             put("base", "cheese_crust");
             put("name", "farm_hosue");

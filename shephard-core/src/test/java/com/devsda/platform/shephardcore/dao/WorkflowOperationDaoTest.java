@@ -8,7 +8,6 @@ import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.factory.ObjectFactory;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.Node;
-import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Injector;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -38,7 +37,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void createNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.PROCESSING, null) ;
+        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.PROCESSING, null);
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
 
         workflowOperationDao.createNode(node);
@@ -47,7 +46,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void updateNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.FAILED, "TEST FAILURE") ;
+        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.FAILED, "TEST FAILURE");
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         node.setNodeId(1);
 

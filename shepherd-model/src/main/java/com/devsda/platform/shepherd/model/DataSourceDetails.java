@@ -1,7 +1,5 @@
 package com.devsda.platform.shepherd.model;
 
-import com.devsda.utils.httputils.constants.Protocol;
-
 import java.util.ArrayList;
 
 public class DataSourceDetails {
@@ -15,6 +13,7 @@ public class DataSourceDetails {
     private String path;
     private String params;
     private String dbname;
+    private String collectionname;
 
     public String getDbname() {
         return dbname;
@@ -31,8 +30,6 @@ public class DataSourceDetails {
     public void setCollectionname(String collectionname) {
         this.collectionname = collectionname;
     }
-
-    private String collectionname;
 
     public String getPrefix() {
         return prefix;

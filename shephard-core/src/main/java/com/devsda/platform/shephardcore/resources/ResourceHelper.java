@@ -26,7 +26,7 @@ public class ResourceHelper {
 
         try {
             shepherdResponse.setServerName(InetAddress.getLocalHost().getHostName());
-        } catch(UnknownHostException e) {
+        } catch (UnknownHostException e) {
             log.error("Not able to fetch DNS name of Shepherd server.");
         }
 

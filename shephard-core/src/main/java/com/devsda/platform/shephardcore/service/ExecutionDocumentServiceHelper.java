@@ -20,11 +20,11 @@ public class ExecutionDocumentServiceHelper {
 
         Iterator<String> it = dataSourceDetails.getClusters().iterator();
 
-        if(it.hasNext()){
+        if (it.hasNext()) {
             uriBuilder.append(it.next());
         }
 
-        while(it.hasNext()){
+        while (it.hasNext()) {
             uriBuilder.append(",").append(it.next());
         }
 

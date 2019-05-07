@@ -10,6 +10,10 @@ public class ShepherdServerConfiguration {
 
     @JsonProperty("server")
     private ServerDetails serverDetails;
+    @JsonProperty("datasource")
+    private DataSourceDetails dataSourceDetails;
+    @JsonProperty("headers")
+    private Map<String, String> headers;
 
     public DataSourceDetails getDataSourceDetails() {
         return dataSourceDetails;
@@ -18,12 +22,6 @@ public class ShepherdServerConfiguration {
     public void setDataSourceDetails(DataSourceDetails dataSourceDetails) {
         this.dataSourceDetails = dataSourceDetails;
     }
-
-    @JsonProperty("datasource")
-    private DataSourceDetails dataSourceDetails;
-
-    @JsonProperty("headers")
-    private Map<String, String> headers;
 
     public ServerDetails getServerDetails() {
         return serverDetails;

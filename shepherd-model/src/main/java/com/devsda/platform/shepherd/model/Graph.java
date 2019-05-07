@@ -1,7 +1,6 @@
 package com.devsda.platform.shepherd.model;
 
 import com.devsda.platform.shepherd.constants.GraphType;
-import com.devsda.platform.shepherd.model.Node;
 
 import java.util.List;
 

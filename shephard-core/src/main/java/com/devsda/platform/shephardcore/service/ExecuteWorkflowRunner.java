@@ -11,7 +11,6 @@ import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
-import org.apache.http.client.HttpResponseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
     private Graph graph;
     private GraphConfiguration graphConfiguration;
 
-    public ExecuteWorkflowRunner(Graph graph, GraphConfiguration graphConfiguration, ExecuteWorkflowRequest executeWorkflowRequest ) {
+    public ExecuteWorkflowRunner(Graph graph, GraphConfiguration graphConfiguration, ExecuteWorkflowRequest executeWorkflowRequest) {
         this.graph = graph;
         this.graphConfiguration = graphConfiguration;
         this.executeWorkflowRequest = executeWorkflowRequest;
@@ -46,6 +45,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
     /**
      * This method executes graph
+     *
      * @throws InterruptedException
      * @throws ExecutionException
      */
@@ -75,7 +75,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         Deque<Future<NodeResponse>> futureObjects = new LinkedList<>();
         futureObjects.addFirst(rootNodeFuture);
 
-        while(!futureObjects.isEmpty()) {
+        while (!futureObjects.isEmpty()) {
 
             Future<NodeResponse> thisFutureObject = futureObjects.removeFirst();
 
@@ -85,7 +85,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                 String nodeName = nodeResponse.getNodeName();
                 NodeState nodeState = nodeResponse.getNodeState();
 
-                if(!NodeState.COMPLETED.equals(nodeState)) {
+                if (!NodeState.COMPLETED.equals(nodeState)) {
                     continue;
                 }
 
@@ -96,13 +96,13 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                 List<Connection> childrenConnections = nodeNameToNodeMapping.get(nodeName).getConnections();
 
-                if(childrenConnections == null) {
+                if (childrenConnections == null) {
                     continue;
                 }
 
                 log.debug(String.format("Number of children of node : %s is %s", nodeName, childrenConnections.size()));
 
-                for(Connection connection : childrenConnections) {
+                for (Connection connection : childrenConnections) {
 
                     // TODO : This will use in CONDITIONAL workflow execution.
                     String edgeName = connection.getEdgeName();
@@ -127,10 +127,10 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                 }
 
-            } catch(TimeoutException e) {
+            } catch (TimeoutException e) {
                 log.info(String.format("Node failed because of timeOut. Pushing it again."));
                 futureObjects.addLast(thisFutureObject);
-            } catch(ClientNodeFailureException | NodeFailureException e) {
+            } catch (ClientNodeFailureException | NodeFailureException e) {
 
                 log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId()), e);
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
@@ -139,7 +139,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                 workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
                         executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
 
-            } catch(Exception e) {
+            } catch (Exception e) {
 
                 log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId()), e);
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);

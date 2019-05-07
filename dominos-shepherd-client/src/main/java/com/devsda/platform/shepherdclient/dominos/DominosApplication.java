@@ -9,7 +9,7 @@ import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
 
-public class DominosApplication extends Application<DominosConfiguration>{
+public class DominosApplication extends Application<DominosConfiguration> {
 
 
     public static void main(String[] args) throws Exception {

@@ -1,63 +1,60 @@
 {
-  "teamConfigurations" : [
+  "teamConfigurations": [
     {
-      "owner" : "PummyAntyFoodShop",
-
-      "serverDetails" : {
-        "hostName" : "localhost",
-        "port" : "8080"
+      "owner": "PummyAntyFoodShop",
+      "serverDetails": {
+        "hostName": "localhost",
+        "port": "8080"
       },
-
-      "headers" : {
-        "content-type" : "application/json",
-        "X-PummyAntyFoodShop-API-Key" : "XYZ",
-        "X-PummyAntyFoodShop-Application-Id" : "ABC",
-        "Accept" : "*/*"
+      "headers": {
+        "content-type": "application/json",
+        "X-PummyAntyFoodShop-API-Key": "XYZ",
+        "X-PummyAntyFoodShop-Application-Id": "ABC",
+        "Accept": "*/*"
       },
-
-      "nodeConfigurations" : [
+      "nodeConfigurations": [
         {
-          "name" : "ValidateOrder",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/validateOrder",
-          "httpMethod" : "POST"
-        } ,
+          "name": "ValidateOrder",
+          "URI": "/dominos-shepherd-client/order-management-workflow/validateOrder",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "GetOrderType",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/getOrderType",
-          "httpMethod" : "POST"
-        } ,
+          "name": "GetOrderType",
+          "URI": "/dominos-shepherd-client/order-management-workflow/getOrderType",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "AssignNonVegKitchen",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/assignNonVegKitchen",
-          "httpMethod" : "POST"
-        } ,
+          "name": "AssignNonVegKitchen",
+          "URI": "/dominos-shepherd-client/order-management-workflow/assignNonVegKitchen",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "AssignVegKitchen",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/assignVegKitchen",
-          "httpMethod" : "POST"
-        } ,
+          "name": "AssignVegKitchen",
+          "URI": "/dominos-shepherd-client/order-management-workflow/assignVegKitchen",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "AssignChef",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/assignChef",
-          "httpMethod" : "POST"
-        } ,
+          "name": "AssignChef",
+          "URI": "/dominos-shepherd-client/order-management-workflow/assignChef",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "GatherIngredients",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/gatherIngredients",
-          "httpMethod" : "POST"
-        } ,
+          "name": "GatherIngredients",
+          "URI": "/dominos-shepherd-client/order-management-workflow/gatherIngredients",
+          "httpMethod": "POST"
+        },
         {
-          "name" : "CookFood",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/cookFood",
-          "httpMethod" : "POST",
-          "headers" : {
-            "content-type" : "application/pdf"
+          "name": "CookFood",
+          "URI": "/dominos-shepherd-client/order-management-workflow/cookFood",
+          "httpMethod": "POST",
+          "headers": {
+            "content-type": "application/pdf"
           }
         },
         {
-          "name" : "NotifyClient",
-          "URI" : "/dominos-shepherd-client/order-management-workflow/notifyClient",
-          "httpMethod" : "POST"
+          "name": "NotifyClient",
+          "URI": "/dominos-shepherd-client/order-management-workflow/notifyClient",
+          "httpMethod": "POST"
         }
       ]
     }

@@ -1,10 +1,10 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
-import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
+import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
 import com.devsda.platform.shepherd.model.Graph;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class ClientDataRetrievelService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(clientName);
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name.");
         }
 
@@ -48,7 +48,7 @@ public class ClientDataRetrievelService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(clientName);
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name.");
         }
 
@@ -63,7 +63,7 @@ public class ClientDataRetrievelService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(clientName);
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name.");
         }
 

@@ -14,7 +14,7 @@ public class YAMLLoader {
 
         File file = new File(filePath);
 
-        if( !(file.exists()  && file.isFile()) ) {
+        if (!(file.exists() && file.isFile())) {
             throw new ClientInvalidRequestException(String.format("YAML file is not available to load. FilePath : %s", filePath));
         }
 

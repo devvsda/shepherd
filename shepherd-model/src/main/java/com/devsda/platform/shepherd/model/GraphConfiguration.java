@@ -1,7 +1,5 @@
 package com.devsda.platform.shepherd.model;
 
-import com.devsda.platform.shepherd.model.TeamConfiguration;
-
 import java.util.List;
 
 public class GraphConfiguration {

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  * This class helps to map client_details table raw data into @{@link ClientDetails} model.
  */
-public class ClientDetailsMapper implements ResultSetMapper<ClientDetails>{
+public class ClientDetailsMapper implements ResultSetMapper<ClientDetails> {
 
     /***
      * This method helps to map client_details table raw data into @{@link ClientDetails} model.

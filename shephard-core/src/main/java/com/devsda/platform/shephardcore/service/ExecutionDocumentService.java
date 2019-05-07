@@ -18,22 +18,20 @@ import java.util.Map;
 
 public class ExecutionDocumentService {
 
+    private static final Logger log = LoggerFactory.getLogger(ExecutionDocumentService.class);
     @Inject
     private ShephardConfiguration shepherdConfiguration;
-
     private MongoClient mongoClient;
-
-    private static final Logger log = LoggerFactory.getLogger(ExecutionDocumentService.class);
 
     public boolean insertExecutionDetails(Integer executionId, Map<String, Object> initialPayload) {
         this.mongoClient = getMongoClient();
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS , false);
+            mapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             String jsonString = "";
             try {
                 jsonString = mapper.writeValueAsString(initialPayload);
-            }catch(JsonProcessingException e){
+            } catch (JsonProcessingException e) {
                 log.error(String.format("Unable to Process the initial payload for execution id : %s.", executionId), e);
                 return false;
             }
@@ -41,7 +39,7 @@ public class ExecutionDocumentService {
 
             if (collection != null) {
                 final Document dbObjectInput = Document.parse(jsonString);
-                dbObjectInput.append("exec_id",executionId);
+                dbObjectInput.append("exec_id", executionId);
                 dbObjectInput.append("createdAt", new Date());
                 collection.insertOne(dbObjectInput);
                 log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", jsonString, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
@@ -54,14 +52,13 @@ public class ExecutionDocumentService {
     }
 
     public Document fetchExecutionDetails(Integer executionID) throws Exception {
-        try
-        {
+        try {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
             if (collection != null) {
-                Document result = collection.find(new Document().append("exec_id",executionID)).first();
+                Document result = collection.find(new Document().append("exec_id", executionID)).first();
                 return result;
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
         return null;
@@ -72,12 +69,12 @@ public class ExecutionDocumentService {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
 
             if (collection != null) {
-                Document dbObjectInput =  new Document();
-                dbObjectInput.append("exec_id",executionID);
+                Document dbObjectInput = new Document();
+                dbObjectInput.append("exec_id", executionID);
                 final Document dbObjectUpdateInput = Document.parse(updatedInput);
                 // TODO: add execution_metadata : {executionID,clientID}
-                dbObjectUpdateInput.append("exec_id",executionID);
-                dbObjectUpdateInput.append("lastUpdatedDate",new Date());
+                dbObjectUpdateInput.append("exec_id", executionID);
+                dbObjectUpdateInput.append("lastUpdatedDate", new Date());
                 UpdateResult updateResult = collection.replaceOne(dbObjectInput, dbObjectUpdateInput);
                 log.debug("updateDocument() :: database: " + this.shepherdConfiguration.getDataSourceDetails().getDbname() + " and collection: " + this.shepherdConfiguration.getDataSourceDetails().getCollectionname()
                         + " is document Updated :" + updateResult.wasAcknowledged());
@@ -87,7 +84,7 @@ public class ExecutionDocumentService {
         } catch (MongoWriteException e) {
             log.error(e.getMessage(), e);
             throw e;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
         return false;
