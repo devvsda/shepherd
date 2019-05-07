@@ -2,6 +2,8 @@ package com.devsda.platform.shepherd.constants;
 
 public class ShepherdConstants {
 
+    public static final String PROCESS_OWNER = "shepherd-core";
+
     public static final class Graph {
         public static final String TYPE = "type";
         public static final String GRAPH = "graph";
@@ -12,6 +14,4 @@ public class ShepherdConstants {
         public static final String CONNECTION = "connection";
         public static final String EDGE = "edge";
     }
-
-    public static final String PROCESS_OWNER = "shepherd-core";
 }

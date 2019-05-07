@@ -15,6 +15,7 @@ public class YamlLoader {
 
     /**
      * This method helps to load YAML from given file into given data class.
+     *
      * @param filePath
      * @param clazz
      * @param <T>
@@ -26,7 +27,7 @@ public class YamlLoader {
 
         File file = new File(filePath);
 
-        if( !(file.exists()  && file.isFile()) ) {
+        if (!(file.exists() && file.isFile())) {
             throw new ClientInvalidRequestException(String.format("YAML file is not available to load. FilePath : {}", filePath));
         }
 

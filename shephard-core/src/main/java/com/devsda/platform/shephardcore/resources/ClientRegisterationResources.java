@@ -2,8 +2,8 @@ package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.service.ClientRegisterationService;
-import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import com.devsda.platform.shepherd.model.EndpointRequest;
+import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,13 +23,11 @@ import java.util.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ClientRegisterationResources {
 
-    private Logger log = LoggerFactory.getLogger(ClientRegisterationResources.class);
-
     @Inject
     public ClientRegisterationService clientRegisterationService;
-
     @Inject
     public ResourceHelper resourceHelper;
+    private Logger log = LoggerFactory.getLogger(ClientRegisterationResources.class);
 
     /**
      * @param registerClientRequest
@@ -39,7 +37,7 @@ public class ClientRegisterationResources {
     @Path(ShephardConstants.Resources.CLIENT)
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response registerClient(@NotNull RegisterClientRequest registerClientRequest){
+    public Response registerClient(@NotNull RegisterClientRequest registerClientRequest) {
 
         try {
             log.info(String.format("Processing register client for %s", registerClientRequest));
@@ -51,9 +49,9 @@ public class ClientRegisterationResources {
             Map<String, Object> shepherdResponse = new HashMap<>();
             shepherdResponse.put("ClientId", clientId);
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse,"Client registered successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, shepherdResponse, "Client registered successfully", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_CLIENT, null, null, e.getLocalizedMessage())).build();
         }
@@ -77,9 +75,9 @@ public class ClientRegisterationResources {
             Map<String, Object> shepherdResponse = new HashMap<>();
             shepherdResponse.put("endpointId", endpointId);
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_ENDPOINT, shepherdResponse,"Registered endpoint successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_ENDPOINT, shepherdResponse, "Registered endpoint successfully", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.REGISTER_ENDPOINT, null, null, e.getLocalizedMessage())).build();
         }

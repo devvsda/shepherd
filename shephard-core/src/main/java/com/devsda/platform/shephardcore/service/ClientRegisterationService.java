@@ -1,12 +1,12 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shepherd.constants.ShepherdConstants;
-import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shepherd.model.RegisterClientRequest;
+import com.devsda.platform.shepherd.constants.ShepherdConstants;
+import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.model.EndpointRequest;
+import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class ClientRegisterationService {
 
         Integer clientId = null;
 
-        if(isItRegistered == null) {
+        if (isItRegistered == null) {
             clientId = registerationDao.registerClient(clientDetails);
         } else {
             throw new ClientInvalidRequestException(String.format("Username %s already exists.", registerClientRequest.getClientName()));
@@ -44,7 +44,7 @@ public class ClientRegisterationService {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(registerEndpointRequest.getClientName());
 
-        if(clientDetails == null) {
+        if (clientDetails == null) {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
@@ -52,7 +52,7 @@ public class ClientRegisterationService {
 
         Integer endpointId = null;
 
-        if(endpointDetails == null) {
+        if (endpointDetails == null) {
 
             endpointDetails = convertToEndpointDetails(registerEndpointRequest);
             endpointDetails.setClientId(clientDetails.getClientId());

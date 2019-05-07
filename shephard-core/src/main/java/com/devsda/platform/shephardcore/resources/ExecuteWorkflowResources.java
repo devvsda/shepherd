@@ -24,12 +24,10 @@ import java.util.Map;
 public class ExecuteWorkflowResources {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowResources.class);
-
-    @Inject
-    private ExecuteWorkflowService executeWorkflowService;
-
     @Inject
     public ResourceHelper resourceHelper;
+    @Inject
+    private ExecuteWorkflowService executeWorkflowService;
 
     @POST
     @Path(ShephardConstants.Resources.ENDPOINT)

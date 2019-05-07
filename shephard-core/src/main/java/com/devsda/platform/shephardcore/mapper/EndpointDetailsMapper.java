@@ -4,7 +4,6 @@ import com.devsda.platform.shephardcore.model.EndpointDetails;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
-import javax.xml.ws.Endpoint;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,6 +14,7 @@ public class EndpointDetailsMapper implements ResultSetMapper<EndpointDetails> {
 
     /**
      * This method helps to map endpoint_details table raw data into @{@link EndpointDetails} model.
+     *
      * @param i
      * @param resultSet
      * @param statementContext

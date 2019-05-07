@@ -29,7 +29,7 @@ public interface RegisterationDao {
 
     @SqlUpdate("insert into endpoint_details(client_id, endpoint_name, workflow_graph, endpoint_details, created_at, updated_at, created_by) values(:endpointDetail.clientId, :endpointDetail.endpointName, :endpointDetail.DAGGraph, :endpointDetail.endpointDetails, :endpointDetail.createdAt, :endpointDetail.updatedAt, :endpointDetail.submittedBy)")
     @GetGeneratedKeys
-    int registerEndpoint(@BindBean("endpointDetail")EndpointDetails endpointDetails);
+    int registerEndpoint(@BindBean("endpointDetail") EndpointDetails endpointDetails);
 
     @RegisterMapper(EndpointDetailsMapper.class)
     @SqlQuery("select * from endpoint_details where client_id = :clientId")

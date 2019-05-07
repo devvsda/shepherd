@@ -1,9 +1,9 @@
 package com.devsda.platform.shepherd.graphgenerator;
 
+import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.model.Connection;
 import com.devsda.platform.shepherd.model.Graph;
-import com.devsda.platform.shepherd.constants.GraphType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,7 +56,7 @@ public class DAGGenerator {
 
             Node thisDOMNode = nodesOfGraph.item(iterator);
 
-            if(thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
+            if (thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
 
                 com.devsda.platform.shepherd.model.Node thisNode = buildNode((Element) thisDOMNode);
                 nodes.add(thisNode);
@@ -98,7 +98,7 @@ public class DAGGenerator {
 
             Node thisDOMNode = nodesOfGraph.item(iterator);
 
-            if(thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
+            if (thisDOMNode.getNodeType() == Node.ELEMENT_NODE) {
 
                 com.devsda.platform.shepherd.model.Node thisNode = buildNode((Element) thisDOMNode);
                 nodes.add(thisNode);
@@ -112,6 +112,7 @@ public class DAGGenerator {
 
     /**
      * This method builds @{@link com.devsda.platform.shepherd.model.Node} by extracting data from corresponding xml field.
+     *
      * @param element
      * @return
      */
@@ -121,18 +122,18 @@ public class DAGGenerator {
 
         NodeList nodeInformation = element.getChildNodes();
 
-        for(int iterator1 = 0; iterator1 < nodeInformation.getLength(); iterator1++) {
+        for (int iterator1 = 0; iterator1 < nodeInformation.getLength(); iterator1++) {
 
             Node thisNodeInformation = nodeInformation.item(iterator1);
 
-            if(thisNodeInformation.getNodeType() == Node.ELEMENT_NODE) {
+            if (thisNodeInformation.getNodeType() == Node.ELEMENT_NODE) {
 
-                if(ShepherdConstants.Graph.CONNECTIONS.equals(thisNodeInformation.getNodeName())) {
+                if (ShepherdConstants.Graph.CONNECTIONS.equals(thisNodeInformation.getNodeName())) {
                     List<Connection> connections = buildConnections((Element) thisNodeInformation);
                     node.setConnections(connections);
-                } else if(ShepherdConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
+                } else if (ShepherdConstants.Graph.NAME.equals(thisNodeInformation.getNodeName())) {
                     node.setName(thisNodeInformation.getTextContent());
-                } else if(ShepherdConstants.Graph.OWNER.equals(thisNodeInformation.getNodeName())) {
+                } else if (ShepherdConstants.Graph.OWNER.equals(thisNodeInformation.getNodeName())) {
                     node.setOwner(thisNodeInformation.getTextContent());
                 }
             }
@@ -143,6 +144,7 @@ public class DAGGenerator {
 
     /**
      * This method builds @{@link Connection} by iterating all child nodes.
+     *
      * @param element
      * @return
      */
@@ -152,11 +154,11 @@ public class DAGGenerator {
 
         NodeList connectionsDOMDetails = element.getChildNodes();
 
-        for(int iter = 0; iter < connectionsDOMDetails.getLength(); iter++) {
+        for (int iter = 0; iter < connectionsDOMDetails.getLength(); iter++) {
 
             Node thisDOMConnection = connectionsDOMDetails.item(iter);
 
-            if(thisDOMConnection.getNodeType() == Node.ELEMENT_NODE) {
+            if (thisDOMConnection.getNodeType() == Node.ELEMENT_NODE) {
                 Connection connection = buildConnection((Element) thisDOMConnection);
                 connections.add(connection);
             }
@@ -166,6 +168,7 @@ public class DAGGenerator {
 
     /**
      * This method builds @{@link Connection} object of every edge between parent and child node
+     *
      * @param element
      * @return
      */
@@ -174,15 +177,15 @@ public class DAGGenerator {
         Connection connection = new Connection();
         NodeList connectionDOMDetails = element.getChildNodes();
 
-        for(int iter = 0; iter < connectionDOMDetails.getLength(); iter++) {
+        for (int iter = 0; iter < connectionDOMDetails.getLength(); iter++) {
 
             Node thisDOMConnection = connectionDOMDetails.item(iter);
 
-            if(thisDOMConnection.getNodeType() == Node.ELEMENT_NODE) {
+            if (thisDOMConnection.getNodeType() == Node.ELEMENT_NODE) {
 
                 Element thisElement = (Element) thisDOMConnection;
 
-                if(ShepherdConstants.Graph.EDGE.equals(thisDOMConnection.getNodeName())) {
+                if (ShepherdConstants.Graph.EDGE.equals(thisDOMConnection.getNodeName())) {
                     connection.setEdgeName(thisElement.getTextContent());
 
                 } else if (ShepherdConstants.Graph.NODE.equals(thisDOMConnection.getNodeName())) {

@@ -4,7 +4,6 @@ import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Date;
 import java.util.Map;
 
 public class ShepherdResponse {

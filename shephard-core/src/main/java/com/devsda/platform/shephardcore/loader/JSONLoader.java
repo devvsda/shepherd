@@ -16,6 +16,7 @@ public class JSONLoader {
 
     /**
      * This method helps to convert any object to stringified json.
+     *
      * @param object
      * @return
      * @throws IOException
@@ -31,6 +32,7 @@ public class JSONLoader {
 
     /**
      * This method helps to load json file into given data class object.
+     *
      * @param filePath
      * @param clazz
      * @param <T>
@@ -43,7 +45,7 @@ public class JSONLoader {
 
         File file = new File(filePath);
 
-        if( !(file.exists()  && file.isFile()) ) {
+        if (!(file.exists() && file.isFile())) {
             throw new ClientInvalidRequestException(String.format("Json file is not available to load. FilePath : {}", filePath));
         }
 
@@ -56,6 +58,7 @@ public class JSONLoader {
 
     /**
      * This method helps to load json file from resources folder into given data class object.
+     *
      * @param fileName
      * @param clazz
      * @param <T>

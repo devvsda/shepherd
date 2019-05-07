@@ -16,7 +16,7 @@ public interface WorkflowOperationDao {
 
     @SqlUpdate("insert into execution_details(client_id, endpoint_id, status, created_at, updated_at, created_by) values(:executeWorkflowRequest.clientId, :executeWorkflowRequest.endpointId, :executeWorkflowRequest.workflowExecutionState, :executeWorkflowRequest.createdAt, :executeWorkflowRequest.updatedAt, :executeWorkflowRequest.submittedBy)")
     @GetGeneratedKeys
-    public int executeWorkflow( @BindBean("executeWorkflowRequest") ExecuteWorkflowRequest executeWorkflowRequest);
+    public int executeWorkflow(@BindBean("executeWorkflowRequest") ExecuteWorkflowRequest executeWorkflowRequest);
 
 
     @SqlUpdate("update execution_details set status=:workflowState, error_message=:errorMessage  where execution_id = :executionId")

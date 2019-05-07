@@ -8,37 +8,22 @@ import com.devsda.platform.shepherdclient.constants.ShepherdClientConstants;
 import com.devsda.platform.shepherdclient.loader.JSONLoader;
 import com.devsda.platform.shepherdclient.loader.XMLLoader;
 import com.devsda.platform.shepherdclient.loader.YAMLLoader;
-import com.devsda.platform.shepherd.model.ServerDetails;
 import com.devsda.platform.shepherdclient.model.ShepherdServerConfiguration;
 import com.devsda.utils.httputils.HttpMethod;
-import com.devsda.utils.httputils.constants.Protocol;
 import com.devsda.utils.httputils.loader.JsonLoader;
 import com.devsda.utils.httputils.methods.HttpGetMethod;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
-import com.mongodb.*;
 import org.apache.http.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import com.mongodb.client.result.UpdateResult;
-import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import static com.mongodb.client.model.Filters.eq;
 
 
 public class ShepherdClient {
@@ -77,10 +62,10 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(registerClientRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
-        } catch(IOException  e) {
+        } catch (IOException e) {
             log.error(String.format("Problem while serialising Client Request : %s", registerClientRequest), e);
             throw new ShepherdInternalException(e);
-        } catch(URISyntaxException e) {
+        } catch (URISyntaxException e) {
             log.error(String.format("Problem while hitting Register Client API for client : %s", clientName), e);
             throw new ShepherdInternalException(String.format("Problem while hitting Register Client API for client : %s", clientName), e);
         }
@@ -102,13 +87,13 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(registerEndpointRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
-        } catch(TransformerException | SAXException | ParserConfigurationException ex) {
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
             log.error("Problem in stringifying of xml file.", ex);
             throw new GraphLoaderException("Problem in stringifying of xml file.", ex);
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             log.error("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
             throw new GraphLoaderException("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
-        } catch(URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             log.error(String.format("Problem while hitting Register Endpoint API for client : %s, endpointName : %s", clientName, endpointName), ex);
             throw new ShepherdInternalException(String.format("Problem while hitting Register Endpoint API for client : %s, endpointName : %s", clientName, endpointName), ex);
         }
@@ -129,13 +114,13 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(updateEndpointRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
-        } catch(TransformerException | SAXException | ParserConfigurationException ex) {
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
             log.error("Problem in stringifying of xml file.", ex);
             throw new GraphLoaderException("Problem in stringifying of xml file.", ex);
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             log.error("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
             throw new GraphLoaderException("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
-        } catch(URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             log.error(String.format("Problem while hitting Update Workflow Details API for client : %s, endpointName : %s", clientName, endpointName), ex);
             throw new ShepherdInternalException(String.format("Problem while hitting Update Workflow Details API for client : %s, endpointName : %s", clientName, endpointName), ex);
         }
@@ -156,10 +141,10 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(updateEndpointRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             log.error("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
             throw new GraphLoaderException("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
-        } catch(URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
             log.error(String.format("Problem while hitting Update Endpoint Details API for client : %s, endpointName : %s", clientName, endpointName), ex);
             throw new ShepherdInternalException(String.format("Problem while hitting Update Endpoint Details API for client : %s, endpointName : %s", clientName, endpointName), ex);
         }
@@ -202,10 +187,10 @@ public class ShepherdClient {
             // Return response.
             return shepherdResponse;
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             log.error("Failed to stringify object.", e);
             throw new ShepherdInternalException(e);
-        } catch(URISyntaxException e) {
+        } catch (URISyntaxException e) {
             log.error("Failed to hit given endpoint", e);
             throw new ShepherdInternalException(e);
         }

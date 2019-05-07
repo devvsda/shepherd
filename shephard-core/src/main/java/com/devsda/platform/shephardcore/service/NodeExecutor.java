@@ -2,17 +2,16 @@ package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shephardcore.model.NodeResponse;
+import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
-import com.devsda.platform.shepherd.util.DateUtil;
-import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
 import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.Node;
 import com.devsda.platform.shepherd.model.NodeConfiguration;
-import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shepherd.model.ServerDetails;
-import com.devsda.utils.httputils.constants.Protocol;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
 import com.google.inject.Inject;
 import org.apache.http.client.HttpResponseException;
@@ -25,13 +24,11 @@ import java.util.concurrent.Callable;
 public class NodeExecutor implements Callable<NodeResponse> {
 
     private static final Logger log = LoggerFactory.getLogger(NodeExecutor.class);
-
+    @Inject
+    private static WorkflowOperationDao workflowOperationDao;
     private NodeConfiguration nodeConfiguration;
     private ServerDetails serverDetails;
     private Node node;
-
-    @Inject
-    private static WorkflowOperationDao workflowOperationDao;
 
     public NodeExecutor(Node node, NodeConfiguration nodeConfiguration, ServerDetails serverDetails) {
         this.node = node;
@@ -52,7 +49,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
             ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getExecutionId());
 
-            if(WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState())) {
+            if (WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState())) {
                 log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
                         this.node.getExecutionId(), this.node.getName()));
                 this.node.setUpdatedAt(DateUtil.currentDate());
@@ -83,7 +80,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
             return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
 
-        } catch(HttpResponseException e) {
+        } catch (HttpResponseException e) {
 
             log.error(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
             this.node.setNodeState(NodeState.FAILED);
@@ -91,7 +88,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             workflowOperationDao.updateNode(this.node);
             throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
 
-        } catch(Exception e) {
+        } catch (Exception e) {
 
             log.error(String.format("Node : %s failed internally.", this.nodeConfiguration.getName()), e);
             this.node.setNodeState(NodeState.FAILED);

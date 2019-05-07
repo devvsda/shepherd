@@ -23,14 +23,14 @@ public class ExecuteWorkflowServiceHelper {
 
         Node thisNode = nameToNodeMapping.get(nodeName);
 
-        if(thisNode.getNodeId() != null) {
+        if (thisNode.getNodeId() != null) {
             log.info(String.format("Node : %s is already processed by other parent.", nodeName));
             return Boolean.FALSE;
         }
 
         List<String> parentNodeNames = nodeToParentNodeMapping.get(nodeName);
 
-        for(String parent : parentNodeNames) {
+        for (String parent : parentNodeNames) {
 
             Node parentNode = nameToNodeMapping.get(parent);
 
@@ -38,7 +38,7 @@ public class ExecuteWorkflowServiceHelper {
 
             log.info(String.format("Node state as per DAO : %s", parentNodeDao));
 
-            if( parentNodeDao == null || !NodeState.COMPLETED.equals(parentNodeDao.getNodeState())) {
+            if (parentNodeDao == null || !NodeState.COMPLETED.equals(parentNodeDao.getNodeState())) {
                 log.info(String.format("Node : %s is not ready to execute.", nodeName));
                 return Boolean.FALSE;
             }

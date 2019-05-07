@@ -42,14 +42,14 @@ public class RequestValidator {
 
         log.debug(String.format("Validating endpoint details for client name : %s, endpoint name : %s", clientName, endpointName));
 
-        if(clientId == null || clientName == null || endpointName == null) {
+        if (clientId == null || clientName == null || endpointName == null) {
             throw new ClientInvalidRequestException("Endpoint/ClientId/ClientName should not be null");
         }
 
         // Get endpoint details.
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails( clientId, endpointName);
+        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointName);
 
-        if(endpointDetails == null) {
+        if (endpointDetails == null) {
             log.error(String.format("Endpoint : %s is not present for client : %s",
                     endpointDetails.getEndpointName(), endpointDetails.getClientName()));
             throw new ClientInvalidRequestException(String.format("Client + Endpoint combination not registered." +
@@ -63,13 +63,13 @@ public class RequestValidator {
 
         log.debug(String.format("Validating execution details for client name : %s, endpoint name : %s, execution id : %s", clientName, endpointName, executionId));
 
-        if(executionId == null) {
+        if (executionId == null) {
             throw new ClientInvalidRequestException("ExecutionId should not be null");
         }
 
         ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(executionId);
 
-        if(executionDetails == null) {
+        if (executionDetails == null) {
             log.error(String.format("Execution with id : %s not present for client : %s, and endpoint : %s",
                     executionId, clientName, endpointName));
             throw new ClientInvalidRequestException(String.format("Execution with id : %s not present for client : %s, and endpoint : %s",

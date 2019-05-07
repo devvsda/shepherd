@@ -3,9 +3,9 @@ package com.devsda.platform.shephardcore.resources;
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shephardcore.service.ClientDataRetrievelService;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.model.Graph;
-import com.devsda.platform.shephardcore.service.ClientDataRetrievelService;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +48,8 @@ public class ClientDataRetrievalResources {
             shepherdResponse.put("registered_clients", clientDetails);
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, shepherdResponse, "Successfully retrieved registered clients", null)).build();
-        } catch(Throwable e) {
-            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, null, null,"Failed to retrieve registered clients")).build();
+        } catch (Throwable e) {
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, null, null, "Failed to retrieve registered clients")).build();
         }
 
     }
@@ -73,7 +73,7 @@ public class ClientDataRetrievalResources {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_ENDPOINTS, shepherdResponse, String.format("Successfully retrieved registered endpoints for client : %s", clientName), null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_ENDPOINTS, null, null, String.format("Failed to retrieve registered endpoints for client : %s", clientName))).build();
 
@@ -100,7 +100,7 @@ public class ClientDataRetrievalResources {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_ENDPOINT, shepherdResponse, "Successfully retrieved endpoint details", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_ENDPOINT, null, null, "Failed to retrieve endpoint details")).build();
 
@@ -128,7 +128,7 @@ public class ClientDataRetrievalResources {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_GRAPH, shepherdResponse, "Successfully retrieved graph details", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_GRAPH, null, null, "Failed to retrieve graph details")).build();
 

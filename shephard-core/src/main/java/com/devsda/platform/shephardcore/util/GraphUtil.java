@@ -17,7 +17,7 @@ public class GraphUtil {
 
         Map<String, List<String>> nodeToParentNodesRelation = new HashMap<>();
 
-        for(Node node : graph.getNodes()) {
+        for (Node node : graph.getNodes()) {
             nodeToParentNodesRelation.put(node.getName(), null);
         }
 
@@ -26,7 +26,8 @@ public class GraphUtil {
 
             for (Connection connection : node.getConnections()) {
                 String destinationNode = connection.getNodeName();
-                List<String> parentNodes = nodeToParentNodesRelation.get(destinationNode);;
+                List<String> parentNodes = nodeToParentNodesRelation.get(destinationNode);
+                ;
 
                 if (parentNodes == null) {
                     parentNodes = new ArrayList<>();
@@ -47,7 +48,7 @@ public class GraphUtil {
 
         Map<String, Node> nameWiseNodeMapping = new HashMap<>();
 
-        for(Node node : graph.getNodes()) {
+        for (Node node : graph.getNodes()) {
             nameWiseNodeMapping.put(node.getName(), node);
         }
 
@@ -59,9 +60,9 @@ public class GraphUtil {
 
         Map<String, List<String>> nodeToParentNodeRelation = getNodeToParentNodesMapping(graph);
 
-        for(Map.Entry<String, List<String>> relation : nodeToParentNodeRelation.entrySet()) {
+        for (Map.Entry<String, List<String>> relation : nodeToParentNodeRelation.entrySet()) {
 
-            if(relation.getValue() == null) {
+            if (relation.getValue() == null) {
                 return relation.getKey();
             }
         }
@@ -75,13 +76,13 @@ public class GraphUtil {
 
         Map<String, NodeConfiguration> nodeNameToConfigurationMapping = new HashMap<>();
 
-        for(TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
+        for (TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
 
-            for(NodeConfiguration nodeConfiguration : teamConfiguration.getNodeConfigurations()) {
+            for (NodeConfiguration nodeConfiguration : teamConfiguration.getNodeConfigurations()) {
 
-                Map<String, String>  nodeHeaders = nodeConfiguration.getHeaders();
+                Map<String, String> nodeHeaders = nodeConfiguration.getHeaders();
 
-                if(nodeHeaders == null) {
+                if (nodeHeaders == null) {
                     nodeHeaders = new HashMap<>();
                     nodeConfiguration.setHeaders(nodeHeaders);
                 }
@@ -100,7 +101,7 @@ public class GraphUtil {
 
         Map<String, TeamConfiguration> teamNameToConfigurationMapping = new HashMap<>();
 
-        for(TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
+        for (TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
             teamNameToConfigurationMapping.put(teamConfiguration.getOwner(), teamConfiguration);
         }
 

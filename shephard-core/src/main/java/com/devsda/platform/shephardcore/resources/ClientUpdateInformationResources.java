@@ -14,8 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path(ShephardConstants.Resources.UPDATE)
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,12 +21,10 @@ import java.util.Map;
 public class ClientUpdateInformationResources {
 
     private static final Logger log = LoggerFactory.getLogger(ClientUpdateInformationResources.class);
-
-    @Inject
-    private ClientUpdateInformationService clientUpdateInformationService;
-
     @Inject
     public ResourceHelper resourceHelper;
+    @Inject
+    private ClientUpdateInformationService clientUpdateInformationService;
 
     @POST
     @Path(ShephardConstants.Resources.ENDPOINT + ShephardConstants.Resources.WORKFLOW_DETAILS)
@@ -43,9 +39,9 @@ public class ClientUpdateInformationResources {
 
             log.info(String.format("Processing successfully completed for update workflow details operation for %s", endpointRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null,"Update workflow details of endpoint successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null, "Update workflow details of endpoint successfully", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null, null, e.getLocalizedMessage())).build();
         }
@@ -65,9 +61,9 @@ public class ClientUpdateInformationResources {
 
             log.info(String.format("Processing successfully completed for update workflow details operation for %s", endpointRequest));
 
-            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null,"Update endpoint details of endpoint successfully", null)).build();
+            return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null, "Update endpoint details of endpoint successfully", null)).build();
 
-        } catch(Throwable e) {
+        } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(com.devsda.platform.shepherd.constants.ResourceName.UPDATE_ENDPOINT, null, null, e.getLocalizedMessage())).build();
         }
