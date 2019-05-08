@@ -16,9 +16,11 @@ import com.devsda.utils.httputils.methods.HttpPostMethod;
 import com.google.inject.Inject;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.StringEntity;
+import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.concurrent.Callable;
 
 public class NodeExecutor implements Callable<NodeResponse> {
@@ -63,8 +65,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setUpdatedAt(DateUtil.currentDate());
             this.node.setNodeState(NodeState.PROCESSING);
             this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-            Integer nodeId = workflowOperationDao.createNode(this.node);
-            this.node.setNodeId(nodeId);
+            workflowOperationDao.createNode(this.node);
 
             // 2. Execute Node.
             response = new HttpPostMethod().call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
@@ -79,6 +80,11 @@ public class NodeExecutor implements Callable<NodeResponse> {
             workflowOperationDao.updateNode(this.node);
 
             return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
+
+        } catch(UnableToExecuteStatementException e) {
+            log.info(String.format("Node : %s already under processing. Skipping this execution to avoid duplicity.",
+                    this.nodeConfiguration.getName()), e);
+            return new NodeResponse(nodeConfiguration.getName(), NodeState.SKIPPED, null);
 
         } catch (HttpResponseException e) {
 

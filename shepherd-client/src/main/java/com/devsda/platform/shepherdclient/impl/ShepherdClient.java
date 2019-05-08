@@ -35,9 +35,6 @@ public class ShepherdClient {
     private ShepherdServerConfiguration shepherdServerDetails;
     private ShepherdClientHelper shepherdClientHelper;
 
-    private MongoClient mongoClient;
-
-
     public ShepherdClient(Environment environment) throws IOException {
 
         this.environment = environment;

@@ -13,6 +13,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 public class WorkflowOperationDaoTest {
 
@@ -39,8 +42,8 @@ public class WorkflowOperationDaoTest {
 
         Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.PROCESSING, null);
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-
         workflowOperationDao.createNode(node);
+
     }
 
     @Test
@@ -57,7 +60,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void getNodeTest() {
 
-        Node node = workflowOperationDao.getNode(23, 39);
+        Node node = workflowOperationDao.getNode("NameTest", 39);
         System.out.println(node);
     }
 
