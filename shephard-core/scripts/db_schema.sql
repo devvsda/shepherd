@@ -35,13 +35,13 @@ created_by varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS node_details(
-node_id int AUTO_INCREMENT primary key,
 node_name varchar(255),
 execution_id int,
 status varchar(255),
 error_message varchar(255),
 created_at DATETIME,
 updated_at DATETIME,
-created_by varchar(255)
+created_by varchar(255),
+primary key(execution_id, node_name)
 );
 

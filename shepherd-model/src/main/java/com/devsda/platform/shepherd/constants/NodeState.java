@@ -4,6 +4,7 @@ public enum NodeState {
 
     NOT_PROCESSED,
     PROVISIONING,
+    SKIPPED,
     PROCESSING,
     COMPLETED,
     FAILED,

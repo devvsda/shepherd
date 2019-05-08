@@ -34,7 +34,7 @@ public class ExecuteWorkflowServiceHelper {
 
             Node parentNode = nameToNodeMapping.get(parent);
 
-            Node parentNodeDao = workflowOperationDao.getNode(parentNode.getNodeId(), parentNode.getExecutionId());
+            Node parentNodeDao = workflowOperationDao.getNode(parentNode.getName(), parentNode.getExecutionId());
 
             log.info(String.format("Node state as per DAO : %s", parentNodeDao));
 
