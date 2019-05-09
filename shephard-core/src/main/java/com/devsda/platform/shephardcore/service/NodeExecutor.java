@@ -49,7 +49,7 @@ public class NodeExecutor implements Callable<NodeResponse> {
 
         try {
 
-            ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getExecutionId());
+            ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getObjectId(), this.node.getExecutionId());
 
             if (WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState())) {
                 log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",

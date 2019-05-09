@@ -38,15 +38,12 @@ public class ExecuteWorkflowResources {
         try {
             log.info(String.format("Processing execute request for %s", executeWorkflowRequest));
 
-            Integer executionId = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
-
-            Map<String, Object> shepherdResponse = new HashMap<>();
-            shepherdResponse.put("execution_id", executionId);
+            Map<String, Object> executeWorkflowResponse = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
 
             log.info(String.format("Successfully started processing  execute request for %s", executeWorkflowRequest));
 
             return Response.ok(resourceHelper.createShepherdResponse(
-                    ResourceName.EXECUTE_WORKFLOW, shepherdResponse, "Workflow triggered successfully.", null)).build();
+                    ResourceName.EXECUTE_WORKFLOW, executeWorkflowResponse, "Workflow triggered successfully.", null)).build();
 
         } catch (Throwable e) {
 

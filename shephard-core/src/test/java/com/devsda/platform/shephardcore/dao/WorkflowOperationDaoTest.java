@@ -40,7 +40,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void createNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.PROCESSING, null);
+        Node node = ObjectFactory.createNode("NameTest", null, "objectId", "executionId",  NodeState.PROCESSING, null);
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         workflowOperationDao.createNode(node);
 
@@ -49,7 +49,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void updateNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, 1, NodeState.FAILED, "TEST FAILURE");
+        Node node = ObjectFactory.createNode("NameTest", null, "objectId", "executionId", NodeState.FAILED, "TEST FAILURE");
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         node.setNodeId(1);
 
@@ -60,7 +60,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void getNodeTest() {
 
-        Node node = workflowOperationDao.getNode("NameTest", 39);
+        Node node = workflowOperationDao.getNode("NameTest", "objectId", "executionId");
         System.out.println(node);
     }
 
@@ -81,13 +81,13 @@ public class WorkflowOperationDaoTest {
     @Test
     public void updateExecutionStatusTest() {
 
-        workflowOperationDao.updateExecutionStatus(21, WorkflowExecutionState.FAILED, "INtentional");
+        workflowOperationDao.updateExecutionStatus("objectId", "executionId", WorkflowExecutionState.FAILED, "INtentional");
     }
 
     @Test
     public void getExecutionDetailsTest() {
 
-        ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(25);
+        ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails("objectId", "executionId");
         System.out.println(executionDetails);
 
     }

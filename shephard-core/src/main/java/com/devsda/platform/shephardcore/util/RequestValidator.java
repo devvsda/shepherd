@@ -59,7 +59,7 @@ public class RequestValidator {
         return endpointDetails;
     }
 
-    public static ExecutionDetails validateExecution(String clientName, String endpointName, Integer executionId) {
+    public static ExecutionDetails validateExecution(String clientName, String endpointName, String objectId, String executionId) {
 
         log.debug(String.format("Validating execution details for client name : %s, endpoint name : %s, execution id : %s", clientName, endpointName, executionId));
 
@@ -67,7 +67,7 @@ public class RequestValidator {
             throw new ClientInvalidRequestException("ExecutionId should not be null");
         }
 
-        ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(executionId);
+        ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(objectId, executionId);
 
         if (executionDetails == null) {
             log.error(String.format("Execution with id : %s not present for client : %s, and endpoint : %s",

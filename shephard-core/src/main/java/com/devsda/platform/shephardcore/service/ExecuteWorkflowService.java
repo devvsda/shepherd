@@ -5,6 +5,8 @@ import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shephardcore.util.UUIDUtil;
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
@@ -16,6 +18,9 @@ import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExecuteWorkflowService {
 
@@ -35,7 +40,7 @@ public class ExecuteWorkflowService {
      *
      * @param executeWorkflowRequest ExecuteWorkflow request from client.
      */
-    public Integer executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
+    public Map<String, Object> executeWorkflow(ExecuteWorkflowRequest executeWorkflowRequest) throws Exception {
 
 
         // validate.
@@ -58,11 +63,15 @@ public class ExecuteWorkflowService {
         executeWorkflowRequest.setClientId(endpointDetails.getClientId());
         executeWorkflowRequest.setEndpointId(endpointDetails.getEndpointId());
 
+        if(ResourceName.EXECUTE_WORKFLOW.equals(executeWorkflowRequest.getResourceName())) {
+            executeWorkflowRequest.setObjectId(UUIDUtil.UUIDGenerator());
+        }
+
+        executeWorkflowRequest.setExecutionId(UUIDUtil.UUIDGenerator());
         executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.PROCESSING);
         executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
         executeWorkflowRequest.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-        Integer executionId = workflowOperationDao.executeWorkflow(executeWorkflowRequest);
-        executeWorkflowRequest.setExecutionId(executionId);
+        workflowOperationDao.executeWorkflow(executeWorkflowRequest);
 
         executionDocumentService.insertExecutionDetails(executeWorkflowRequest.getExecutionId(), executeWorkflowRequest.getInitialPayload());
 
@@ -79,6 +88,9 @@ public class ExecuteWorkflowService {
         ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
         executeWorkflowRunner.call();
 
-        return executionId;
+        Map<String, Object> executionWorkflowResponse = new HashMap<>();
+        executionWorkflowResponse.put(ShepherdConstants.OBJECT_ID, executeWorkflowRequest.getObjectId());
+        executionWorkflowResponse.put(ShepherdConstants.EXECUTION_ID, executeWorkflowRequest.getExecutionId());
+        return executionWorkflowResponse;
     }
 }

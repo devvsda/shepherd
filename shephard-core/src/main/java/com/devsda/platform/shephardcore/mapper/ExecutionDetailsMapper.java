@@ -15,7 +15,8 @@ public class ExecutionDetailsMapper implements ResultSetMapper<ExecutionDetails>
 
         ExecutionDetails executionDetails = new ExecutionDetails();
 
-        executionDetails.setExecutionId(resultSet.getInt("execution_id"));
+        executionDetails.setExecutionId(resultSet.getString("object_id"));
+        executionDetails.setExecutionId(resultSet.getString("execution_id"));
         executionDetails.setClientId(resultSet.getInt("client_id"));
         executionDetails.setEndpointId(resultSet.getInt("endpoint_id"));
         executionDetails.setCreatedAt(resultSet.getDate("created_at"));

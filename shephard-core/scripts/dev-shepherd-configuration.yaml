@@ -54,7 +54,7 @@ logging:
 datasource :
   prefix: mongodb
   user: ashutosh
-  password: xyz
+  password: PASSWORD
   clusters:
     - shepherd-cluster0-shard-00-00-lovgv.mongodb.net:27017
     - shepherd-cluster0-shard-00-01-lovgv.mongodb.net:27017

@@ -11,7 +11,8 @@ import java.util.List;
 public class ExecutionDetails {
 
 
-    private Integer executionId;
+    private String objectId;
+    private String executionId;
     private Integer clientId;
     private Integer endpointId;
     private WorkflowExecutionState workflowExecutionState;
@@ -22,11 +23,19 @@ public class ExecutionDetails {
     private Date updatedAt;
     private String createdBy;
 
-    public Integer getExecutionId() {
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getExecutionId() {
         return executionId;
     }
 
-    public void setExecutionId(Integer executionId) {
+    public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
 
@@ -105,7 +114,8 @@ public class ExecutionDetails {
     @Override
     public String toString() {
         return "ExecutionDetails{" +
-                "executionId=" + executionId +
+                "objectId='" + objectId + '\'' +
+                ", executionId='" + executionId + '\'' +
                 ", clientId=" + clientId +
                 ", endpointId=" + endpointId +
                 ", workflowExecutionState=" + workflowExecutionState +

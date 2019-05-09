@@ -5,8 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class WorkflowManagementRequest extends ShepherdRequest {
 
+    @JsonProperty("objectId")
+    private String objectId;
+
     @JsonProperty("executionId")
-    private Integer executionId;
+    private String executionId;
 
     @JsonProperty("clientName")
     private String clientName;
@@ -18,11 +21,19 @@ public class WorkflowManagementRequest extends ShepherdRequest {
         super(resourceName);
     }
 
-    public Integer getExecutionId() {
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getExecutionId() {
         return executionId;
     }
 
-    public void setExecutionId(Integer executionId) {
+    public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
 
@@ -45,7 +56,8 @@ public class WorkflowManagementRequest extends ShepherdRequest {
     @Override
     public String toString() {
         return "WorkflowManagementRequest{" +
-                "executionId=" + executionId +
+                "objectId='" + objectId + '\'' +
+                ", executionId='" + executionId + '\'' +
                 ", clientName='" + clientName + '\'' +
                 ", endpointName='" + endpointName + '\'' +
                 '}';

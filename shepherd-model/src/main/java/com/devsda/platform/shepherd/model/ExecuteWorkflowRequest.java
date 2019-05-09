@@ -10,8 +10,11 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExecuteWorkflowRequest extends ShepherdRequest {
 
+    @JsonProperty("object_id")
+    private String objectId;
+
     @JsonProperty("execution_id")
-    private Integer executionId;
+    private String executionId;
 
     @JsonProperty("client_name")
     private String clientName;
@@ -84,18 +87,27 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
         this.initialPayload = initialPayload;
     }
 
-    public Integer getExecutionId() {
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getExecutionId() {
         return executionId;
     }
 
-    public void setExecutionId(Integer executionId) {
+    public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
 
     @Override
     public String toString() {
         return "ExecuteWorkflowRequest{" +
-                "executionId=" + executionId +
+                "objectId='" + objectId + '\'' +
+                ", executionId='" + executionId + '\'' +
                 ", clientName='" + clientName + '\'' +
                 ", clientId=" + clientId +
                 ", endpointName='" + endpointName + '\'' +
