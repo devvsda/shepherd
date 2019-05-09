@@ -23,7 +23,7 @@ public class ExecutionDocumentService {
     private ShephardConfiguration shepherdConfiguration;
     private MongoClient mongoClient;
 
-    public boolean insertExecutionDetails(Integer executionId, Map<String, Object> initialPayload) {
+    public boolean insertExecutionDetails(String executionId, Map<String, Object> initialPayload) {
         this.mongoClient = getMongoClient();
         try {
             ObjectMapper mapper = new ObjectMapper();

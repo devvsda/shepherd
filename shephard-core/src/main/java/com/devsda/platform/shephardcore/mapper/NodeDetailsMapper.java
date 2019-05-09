@@ -15,7 +15,8 @@ public class NodeDetailsMapper implements ResultSetMapper<Node> {
 
         Node node = new Node();
         node.setName(resultSet.getString("node_name"));
-        node.setExecutionId(resultSet.getInt("execution_id"));
+        node.setObjectId(resultSet.getString("object_id"));
+        node.setExecutionId(resultSet.getString("execution_id"));
         node.setNodeState(NodeState.valueOf(resultSet.getString("status")));
         node.setErrorMessage(resultSet.getString("error_message"));
         node.setCreatedAt(resultSet.getDate("created_at"));

@@ -107,15 +107,12 @@ public class WorkflowManagementResources {
         try {
             log.info(String.format("Processing Restart Execution Request for %s", restartWorkflowRequest));
 
-            Integer restartExecutionId = workflowManagementService.restartWorkflow(restartWorkflowRequest);
-
-            Map<String, Object> shepherdResponse = new HashMap<>();
-            shepherdResponse.put("execution_id", restartExecutionId);
+            Map<String, Object> restartedExecutionResponse = workflowManagementService.restartWorkflow(restartWorkflowRequest);
 
             log.info(String.format("Execution restarted successfully for %s", restartWorkflowRequest));
 
             return Response.ok(resourceHelper.createShepherdResponse(
-                    ResourceName.RESTART_EXECUTION, shepherdResponse,
+                    ResourceName.RESTART_EXECUTION, restartedExecutionResponse,
                     "Execution restarted successfully.", null))
                     .build();
 

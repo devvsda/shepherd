@@ -14,4 +14,7 @@ public class ShepherdConstants {
         public static final String CONNECTION = "connection";
         public static final String EDGE = "edge";
     }
+
+    public static final String OBJECT_ID = "objectId";
+    public static final String EXECUTION_ID = "executionId";
 }

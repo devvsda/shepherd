@@ -3,12 +3,15 @@ package com.devsda.platform.shephardcore.service;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ClientDetails;
 import com.devsda.platform.shephardcore.util.RequestValidator;
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.WorkflowManagementRequest;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class WorkflowManagementService {
 
@@ -26,11 +29,11 @@ public class WorkflowManagementService {
         ClientDetails clientDetails = RequestValidator.validateClient(killWorkflowRequest.getClientName());
         RequestValidator.validateEndpoint(clientDetails.getClientId(), killWorkflowRequest.getClientName(), killWorkflowRequest.getEndpointName());
         RequestValidator.validateExecution(
-                killWorkflowRequest.getClientName(), killWorkflowRequest.getEndpointName(), killWorkflowRequest.getExecutionId());
+                killWorkflowRequest.getClientName(), killWorkflowRequest.getEndpointName(), killWorkflowRequest.getObjectId(), killWorkflowRequest.getExecutionId());
 
         log.debug(String.format("Updating status of execution id : %s with value : %s", killWorkflowRequest.getExecutionId(), WorkflowExecutionState.KILLED.name()));
 
-        workflowOperationDao.updateExecutionStatus(killWorkflowRequest.getExecutionId(), WorkflowExecutionState.KILLED, null);
+        workflowOperationDao.updateExecutionStatus(killWorkflowRequest.getObjectId(), killWorkflowRequest.getExecutionId(), WorkflowExecutionState.KILLED, null);
     }
 
     public void resumeWorkflow(WorkflowManagementRequest resumeWorkflowRequest) {
@@ -38,20 +41,22 @@ public class WorkflowManagementService {
         ClientDetails clientDetails = RequestValidator.validateClient(resumeWorkflowRequest.getClientName());
         RequestValidator.validateEndpoint(clientDetails.getClientId(), resumeWorkflowRequest.getClientName(), resumeWorkflowRequest.getEndpointName());
         RequestValidator.validateExecution(
-                resumeWorkflowRequest.getClientName(), resumeWorkflowRequest.getEndpointName(), resumeWorkflowRequest.getExecutionId());
+                resumeWorkflowRequest.getClientName(), resumeWorkflowRequest.getEndpointName(), resumeWorkflowRequest.getObjectId(), resumeWorkflowRequest.getExecutionId());
 
     }
 
-    public Integer restartWorkflow(WorkflowManagementRequest restartWorkflowRequest) throws Exception {
+    public Map<String, Object> restartWorkflow(WorkflowManagementRequest restartWorkflowRequest) throws Exception {
 
         killWorkflow(restartWorkflowRequest);
 
         ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest();
+        executeWorkflowRequest.setResourceName(ResourceName.RESTART_EXECUTION);
         executeWorkflowRequest.setClientName(restartWorkflowRequest.getClientName());
         executeWorkflowRequest.setEndpointName(restartWorkflowRequest.getEndpointName());
+        executeWorkflowRequest.setObjectId(restartWorkflowRequest.getObjectId());
 
-        Integer newExecutionId = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
+        Map<String, Object> restartedExecutionResponse = executeWorkflowService.executeWorkflow(executeWorkflowRequest);
 
-        return newExecutionId;
+        return restartedExecutionResponse;
     }
 }

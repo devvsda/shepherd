@@ -10,7 +10,8 @@ public class Node extends ShepherdRequest {
     private Integer nodeId;
     private String name;
 
-    private Integer executionId;
+    private String objectId;
+    private String executionId;
 
     private List<Connection> connections;
     private List<Node> parentNodes;
@@ -70,11 +71,19 @@ public class Node extends ShepherdRequest {
         this.nodeId = nodeId;
     }
 
-    public Integer getExecutionId() {
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public String getExecutionId() {
         return executionId;
     }
 
-    public void setExecutionId(Integer executionId) {
+    public void setExecutionId(String executionId) {
         this.executionId = executionId;
     }
 
@@ -83,7 +92,8 @@ public class Node extends ShepherdRequest {
         return "Node{" +
                 "nodeId=" + nodeId +
                 ", name='" + name + '\'' +
-                ", executionId=" + executionId +
+                ", objectId='" + objectId + '\'' +
+                ", executionId='" + executionId + '\'' +
                 ", connections=" + connections +
                 ", parentNodes=" + parentNodes +
                 ", owner='" + owner + '\'' +

@@ -69,6 +69,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         log.info(String.format("Submitting node : %s to thread-pool for execution", rootNode));
 
         Node rootNodeObj = nodeNameToNodeMapping.get(rootNode);
+        rootNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
         rootNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
         Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNodeObj, rootNodeConfiguration, rootNodeServerDetails));
 
@@ -136,7 +137,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
                 executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
                 executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
-                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
+                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(),
                         executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
 
             } catch (Exception e) {
@@ -145,7 +146,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                 executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
                 executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
                 executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
-                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getExecutionId(),
+                workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(),
                         executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
 
             }

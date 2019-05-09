@@ -22,7 +22,8 @@ created_by varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS execution_details(
-execution_id int AUTO_INCREMENT primary key,
+object_id varchar(64),
+execution_id varchar(64),
 client_id int,
 endpoint_id int,
 status varchar(255),
@@ -31,12 +32,14 @@ processed_nodes varchar(255),
 current_executing_nodes varchar(255),
 created_at DATETIME,
 updated_at DATETIME,
-created_by varchar(255)
+created_by varchar(255),
+primary key(object_id, execution_id)
 );
 
 CREATE TABLE IF NOT EXISTS node_details(
 node_name varchar(255),
-execution_id int,
+object_id varchar(64),
+execution_id varchar(64),
 status varchar(255),
 error_message varchar(255),
 created_at DATETIME,
@@ -44,4 +47,3 @@ updated_at DATETIME,
 created_by varchar(255),
 primary key(execution_id, node_name)
 );
-
