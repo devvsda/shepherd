@@ -29,7 +29,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(1000);
+        // Thread.sleep(1000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -47,7 +47,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(2000);
+        // Thread.sleep(2000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -65,7 +65,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(3000);
+        // Thread.sleep(3000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -83,7 +83,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(4000);
+        // Thread.sleep(4000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -101,7 +101,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(5000);
+        // Thread.sleep(5000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -119,7 +119,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(6000);
+        // Thread.sleep(6000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -137,7 +137,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(7000);
+        // Thread.sleep(7000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -155,7 +155,7 @@ public class OrderDeliveryWorkflowResources {
         // TODO : Fetch processed data from DocumentDB.
 
         // TODO : Process responsibility of this API
-        Thread.sleep(8000);
+        // Thread.sleep(8000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 

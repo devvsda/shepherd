@@ -29,7 +29,7 @@ public interface WorkflowOperationDao {
     public int updateNodeStatus(@Bind("executionId") Integer executionId, @Bind("processedNodes") List<Integer> processedNodes, @Bind("inProcessingNodes") List<Integer> inProcessingNodes);
 
 
-    @SqlUpdate("insert into node_details(node_name, execution_id, status, error_message, created_at, updated_at, created_by) values(:node.name,:node.executionId,:node.nodeState,:node.errorMessage,:node.createdAt,:node.updatedAt,:node.submittedBy)")
+    @SqlUpdate("insert into node_details(node_name, object_id, execution_id, status, error_message, created_at, updated_at, created_by) values(:node.name, :node.objectId, :node.executionId,:node.nodeState,:node.errorMessage,:node.createdAt,:node.updatedAt,:node.submittedBy)")
     public int createNode(@BindBean("node") Node node);
 
     @SqlUpdate("update node_details set status = :node.nodeState, error_message = :node.errorMessage, updated_at = :node.updatedAt where execution_id = :node.executionId and node_name = :node.name")

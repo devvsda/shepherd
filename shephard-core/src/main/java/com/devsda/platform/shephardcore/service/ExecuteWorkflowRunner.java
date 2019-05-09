@@ -119,6 +119,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
                         ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
 
                         Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
+                        thisNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
                         thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
                         Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
                         futureObjects.addLast(childNodeResponse);

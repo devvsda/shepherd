@@ -45,5 +45,5 @@ error_message varchar(255),
 created_at DATETIME,
 updated_at DATETIME,
 created_by varchar(255),
-primary key(execution_id, node_name)
+primary key(object_id, execution_id, node_name)
 );
