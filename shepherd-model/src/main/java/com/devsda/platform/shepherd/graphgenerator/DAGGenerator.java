@@ -84,11 +84,11 @@ public class DAGGenerator {
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        //Document doc = dBuilder.parse(new StringBufferInputStream(stringifyXML));
         Document doc = dBuilder.parse(new InputSource(new StringReader(stringifyXML)));
-
-        // DocumentBuilder.parse(new StringBufferInputStream(stringifyXML));
         doc.getDocumentElement().normalize();
+
+        Node workflowType = doc.getDocumentElement().getElementsByTagName(ShepherdConstants.Graph.TYPE).item(0);
+        graph.setGraphType(GraphType.valueOf(workflowType.getTextContent()));
 
         Node graphRoot = doc.getDocumentElement().getElementsByTagName(ShepherdConstants.Graph.GRAPH).item(0);
 

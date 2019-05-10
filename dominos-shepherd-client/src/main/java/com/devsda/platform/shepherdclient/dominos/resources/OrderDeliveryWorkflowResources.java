@@ -33,7 +33,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("VALIDATE_ORDER").build();
+        return Response.ok("YES").build();
     }
 
     @POST
@@ -51,7 +51,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("GET_ORDER_TYPE").build();
+        return Response.ok("Veg").build();
     }
 
     @POST
@@ -69,7 +69,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("ASSIGN_NON_VEG_KITCHEN").build();
+        return Response.ok("Yes").build();
     }
 
     @POST
@@ -87,7 +87,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("ASSIGN_VEG_KITCHEN").build();
+        return Response.ok("Yes").build();
     }
 
     @POST
@@ -105,7 +105,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("ASSIGN_CHEF").build();
+        return Response.ok("Yes").build();
     }
 
     @POST
@@ -123,7 +123,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("GATHER_INGREDIENTS").build();
+        return Response.ok("Yes").build();
     }
 
     @POST
@@ -141,7 +141,7 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("COOK_FOOD").build();
+        return Response.ok("Yes").build();
     }
 
     @POST
@@ -159,6 +159,6 @@ public class OrderDeliveryWorkflowResources {
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
-        return Response.ok("NOTIFY_CLIENT").build();
+        return Response.ok("COMPLETED").build();
     }
 }
