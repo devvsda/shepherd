@@ -4,6 +4,7 @@ import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shephardcore.util.GraphUtil;
+import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
@@ -92,8 +93,6 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                 log.info(String.format("Node : %s successfully completed", nodeName));
 
-                // TODO : This will use in CONDITIONAL workflow execution.
-                String clientResponse = nodeResponse.getClientResponse();
 
                 List<Connection> childrenConnections = nodeNameToNodeMapping.get(nodeName).getConnections();
 
@@ -105,28 +104,34 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                 for (Connection connection : childrenConnections) {
 
-                    // TODO : This will use in CONDITIONAL workflow execution.
-                    String edgeName = connection.getEdgeName();
-
                     String childNodeName = connection.getNodeName();
 
-                    Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
+                    if(GraphType.CONDITIONAL.equals(graph.getGraphType())) {
 
-                    if (Boolean.TRUE.equals(isNodeReadyToExecute)) {
+                        if (connection.getEdgeName().equalsIgnoreCase(nodeResponse.getClientResponse())) {
 
-                        log.info(String.format("Pushing node : %s to Queue", childNodeName));
-                        NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
-                        ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
+                            pushNodeToQueue(childNodeName,
+                                    nodeNameToNodeConfigurationMapping, teamNameToTeamConfigurationMapping, nodeNameToNodeMapping,
+                                    executorService, futureObjects);
 
-                        Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
-                        thisNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
-                        thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
-                        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
-                        futureObjects.addLast(childNodeResponse);
+                        } else {
+                            continue;
+                        }
+
                     } else {
-                        // TODO : Need to maintain secondary Queue to avoid this node becoming Zombie.
-                    }
 
+                        Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
+
+                        if (Boolean.TRUE.equals(isNodeReadyToExecute)) {
+
+                            pushNodeToQueue(childNodeName,
+                                    nodeNameToNodeConfigurationMapping, teamNameToTeamConfigurationMapping, nodeNameToNodeMapping,
+                                    executorService, futureObjects);
+
+                        } else {
+                            // TODO : Need to maintain secondary Queue to avoid this node becoming Zombie.
+                        }
+                    }
                 }
 
             } catch (TimeoutException e) {
@@ -156,5 +161,20 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         executorService.shutdown();
 
         return null;
+    }
+
+    private void pushNodeToQueue(String childNodeName, Map<String,
+            NodeConfiguration> nodeNameToNodeConfigurationMapping, Map<String,
+            TeamConfiguration> teamNameToTeamConfigurationMapping, Map<String, Node> nodeNameToNodeMapping,
+                                 ExecutorService executorService, Deque<Future<NodeResponse>> futureObjects) {
+        log.info(String.format("Pushing node : %s to Queue", childNodeName));
+        NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
+        ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
+
+        Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
+        thisNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
+        thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
+        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
+        futureObjects.addLast(childNodeResponse);
     }
 }
