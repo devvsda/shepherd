@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore.service;
+package com.devsda.platform.shephardcore.service.documentservice;
 
 import com.devsda.platform.shepherd.model.DataSourceDetails;
 import com.mongodb.MongoClient;

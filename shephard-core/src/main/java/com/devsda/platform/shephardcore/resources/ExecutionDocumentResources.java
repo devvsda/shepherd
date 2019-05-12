@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.service.ExecutionDocumentService;
+import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import org.bson.Document;
@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Map;
 
 @Path(ShephardConstants.Resources.EXECUTION_DETAILS)
 @Produces(MediaType.APPLICATION_JSON)
@@ -26,7 +27,7 @@ public class ExecutionDocumentResources {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response fetchExecutionDetails(@PathParam("executionID") Integer executionID) throws Exception {
+    public Response fetchExecutionDetails(@PathParam("executionID") String executionID) throws Exception {
 
         try {
             Document result = this.executeWorkflowService.fetchExecutionDetails(executionID);
@@ -48,7 +49,7 @@ public class ExecutionDocumentResources {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateExecutionDetails(@PathParam("executionID") Integer executionID, @NotNull String updatedExecutionDetails) throws Exception {
+    public Response updateExecutionDetails(@PathParam("executionID") String executionID, @NotNull Map<String, Object> updatedExecutionDetails) throws Exception {
 
         try {
             boolean result = this.executeWorkflowService.updateExecutionDetails(executionID, updatedExecutionDetails);

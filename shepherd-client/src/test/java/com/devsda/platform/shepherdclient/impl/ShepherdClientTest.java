@@ -80,8 +80,8 @@ public class ShepherdClientTest {
     @Test
     public void executeEndpointTest() throws Exception {
 
-        String clientName = "dominos";
-        String endpointName = "logistics_dev";
+        String clientName = "dominos11";
+        String endpointName = "validate_dev";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>() {{
             put("size", "medium");
