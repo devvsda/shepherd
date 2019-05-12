@@ -110,7 +110,7 @@ public class ExecutionDocumentService {
         {
             updateOperation.append("$set", new Document("executionData."+entry.getKey(), entry.getValue()));
         }
-        updateOperation.append("$set", new Document("executionMetaData.lastModifiedDate", DateUtil.currentDate()), );
+        updateOperation.append("$set", new Document("executionMetaData.lastModifiedDate", DateUtil.currentDate()));
         updateOperation.append("$inc", new Document("executionMetaData.numberOfUpdatesAfterInsertion",1));
         return updateOperation;
     }
