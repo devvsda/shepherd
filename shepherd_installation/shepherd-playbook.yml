@@ -1,0 +1,7 @@
+---
+- name: install
+  hosts: instances
+
+  roles:
+    - shepherd
+  
