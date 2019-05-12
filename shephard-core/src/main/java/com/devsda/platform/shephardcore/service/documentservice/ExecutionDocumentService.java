@@ -10,6 +10,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoWriteException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
@@ -88,7 +89,7 @@ public class ExecutionDocumentService {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
 
             if (collection != null) {
-                UpdateResult updateResult = collection.updateOne(getSearchFilter(executionID), getUpdateOperation(updatedInput));
+                UpdateResult updateResult = collection.updateOne(getSearchFilter(executionID), getUpdateOperation(updatedInput), new UpdateOptions().upsert(true));
                 log.debug("updateDocument() :: database: " + this.shepherdConfiguration.getDataSourceDetails().getDbname() + " and collection: " + this.shepherdConfiguration.getDataSourceDetails().getCollectionname()
                         + " is document Updated :" + updateResult.wasAcknowledged());
                 boolean ack = updateResult.wasAcknowledged();
@@ -109,7 +110,7 @@ public class ExecutionDocumentService {
         {
             updateOperation.append("$set", new Document("executionData."+entry.getKey(), entry.getValue()));
         }
-        updateOperation.append("$set", new Document("executionMetaData.lastModifiedDate", DateUtil.currentDate()));
+        updateOperation.append("$set", new Document("executionMetaData.lastModifiedDate", DateUtil.currentDate()), );
         updateOperation.append("$inc", new Document("executionMetaData.numberOfUpdatesAfterInsertion",1));
         return updateOperation;
     }
