@@ -1,0 +1,40 @@
+---
+# tasks file for dominos setup
+
+- name: Delete dominos(shepherd's sample customer) folder
+  file:
+    state: absent
+    path: /home/admin/dominos
+
+- name: Create folder for dominos
+  file:
+    state: directory
+    path: /home/admin/dominos
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Copy dominos jar to server.
+  copy:
+    src: /Users/hijhamb/side_project/shephard/dominos-shepherd-client/target/dominos-shepherd-client-1.0-SNAPSHOT.jar
+    dest: /home/admin/dominos/dominos.jar
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Copy configuration file.
+  copy:
+    src: /Users/hijhamb/side_project/shephard/dominos-shepherd-client/configurations/dev-dominos-configuration.yaml
+    dest: /home/admin/dominos/dominos-configuration.yaml
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Kill running server
+  shell: if [[  $(ps aux | grep dominos | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[d]ominos' | awk '{print $2}'); fi
+
+  
+- name: Run Dominos Server
+  shell: nohup java -cp dominos.jar com.devsda.platform.shepherdclient.dominos.DominosApplication server dominos-configuration.yaml > /dev/null 2>&1 &
+  args:
+    chdir: /home/admin/dominos/

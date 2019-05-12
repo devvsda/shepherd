@@ -1,0 +1,3 @@
+---
+- name: restart shepherd
+  service: name=shepherd-server state=restarted 
