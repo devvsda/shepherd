@@ -1,10 +1,11 @@
 package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.devsda.platform.shephardcore.service.ClientDataRetrievelService;
 import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.model.Graph;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
@@ -110,7 +111,7 @@ public class ClientDataRetrievalResources {
 
 
     @GET
-    @Path(ShephardConstants.Resources.GRAPH_JSON)
+    @Path(ShephardConstants.Resources.GRAPH_DETAILS)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getGraphJSON(@QueryParam("clientName") String clientName, @QueryParam("endpointName") String endpointName) {
@@ -131,6 +132,38 @@ public class ClientDataRetrievalResources {
         } catch (Throwable e) {
 
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_GRAPH, null, null, "Failed to retrieve graph details")).build();
+
+        }
+
+    }
+
+    @GET
+    @Path(ShephardConstants.Resources.EXECUTION_STATE)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getExecutionState(@QueryParam("clientName") String clientName, @QueryParam("endpointName") String endpointName,
+                                      @QueryParam("objectId") String objectId, @QueryParam("executionId") String executionId) {
+
+
+        try {
+
+            log.info(String.format("Processing Get Execution State Request for client : %s, endpoint : %s, objectId : %s, executionId : %s",
+                    clientName, endpointName, objectId, executionId));
+
+            ExecutionDetails executionDetails = clientDataRetrievelService.getExecutionState(clientName, endpointName, objectId, executionId);
+
+            log.info(String.format("Successfully completed get graph JSON %s", clientName));
+
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("executionDetails", executionDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_EXECUTION_STATE, shepherdResponse, "Successfully retrieved execution state", null)).build();
+
+        } catch (Throwable e) {
+
+            log.error(String.format("Get Execution Details API failed for clientName : %s," +
+                    " endpointName : %s, objectId : %s, executionId : %s", clientName, endpointName, objectId, executionId), e);
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_EXECUTION_STATE, null, null, "Failed to retrieve execution state")).build();
 
         }
 

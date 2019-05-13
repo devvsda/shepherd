@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
@@ -20,7 +20,6 @@ import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.concurrent.Callable;
 
 public class NodeExecutor implements Callable<NodeResponse> {
