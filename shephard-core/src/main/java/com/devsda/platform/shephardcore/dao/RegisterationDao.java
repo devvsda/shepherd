@@ -3,8 +3,8 @@ package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shephardcore.mapper.ClientDetailsMapper;
 import com.devsda.platform.shephardcore.mapper.EndpointDetailsMapper;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 

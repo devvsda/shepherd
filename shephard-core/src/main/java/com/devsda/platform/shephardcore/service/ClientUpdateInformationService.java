@@ -1,8 +1,8 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.util.DateUtil;

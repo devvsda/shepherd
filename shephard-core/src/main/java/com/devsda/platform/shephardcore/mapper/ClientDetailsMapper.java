@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.mapper;
 
-import com.devsda.platform.shephardcore.model.ClientDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 

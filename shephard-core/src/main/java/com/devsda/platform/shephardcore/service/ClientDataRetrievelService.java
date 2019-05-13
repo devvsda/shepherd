@@ -1,11 +1,11 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shepherd.model.*;
+import com.devsda.platform.shephardcore.util.RequestValidator;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
-import com.devsda.platform.shepherd.model.Graph;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +17,13 @@ public class ClientDataRetrievelService {
     private static final Logger log = LoggerFactory.getLogger(ClientDataRetrievelService.class);
 
     @Inject
-    public RegisterationDao registerationDao;
+    private RegisterationDao registerationDao;
 
     @Inject
-    public DAGGenerator dagGenerator;
+    private DAGGenerator dagGenerator;
+
+    @Inject
+    private WorkflowOperationDao workflowOperationDao;
 
     public List<ClientDetails> getAllClients() {
 
@@ -78,6 +81,22 @@ public class ClientDataRetrievelService {
         Graph graph = dagGenerator.generateFromString(stringifyGRaph);
 
         return graph;
+    }
+
+    public ExecutionDetails getExecutionState(String clientName, String endpointName, String objectId, String executionId) {
+
+        ClientDetails clientDetails = RequestValidator.validateClient(clientName);
+        RequestValidator.validateEndpoint(clientDetails.getClientId(), clientName, endpointName);
+        ExecutionDetails executionDetails = RequestValidator.validateExecution(
+                clientName, endpointName, objectId, executionId);
+
+
+        List<Node> nodes = workflowOperationDao.getAllNodes(objectId, executionId);
+        executionDetails.setNodes(nodes);
+
+        return executionDetails;
+
+
     }
 
 }

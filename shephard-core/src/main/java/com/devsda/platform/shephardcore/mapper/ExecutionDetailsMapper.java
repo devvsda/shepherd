@@ -1,6 +1,6 @@
 package com.devsda.platform.shephardcore.mapper;
 
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
@@ -15,7 +15,7 @@ public class ExecutionDetailsMapper implements ResultSetMapper<ExecutionDetails>
 
         ExecutionDetails executionDetails = new ExecutionDetails();
 
-        executionDetails.setExecutionId(resultSet.getString("object_id"));
+        executionDetails.setObjectId(resultSet.getString("object_id"));
         executionDetails.setExecutionId(resultSet.getString("execution_id"));
         executionDetails.setClientId(resultSet.getInt("client_id"));
         executionDetails.setEndpointId(resultSet.getInt("endpoint_id"));

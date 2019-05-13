@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore.model;
+package com.devsda.platform.shepherd.model;
 
 
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
@@ -17,8 +17,7 @@ public class ExecutionDetails {
     private Integer endpointId;
     private WorkflowExecutionState workflowExecutionState;
     private String errorMessage;
-    private List<Node> processedNodes;
-    private List<Node> procressingNodes;
+    private List<Node> nodes;
     private Date createdAt;
     private Date updatedAt;
     private String createdBy;
@@ -71,22 +70,6 @@ public class ExecutionDetails {
         this.errorMessage = errorMessage;
     }
 
-    public List<Node> getProcessedNodes() {
-        return processedNodes;
-    }
-
-    public void setProcessedNodes(List<Node> processedNodes) {
-        this.processedNodes = processedNodes;
-    }
-
-    public List<Node> getProcressingNodes() {
-        return procressingNodes;
-    }
-
-    public void setProcressingNodes(List<Node> procressingNodes) {
-        this.procressingNodes = procressingNodes;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -111,6 +94,14 @@ public class ExecutionDetails {
         this.createdBy = createdBy;
     }
 
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public void setNodes(List<Node> nodes) {
+        this.nodes = nodes;
+    }
+
     @Override
     public String toString() {
         return "ExecutionDetails{" +
@@ -120,8 +111,7 @@ public class ExecutionDetails {
                 ", endpointId=" + endpointId +
                 ", workflowExecutionState=" + workflowExecutionState +
                 ", errorMessage='" + errorMessage + '\'' +
-                ", processedNodes=" + processedNodes +
-                ", procressingNodes=" + procressingNodes +
+                ", nodes=" + nodes +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", createdBy='" + createdBy + '\'' +

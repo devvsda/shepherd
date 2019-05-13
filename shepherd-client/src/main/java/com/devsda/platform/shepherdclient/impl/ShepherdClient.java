@@ -162,7 +162,7 @@ public class ShepherdClient {
             return shepherdResponse;
         } catch (Exception e) {
             log.error("Retrival endpoint failed", e);
-            throw new ShepherdInternalException("dscasdc");
+            throw new ShepherdInternalException(e);
         }
     }
 
@@ -192,5 +192,27 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
 
+    }
+
+    public ShepherdResponse getExecutionState(String clientName, String endpointName, String objectId, String executionId) {
+
+        try {
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("clientName", clientName);
+            parameters.put("endpointName", endpointName);
+            parameters.put("objectId", objectId);
+            parameters.put("executionId", executionId);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            HttpMethod httpMethod = new HttpGetMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(), ShepherdClientConstants.Resources.GET_EXECUTION_STATE, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
+            return shepherdResponse;
+
+        } catch (Exception e) {
+            log.error("Get Execution State failed", e);
+            throw new ShepherdInternalException(e);
+        }
     }
 }

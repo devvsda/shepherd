@@ -93,4 +93,18 @@ public class ShepherdClientTest {
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(executeEndpointResponse));
     }
+
+    @Test
+    public void getExecutionState() {
+
+        String clientName = "dominos11";
+        String endpointName = "validate_dev";
+        String objectId = "0b1bb945e6184a5ab80828e3ab71f0d0";
+        String executionId = "5a40591a68b7461bba7bd3023c366a54";
+
+        ShepherdResponse getExecutionStateResponse = shepherdClient.getExecutionState(clientName, endpointName, objectId, executionId);
+
+        System.out.println(getExecutionStateResponse);
+    }
+
 }
