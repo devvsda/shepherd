@@ -1,3 +1,5 @@
+<img src="https://github.com/devvsda/shephard/blob/master/diagrams/logo.png" height="200px" width="150px">
+
 # Shepherd
 Shepherd is a platform to create, schedule and monitor workflows programmatically in any language. Shepherd can support conditional workflows as well as un-conditional workflows. Shepherd is a Software as a service, where clients can register themselves, create multiple endpoints, and execute workflows in any programming language, or multiple programming languages in a single workflow. Currently, Shepherd has an integration with AWS SNS, from which client can get notification once workflow processing completes.
 
