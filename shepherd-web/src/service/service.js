@@ -1,11 +1,11 @@
 // IMPORT DATA FROM STATIC JSON FILE
 
 // COMPONENT
-const registerClientUrl = "http://ec2-54-173-37-0.compute-1.amazonaws.com:8080/shephard-core/register/client";
-const fetchClientsUrl = "http://ec2-54-173-37-0.compute-1.amazonaws.com:8080/shephard-core/retrieve/client";
-const fetchEndpointsUrl = "http://ec2-54-173-37-0.compute-1.amazonaws.com:8080/shephard-core/retrieve/endpoints";
-const createEndpointUrl = "http://ec2-54-173-37-0.compute-1.amazonaws.com:8080/shephard-core/register/endpoint";
-const getGraphJSON = "http://ec2-54-173-37-0.compute-1.amazonaws.com:8080/shephard-core/retrieve/graphJSON";
+const registerClientUrl = "http://3.95.163.243:8080/shephard-core/register/client";
+const fetchClientsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/client";
+const fetchEndpointsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/endpoints";
+const createEndpointUrl = "http://3.95.163.243:8080/shephard-core/register/endpoint";
+const getGraphJSON = "http://3.95.163.243:8080/shephard-core/retrieve/graphJSON";
 /**
  * get all client
  * @returns {Promise<any>}
