@@ -30,6 +30,11 @@ public class ClientDataRetrievelService {
         return registerationDao.getAllClientDetails();
     }
 
+    public ClientDetails getClientDetails(String clientName) {
+
+        return registerationDao.getClientDetails(clientName);
+    }
+
 
     public List<EndpointDetails> getAllEndpoints(String clientName) {
 

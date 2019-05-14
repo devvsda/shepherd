@@ -12,6 +12,7 @@ public class ShephardConstants {
         public static final String UPDATE = "/update";
         public static final String EXECUTION = "/execution";
 
+        public static final String CLIENTS = "/clients";
         public static final String CLIENT = "/client";
         public static final String ENDPOINT = "/endpoint";
         public static final String GRAPH_DETAILS = "/graphXML";
