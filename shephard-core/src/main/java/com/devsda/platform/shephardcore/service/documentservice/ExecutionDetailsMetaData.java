@@ -6,25 +6,37 @@ import java.util.Date;
 
 public class ExecutionDetailsMetaData implements Serializable {
     private String executionId;
+    private String objectId;
 
-    public ExecutionDetailsMetaData(String executionId, Integer clientId, Date executionStartDateTime) {
+    @Override
+    public String toString() {
+        return "ExecutionDetailsMetaData{" +
+                "executionId='" + executionId + '\'' +
+                ", objectId='" + objectId + '\'' +
+                ", clientId=" + clientId +
+                ", executionStartDateTime=" + executionStartDateTime +
+                ", numberOfUpdatesAfterInsertion=" + numberOfUpdatesAfterInsertion +
+                ", listOfNodesMadeUpdateOnDocument=" + listOfNodesMadeUpdateOnDocument +
+                '}';
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
+    public ExecutionDetailsMetaData(String executionId, String objectId, Integer clientId, Date executionStartDateTime) {
         this.executionId = executionId;
+        this.objectId = objectId;
         this.clientId = clientId;
         this.executionStartDateTime = executionStartDateTime;
     }
 
     private Integer clientId;
     private Date executionStartDateTime;
-
-    @Override
-    public String toString() {
-        return "ExecutionDetailsMetaData{" +
-                "clientId=" + clientId +
-                ", executionStartDateTime=" + executionStartDateTime +
-                ", numberOfUpdatesAfterInsertion=" + numberOfUpdatesAfterInsertion +
-                ", listOfNodesMadeUpdateOnDocument=" + listOfNodesMadeUpdateOnDocument +
-                '}';
-    }
 
     private int numberOfUpdatesAfterInsertion;
     private ArrayList<String> listOfNodesMadeUpdateOnDocument;

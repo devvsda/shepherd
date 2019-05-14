@@ -23,14 +23,14 @@ public class ExecutionDocumentResources {
     @Inject
     private ExecutionDocumentService executeWorkflowService;
 
-    @Path("/{executionID}")
+    @Path("/{objectId}/{executionId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response fetchExecutionDetails(@PathParam("executionID") String executionID) throws Exception {
+    public Response fetchExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID) throws Exception {
 
         try {
-            Document result = this.executeWorkflowService.fetchExecutionDetails(executionID);
+            Document result = this.executeWorkflowService.fetchExecutionDetails(objectId, executionID);
             if (result == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("No Document found for " + executionID).build();
             }
@@ -45,14 +45,14 @@ public class ExecutionDocumentResources {
         }
     }
 
-    @Path("/{executionID}")
+    @Path("/{executionId}")
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateExecutionDetails(@PathParam("executionID") String executionID, @NotNull Map<String, Object> updatedExecutionDetails) throws Exception {
+    public Response updateExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID, @NotNull Map<String, Object> updatedExecutionDetails) throws Exception {
 
         try {
-            boolean result = this.executeWorkflowService.updateExecutionDetails(executionID, updatedExecutionDetails);
+            boolean result = this.executeWorkflowService.updateExecutionDetails(objectId, executionID, updatedExecutionDetails);
             if (result == false) {
                 return Response.status(Response.Status.NOT_MODIFIED).entity("Could not update the document with executionId: " + executionID + "update :" + updatedExecutionDetails).build();
             }

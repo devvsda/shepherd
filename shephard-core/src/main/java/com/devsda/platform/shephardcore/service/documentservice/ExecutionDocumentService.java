@@ -50,8 +50,8 @@ public class ExecutionDocumentService {
 
             if (collection != null) {
                 final Document dbObjectInput = new Document();
-                dbObjectInput.append("executionData",Document.parse(jsonString));
-                dbObjectInput.append("executionMetaData", Document.parse(metaDataString));
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD,Document.parse(jsonString));
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD, Document.parse(metaDataString));
                 collection.insertOne(dbObjectInput);
                 log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", jsonString, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
                 return true;
@@ -70,12 +70,12 @@ public class ExecutionDocumentService {
         return metaData;
     }
 
-    public Document fetchExecutionDetails(String executionID) throws Exception {
+    public Document fetchExecutionDetails(String objectId, String executionID) throws Exception {
         try {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
             if (collection != null) {
                 ExecutionDetailsMetaData metaData = new ExecutionDetailsMetaData(executionID);
-                Document result = collection.find(getSearchFilter(executionID)).first();
+                Document result = collection.find(getSearchFilter(objectId, executionID)).first();
                 return result;
             }
         } catch (Exception ex) {
@@ -84,12 +84,12 @@ public class ExecutionDocumentService {
         return null;
     }
 
-    public boolean updateExecutionDetails(String executionID, Map<String, Object> updatedInput) {
+    public boolean updateExecutionDetails(String objectId, String executionID, Map<String, Object> updatedInput) {
         try {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
 
             if (collection != null) {
-                UpdateResult updateResult = collection.updateOne(getSearchFilter(executionID), getUpdateOperation(updatedInput), new UpdateOptions().upsert(true));
+                UpdateResult updateResult = collection.updateOne(getSearchFilter(objectId,executionID), getUpdateOperation(updatedInput), new UpdateOptions().upsert(true));
                 log.debug("updateDocument() :: database: " + this.shepherdConfiguration.getDataSourceDetails().getDbname() + " and collection: " + this.shepherdConfiguration.getDataSourceDetails().getCollectionname()
                         + " is document Updated :" + updateResult.wasAcknowledged());
                 boolean ack = updateResult.wasAcknowledged();
@@ -108,16 +108,17 @@ public class ExecutionDocumentService {
         Document updateOperation = new Document();
         for (Map.Entry<String,Object> entry : updatedInput.entrySet())
         {
-            updateOperation.append("$set", new Document("executionData."+entry.getKey(), entry.getValue()));
+            updateOperation.append(ExecutionDocumentConstants.Operations.SET_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD+"."+entry.getKey(), entry.getValue()));
         }
-        updateOperation.append("$set", new Document("executionMetaData.lastModifiedDate", DateUtil.currentDate()));
-        updateOperation.append("$inc", new Document("executionMetaData.numberOfUpdatesAfterInsertion",1));
+        updateOperation.append(ExecutionDocumentConstants.Operations.SET_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.LAST_MODIFIED_DATE, DateUtil.currentDate()));
+        updateOperation.append(ExecutionDocumentConstants.Operations.INCREMENT_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "."+ ExecutionDocumentConstants.Fields.UPDATE_COUNT, 1));
         return updateOperation;
     }
 
-    private Document getSearchFilter(String executionID){
+    private Document getSearchFilter(String objectId, String executionID){
         Document dbObjectInput = new Document();
-        dbObjectInput.append("executionMetaData.executionId",executionID);
+        dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD+ "."+ ExecutionDocumentConstants.Fields.EXCUTION_ID, executionID);
+        dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD+ "."+ ExecutionDocumentConstants.Fields.OBJECT_ID, objectId);
         return dbObjectInput;
 
     }
