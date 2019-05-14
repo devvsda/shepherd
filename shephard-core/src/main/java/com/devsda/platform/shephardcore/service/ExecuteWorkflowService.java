@@ -3,8 +3,9 @@ package com.devsda.platform.shephardcore.service;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
-import com.devsda.platform.shepherd.model.ClientDetails;
-import com.devsda.platform.shepherd.model.EndpointDetails;
+import com.devsda.platform.shephardcore.model.ClientDetails;
+import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
 import com.devsda.platform.shephardcore.util.UUIDUtil;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
@@ -16,6 +17,7 @@ import com.devsda.platform.shepherd.model.Graph;
 import com.devsda.platform.shepherd.model.GraphConfiguration;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +75,7 @@ public class ExecuteWorkflowService {
         executeWorkflowRequest.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         workflowOperationDao.executeWorkflow(executeWorkflowRequest);
 
-        executionDocumentService.insertExecutionDetails(executeWorkflowRequest.getExecutionId(), executeWorkflowRequest.getInitialPayload());
+        executionDocumentService.insertExecutionDetails(executeWorkflowRequest, executeWorkflowRequest.getInitialPayload());
 
         // Generate graph details, and load graph configurations.
         DAGGenerator dagGenerator = new DAGGenerator();
