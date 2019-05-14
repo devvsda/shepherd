@@ -2,7 +2,7 @@
 
 // COMPONENT
 const registerClientUrl = "http://3.95.163.243:8080/shephard-core/register/client";
-const fetchClientsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/client";
+const fetchClientsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/clients";
 const fetchEndpointsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/endpoints";
 const createEndpointUrl = "http://3.95.163.243:8080/shephard-core/register/endpoint";
 const getGraphJSON = "http://3.95.163.243:8080/shephard-core/retrieve/graphJSON";
