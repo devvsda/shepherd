@@ -32,7 +32,7 @@ public class ClientDataRetrievalResources {
     public ClientDataRetrievelService clientDataRetrievelService;
 
     @GET
-    @Path(ShephardConstants.Resources.CLIENT)
+    @Path(ShephardConstants.Resources.CLIENTS)
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getAllRegisteredClients() {
@@ -51,6 +51,30 @@ public class ClientDataRetrievalResources {
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, shepherdResponse, "Successfully retrieved registered clients", null)).build();
         } catch (Throwable e) {
             return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_REGISTERED_CLIENTS, null, null, "Failed to retrieve registered clients")).build();
+        }
+
+    }
+
+    @GET
+    @Path(ShephardConstants.Resources.CLIENT)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getClient(@QueryParam("clientName") String clientName) {
+
+        try {
+
+            log.info(String.format("PRocessing Get Clients Data"));
+
+            ClientDetails clientDetails = clientDataRetrievelService.getClientDetails(clientName);
+
+            log.info(String.format("Successfully completed Get Client Details data"));
+
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("client_details", clientDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_CLIENT_DETAILS, shepherdResponse, "Successfully retrieved client details", null)).build();
+        } catch (Throwable e) {
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.RETRIEVE_CLIENT_DETAILS, null, null, "Failed to retrieve client details")).build();
         }
 
     }
