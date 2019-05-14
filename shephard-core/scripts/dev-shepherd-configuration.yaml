@@ -45,7 +45,7 @@ logging:
     - type: file
       threshold: INFO
       logFormat: "%-6level [%d{HH:mm:ss.SSS}] [%t] %logger{5} - %X{code} %msg %n"
-      currentLogFilename: /tmp/application.log
+      currentLogFilename: /tmp/application-shepherd.log
       archivedLogFilenamePattern: /tmp/shephard-core-application-%d{yyyy-MM-dd}-%i.log.gz
       archivedFileCount: 7
       timeZone: UTC
