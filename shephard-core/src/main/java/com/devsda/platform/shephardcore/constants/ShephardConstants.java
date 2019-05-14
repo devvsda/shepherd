@@ -14,7 +14,8 @@ public class ShephardConstants {
 
         public static final String CLIENT = "/client";
         public static final String ENDPOINT = "/endpoint";
-        public static final String GRAPH_JSON = "/graphJSON";
+        public static final String GRAPH_DETAILS = "/graphXML";
+        public static final String EXECUTION_STATE = "/executionState";
         public static final String ENDPOINTS = "/endpoints";
         public static final String KILL = "/kill";
         public static final String RESUME = "/resume";

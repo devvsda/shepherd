@@ -3,7 +3,7 @@ package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shephardcore.mapper.ExecutionDetailsMapper;
 import com.devsda.platform.shephardcore.mapper.NodeDetailsMapper;
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.Node;
@@ -38,4 +38,8 @@ public interface WorkflowOperationDao {
     @RegisterMapper(NodeDetailsMapper.class)
     @SqlQuery("select * from node_details where object_id = :objectId and execution_id = :executionId and node_name = :nodeName")
     public Node getNode(@Bind("nodeName") String nodeName, @Bind("objectId") String objectId, @Bind("executionId") String executionId);
+
+    @RegisterMapper(NodeDetailsMapper.class)
+    @SqlQuery("select * from node_details where object_id = :objectId and execution_id = :executionId")
+    public List<Node> getAllNodes(@Bind("objectId") String objectId, @Bind("executionId") String executionId);
 }

@@ -1,0 +1,3 @@
+---
+- name: restart dominos
+  service: name=dominos-server state=restarted

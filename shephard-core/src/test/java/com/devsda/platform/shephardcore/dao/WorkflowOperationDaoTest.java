@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shephardcore.ApplicationContextUtil;
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
@@ -13,9 +13,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
-
-import java.sql.SQLIntegrityConstraintViolationException;
 
 public class WorkflowOperationDaoTest {
 

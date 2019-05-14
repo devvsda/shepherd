@@ -1,8 +1,8 @@
 package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shephardcore.ApplicationContextUtil;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Injector;

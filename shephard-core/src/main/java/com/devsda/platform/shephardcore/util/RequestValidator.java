@@ -2,9 +2,9 @@ package com.devsda.platform.shephardcore.util;
 
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.google.inject.Inject;
 import org.slf4j.Logger;
