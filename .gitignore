@@ -29,3 +29,6 @@ dependency-reduced-pom.xml
 *.iml
 
 .idea
+
+.DS_Store
+venv

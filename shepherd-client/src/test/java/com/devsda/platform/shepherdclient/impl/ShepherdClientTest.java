@@ -70,9 +70,11 @@ public class ShepherdClientTest {
 
     @Test
     public void updateEndpointDetailsTest() throws Exception {
+
+        String workflowGraphPath = "./src/test/resources/sample_workflow.xml";
         String endpointFilePath = "./src/test/resources/workflow_configuration.json";
 
-        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("dominos", "logistics_dev", endpointFilePath);
+        ShepherdResponse registerEndpointResponse = shepherdClient.updateEndpointDetails("bcci", "selection_dev", workflowGraphPath, endpointFilePath);
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
     }
@@ -80,8 +82,8 @@ public class ShepherdClientTest {
     @Test
     public void executeEndpointTest() throws Exception {
 
-        String clientName = "dominos11";
-        String endpointName = "validate_dev";
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
 
         Map<String, Object> initialPayload = new HashMap<String, Object>() {{
             put("size", "medium");

@@ -62,4 +62,4 @@ datasource :
   path: /test
   params: ssl=true&replicaSet=Shepherd-Cluster0-shard-0&authSource=admin&retryWrites=true
   dbname: shepherd
-  collectionname: execution_details
+  collectionname: execution_detailss
