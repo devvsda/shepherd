@@ -24,6 +24,7 @@ public class JSONLoader {
     public static String stringify(Object object) throws IOException {
 
         ObjectMapper objectMapper = Jackson.newObjectMapper();
+        objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         String stringify = objectMapper.writeValueAsString(object);
 

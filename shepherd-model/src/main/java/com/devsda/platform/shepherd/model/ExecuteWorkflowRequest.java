@@ -34,6 +34,19 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
     @JsonProperty("initial_payload")
     private Map<String, Object> initialPayload;
 
+    public ExecutionData getExecutionData() {
+        return executionData;
+    }
+
+    public void setExecutionData(ExecutionData executionData) {
+        this.executionData = executionData;
+    }
+
+    @JsonProperty("executionData")
+    ExecutionData executionData;
+
+
+
     public ExecuteWorkflowRequest() {
         super(ResourceName.EXECUTE_WORKFLOW);
         this.workflowExecutionState = WorkflowExecutionState.PENDING;

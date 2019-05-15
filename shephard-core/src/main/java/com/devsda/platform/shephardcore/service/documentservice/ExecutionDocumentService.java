@@ -1,28 +1,37 @@
 package com.devsda.platform.shephardcore.service.documentservice;
 
+import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
+import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoClientURI;
 import com.mongodb.MongoWriteException;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
 import static com.mongodb.client.model.Updates.*;
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class ExecutionDocumentService {
 
@@ -32,28 +41,31 @@ public class ExecutionDocumentService {
     private MongoClient mongoClient;
 
     public boolean insertExecutionDetails(ExecuteWorkflowRequest executeWorkflowRequest, Map<String, Object> initialPayload) {
-        this.mongoClient = getMongoClient();
+
+        if(this.mongoClient==null) {
+            this.mongoClient = getMongoClient();
+        }
         try {
-            ObjectMapper mapper = new ObjectMapper();
             ExecutionDetailsMetaData metaData = generateExecutionDetailsMetaData(executeWorkflowRequest);
-            mapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-            String jsonString = "";
-            String metaDataString= "";
+
+            String executionDataJson= "";
+            String executionMetaDataJson= "";
+            ExecutionData data = executeWorkflowRequest.getExecutionData();
             try {
-                jsonString = mapper.writeValueAsString(initialPayload);
-                metaDataString= mapper.writeValueAsString(metaData);
-            } catch (JsonProcessingException e) {
-                log.error(String.format("Unable to Process the initial payload for execution id : %s.", executeWorkflowRequest.getExecutionId()), e);
+                executionDataJson=JSONLoader.stringify(executeWorkflowRequest.getExecutionData());
+                executionMetaDataJson= JSONLoader.stringify(metaData);
+            } catch (IOException ex){
+                log.error(String.format("Unable to Process the initial payload for execution id : %s.", executeWorkflowRequest.getExecutionId()), ex);
                 return false;
             }
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
 
             if (collection != null) {
                 final Document dbObjectInput = new Document();
-                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD,Document.parse(jsonString));
-                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD, Document.parse(metaDataString));
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD,Document.parse(executionDataJson));
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD, Document.parse(executionMetaDataJson));
                 collection.insertOne(dbObjectInput);
-                log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", jsonString, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
+                log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", executionDataJson, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
                 return true;
             }
         } catch (MongoWriteException e) {
@@ -66,15 +78,18 @@ public class ExecutionDocumentService {
         ExecutionDetailsMetaData metaData = new ExecutionDetailsMetaData();
         metaData.setClientId(executeWorkflowRequest.getClientId());
         metaData.setExecutionId(executeWorkflowRequest.getExecutionId());
+        metaData.setObjectId(executeWorkflowRequest.getObjectId());
         metaData.setExecutionStartDateTime(DateUtil.currentDate());
         return metaData;
     }
 
     public Document fetchExecutionDetails(String objectId, String executionID) throws Exception {
+        if(this.mongoClient == null){
+            this.mongoClient = getMongoClient();
+        }
         try {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
             if (collection != null) {
-                ExecutionDetailsMetaData metaData = new ExecutionDetailsMetaData(executionID);
                 Document result = collection.find(getSearchFilter(objectId, executionID)).first();
                 return result;
             }
@@ -84,12 +99,15 @@ public class ExecutionDocumentService {
         return null;
     }
 
-    public boolean updateExecutionDetails(String objectId, String executionID, Map<String, Object> updatedInput) {
+    public boolean updateExecutionDetails(String objectId, String executionID, ExecutionData updatedInput) throws Exception{
+        if(this.mongoClient == null){
+            this.mongoClient = getMongoClient();
+        }
         try {
             MongoCollection<Document> collection = ExecutionDocumentServiceHelper.getMongoCollection(this.mongoClient, this.shepherdConfiguration.getDataSourceDetails().getDbname(), this.shepherdConfiguration.getDataSourceDetails().getCollectionname());
 
             if (collection != null) {
-                UpdateResult updateResult = collection.updateOne(getSearchFilter(objectId,executionID), getUpdateOperation(updatedInput), new UpdateOptions().upsert(true));
+                UpdateResult updateResult = collection.updateOne(getSearchFilter(objectId,executionID), getUpdateOperationOnFullExecutionData(updatedInput), new UpdateOptions());
                 log.debug("updateDocument() :: database: " + this.shepherdConfiguration.getDataSourceDetails().getDbname() + " and collection: " + this.shepherdConfiguration.getDataSourceDetails().getCollectionname()
                         + " is document Updated :" + updateResult.wasAcknowledged());
                 boolean ack = updateResult.wasAcknowledged();
@@ -112,6 +130,22 @@ public class ExecutionDocumentService {
         }
         updateOperation.append(ExecutionDocumentConstants.Operations.SET_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.LAST_MODIFIED_DATE, DateUtil.currentDate()));
         updateOperation.append(ExecutionDocumentConstants.Operations.INCREMENT_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "."+ ExecutionDocumentConstants.Fields.UPDATE_COUNT, 1));
+        return updateOperation;
+    }
+
+    private Document getUpdateOperationOnFullExecutionData(ExecutionData executionData) throws Exception{
+        Document updateOperation = new Document();
+
+        try {
+            Document setDocument = new Document(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD, Document.parse(JSONLoader.stringify(executionData)));
+            setDocument.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.LAST_MODIFIED_DATE,DateUtil.currentDate());
+            updateOperation.append(ExecutionDocumentConstants.Operations.SET_OPERATION, setDocument);
+            updateOperation.append(ExecutionDocumentConstants.Operations.INCREMENT_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.UPDATE_COUNT, 1));
+        }catch(IOException ex){
+            log.error("Problem in executionData", ex);
+            throw new Exception("invalid executionData");
+        }
+
         return updateOperation;
     }
 

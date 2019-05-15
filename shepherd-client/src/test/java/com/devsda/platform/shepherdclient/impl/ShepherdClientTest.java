@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdclient.impl;
 
+import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.model.ShepherdResponse;
 import com.devsda.platform.shepherdclient.constants.Environment;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -88,6 +89,8 @@ public class ShepherdClientTest {
             put("base", "cheese_crust");
             put("name", "farm_hosue");
         }};
+
+        ExecutionData executionData = new ExecutionData(initialPayload);
 
         ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, initialPayload);
         ObjectMapper objectMapper = new ObjectMapper();

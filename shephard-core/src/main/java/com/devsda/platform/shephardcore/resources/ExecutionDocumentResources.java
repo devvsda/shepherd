@@ -2,6 +2,7 @@ package com.devsda.platform.shephardcore.resources;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
 import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
+import com.devsda.platform.shepherd.model.ExecutionData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import org.bson.Document;
@@ -51,8 +52,9 @@ public class ExecutionDocumentResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID, @NotNull Map<String, Object> updatedExecutionDetails) throws Exception {
 
+        ExecutionData updatedExecutionData = new ExecutionData(updatedExecutionDetails);
         try {
-            boolean result = this.executeWorkflowService.updateExecutionDetails(objectId, executionID, updatedExecutionDetails);
+            boolean result = this.executeWorkflowService.updateExecutionDetails(objectId, executionID, updatedExecutionData);
             if (result == false) {
                 return Response.status(Response.Status.NOT_MODIFIED).entity("Could not update the document with executionId: " + executionID + "update :" + updatedExecutionDetails).build();
             }

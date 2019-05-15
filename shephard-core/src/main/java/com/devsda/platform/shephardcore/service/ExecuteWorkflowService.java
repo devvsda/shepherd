@@ -84,9 +84,6 @@ public class ExecuteWorkflowService {
 
         log.debug(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
 
-        // Create document for given executionId.
-        // TODO : Store initial payload in documentDb corresponding to executionId.
-
         ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
         executeWorkflowRunner.call();
 
