@@ -54,7 +54,7 @@ logging:
 datasource :
   prefix: mongodb
   user: ashutosh
-  password: PASSWORD
+  password: mOngo%407218
   clusters:
     - shepherd-cluster0-shard-00-00-lovgv.mongodb.net:27017
     - shepherd-cluster0-shard-00-01-lovgv.mongodb.net:27017
@@ -62,4 +62,4 @@ datasource :
   path: /test
   params: ssl=true&replicaSet=Shepherd-Cluster0-shard-0&authSource=admin&retryWrites=true
   dbname: shepherd
-  collectionname: execution_details
+  collectionname: execution_detailss

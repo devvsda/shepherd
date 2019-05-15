@@ -124,12 +124,15 @@ public class ShepherdClient {
 
     }
 
-    public ShepherdResponse updateEndpointDetails(String clientName, String endpointName, String endpointPath) {
+    public ShepherdResponse updateEndpointDetails(String clientName, String endpointName, String workflowPath, String endpointPath) {
 
         try {
+            String graphData = XMLLoader.strigify(workflowPath);
+
             GraphConfiguration graphConfiguration = JSONLoader.load(endpointPath, GraphConfiguration.class);
             String strigifiedEndpointDetails = JSONLoader.stringify(graphConfiguration);
-            EndpointRequest updateEndpointRequest = shepherdClientHelper.createEndpointRequest(clientName, endpointName, null, strigifiedEndpointDetails);
+
+            EndpointRequest updateEndpointRequest = shepherdClientHelper.createEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
             ShepherdResponse shepherdResponse = httpMethod.call(
@@ -138,6 +141,9 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(updateEndpointRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
+            log.error("Problem in stringifying of xml file.", ex);
+            throw new GraphLoaderException("Problem in stringifying of xml file.", ex);
         } catch (IOException ex) {
             log.error("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
             throw new GraphLoaderException("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);

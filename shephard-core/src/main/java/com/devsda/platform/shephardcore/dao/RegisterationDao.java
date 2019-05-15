@@ -46,6 +46,6 @@ public interface RegisterationDao {
     @SqlUpdate("update endpoint_details set workflow_graph = :endpointDetails.DAGGraph, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
     int updateWorkflowDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
 
-    @SqlUpdate("update endpoint_details set endpoint_details = :endpointDetails.endpointDetails, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
+    @SqlUpdate("update endpoint_details set endpoint_details = :endpointDetails.endpointDetails, workflow_graph = :endpointDetails.DAGGraph, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
     int updateEndpointDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
 }
