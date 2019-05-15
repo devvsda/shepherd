@@ -1,7 +1,9 @@
 package com.devsda.platform.shepherdclient.impl;
 
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
+import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +35,13 @@ public class ShepherdClientHelper {
     public ExecuteWorkflowRequest createExecuteWorkflowRequest(String clientName, String endpointName, Map<String, Object> initialObject) {
 
         ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest();
+        ExecutionData executionData = new ExecutionData(initialObject);
+        executeWorkflowRequest.setExecutionData(executionData);
 
         executeWorkflowRequest.setClientName(clientName);
         executeWorkflowRequest.setEndpointName(endpointName);
         executeWorkflowRequest.setInitialPayload(initialObject);
+        executeWorkflowRequest.setResourceName(ResourceName.EXECUTE_WORKFLOW);
         return executeWorkflowRequest;
     }
 }

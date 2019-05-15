@@ -1,21 +1,22 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shephardcore.loader.JSONLoader;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shephardcore.model.NodeResponse;
+import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
 import com.devsda.platform.shepherd.exception.NodeFailureException;
-import com.devsda.platform.shepherd.model.Node;
-import com.devsda.platform.shepherd.model.NodeConfiguration;
-import com.devsda.platform.shepherd.model.ServerDetails;
+import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
 import com.google.inject.Inject;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.StringEntity;
+import org.bson.Document;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class NodeExecutor implements Callable<NodeResponse> {
     private static final Logger log = LoggerFactory.getLogger(NodeExecutor.class);
     @Inject
     private static WorkflowOperationDao workflowOperationDao;
+    @Inject
+    private static ExecutionDocumentService executionDocumentService;
+
     private NodeConfiguration nodeConfiguration;
     private ServerDetails serverDetails;
     private Node node;
@@ -65,13 +69,26 @@ public class NodeExecutor implements Callable<NodeResponse> {
             this.node.setNodeState(NodeState.PROCESSING);
             this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
             workflowOperationDao.createNode(this.node);
+            ShepherdExecutionResponse clientNodeResponse = null;
 
-            // 2. Execute Node.
-            response = new HttpPostMethod().call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
-                    nodeConfiguration.getURI(), null, nodeConfiguration.getHeaders(),
-                    new StringEntity(""), String.class);
+            Document executionDetailsDoc = executionDocumentService.fetchExecutionDetails(this.node.getObjectId(),this.node.getExecutionId());
+            try {
+                String executionDataJson= ((Document)executionDetailsDoc.get("executionData")).toJson();
+                ExecutionData executionData = JSONLoader.loadFromStringifiedObject(executionDataJson, ExecutionData.class);
 
-            log.info(String.format("Response of Node : %s is %s", nodeConfiguration.getName(), response));
+                // 2. Execute Node.
+                HttpPostMethod clientNodeRequest= new HttpPostMethod();
+                clientNodeResponse = clientNodeRequest.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
+                        nodeConfiguration.getURI(), null , nodeConfiguration.getHeaders(),
+                        new StringEntity(JSONLoader.stringify(executionData)), ShepherdExecutionResponse.class);
+
+            }catch(Exception ex){
+                throw ex;
+            }
+
+            boolean isExecutionDocumentUpddated = executionDocumentService.updateExecutionDetails(this.node.getObjectId(),this.node.getExecutionId(), clientNodeResponse.getExecutionData());
+
+            log.info(String.format("Response of Node : %s is %s, isExecutionDocumentUpddated %s", nodeConfiguration.getName(), clientNodeResponse.getResponseEdge(),isExecutionDocumentUpddated));
 
             // 3. Update Node status as Completed in Node table.
             this.node.setNodeState(NodeState.COMPLETED);
