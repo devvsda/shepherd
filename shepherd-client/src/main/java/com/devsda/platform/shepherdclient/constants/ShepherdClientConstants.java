@@ -15,5 +15,6 @@ public class ShepherdClientConstants {
         public static final String UPDATE_ENDPOINT_DETAILS = "/shephard-core/update/endpoint/endpointDetails";
         public static final String RETRIEVE_ENDPOINT = "/shephard-core/retrieve/endpoint";
         public static final String EXECUTE_ENDPOINT = "/shephard-core/execute/endpoint";
+        public static final String GET_EXECUTION_STATE = "/shephard-core/retrieve/executionState";
     }
 }

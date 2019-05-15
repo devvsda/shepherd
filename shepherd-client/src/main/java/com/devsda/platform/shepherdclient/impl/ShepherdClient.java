@@ -124,12 +124,15 @@ public class ShepherdClient {
 
     }
 
-    public ShepherdResponse updateEndpointDetails(String clientName, String endpointName, String endpointPath) {
+    public ShepherdResponse updateEndpointDetails(String clientName, String endpointName, String workflowPath, String endpointPath) {
 
         try {
+            String graphData = XMLLoader.strigify(workflowPath);
+
             GraphConfiguration graphConfiguration = JSONLoader.load(endpointPath, GraphConfiguration.class);
             String strigifiedEndpointDetails = JSONLoader.stringify(graphConfiguration);
-            EndpointRequest updateEndpointRequest = shepherdClientHelper.createEndpointRequest(clientName, endpointName, null, strigifiedEndpointDetails);
+
+            EndpointRequest updateEndpointRequest = shepherdClientHelper.createEndpointRequest(clientName, endpointName, graphData, strigifiedEndpointDetails);
             ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
             HttpMethod httpMethod = new HttpPostMethod();
             ShepherdResponse shepherdResponse = httpMethod.call(
@@ -138,6 +141,9 @@ public class ShepherdClient {
                     shepherdServerDetails.getHeaders(), new StringEntity(JsonLoader.loadObject(updateEndpointRequest)),
                     ShepherdResponse.class);
             return shepherdResponse;
+        } catch (TransformerException | SAXException | ParserConfigurationException ex) {
+            log.error("Problem in stringifying of xml file.", ex);
+            throw new GraphLoaderException("Problem in stringifying of xml file.", ex);
         } catch (IOException ex) {
             log.error("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
             throw new GraphLoaderException("Problem in loading graphDetails/endpointDetails from xml/json file.", ex);
@@ -162,7 +168,7 @@ public class ShepherdClient {
             return shepherdResponse;
         } catch (Exception e) {
             log.error("Retrival endpoint failed", e);
-            throw new ShepherdInternalException("dscasdc");
+            throw new ShepherdInternalException(e);
         }
     }
 
@@ -192,5 +198,27 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
 
+    }
+
+    public ShepherdResponse getExecutionState(String clientName, String endpointName, String objectId, String executionId) {
+
+        try {
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("clientName", clientName);
+            parameters.put("endpointName", endpointName);
+            parameters.put("objectId", objectId);
+            parameters.put("executionId", executionId);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            HttpMethod httpMethod = new HttpGetMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(), ShepherdClientConstants.Resources.GET_EXECUTION_STATE, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
+            return shepherdResponse;
+
+        } catch (Exception e) {
+            log.error("Get Execution State failed", e);
+            throw new ShepherdInternalException(e);
+        }
     }
 }

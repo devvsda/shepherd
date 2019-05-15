@@ -8,6 +8,7 @@ import com.devsda.platform.shephardcore.resources.*;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shephardcore.service.ExecuteWorkflowServiceHelper;
 import com.devsda.platform.shephardcore.service.NodeExecutor;
+import com.devsda.platform.shephardcore.util.RequestValidator;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -86,6 +87,7 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
                 requestStaticInjection(ExecuteWorkflowRunner.class);
                 requestStaticInjection(ExecuteWorkflowServiceHelper.class);
                 requestStaticInjection(NodeExecutor.class);
+                requestStaticInjection(RequestValidator.class);
 
                 // Other objects
                 bind(ShephardConfiguration.class).toInstance(shephardConfiguration);

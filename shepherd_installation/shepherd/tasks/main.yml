@@ -1,0 +1,40 @@
+---
+# tasks file for shepherd setup
+
+- name: Delete shepherd folder
+  file:
+    state: absent
+    path: /home/admin/shepherd
+
+- name: Create folder for shepherd
+  file:
+    state: directory
+    path: /home/admin/shepherd
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Copy shepherd jar to server.
+  copy:
+    src: /Users/hijhamb/side_project/shephard/shephard-core/target/shephard-core-1.0-SNAPSHOT.jar
+    dest: /home/admin/shepherd/shephard-core.jar
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Copy configuration file.
+  copy:
+    src: /Users/hijhamb/side_project/shephard/shephard-core/scripts/dev-shepherd-configuration.yaml
+    dest: /home/admin/shepherd/shepherd-configuration.yaml
+    owner: admin
+    group: admin
+    mode: 0755
+
+- name: Kill running server
+  shell: if [[  $(ps aux | grep shepherd | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[s]hepherd' | awk '{print $2}'); fi
+
+  
+- name: Run shepherd-core
+  shell: nohup java -cp shephard-core.jar com.devsda.platform.shephardcore.application.ShephardApplication server shepherd-configuration.yaml > /dev/null 2>&1 &
+  args:
+    chdir: /home/admin/shepherd/

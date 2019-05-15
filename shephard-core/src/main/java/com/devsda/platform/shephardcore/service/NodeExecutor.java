@@ -2,7 +2,7 @@ package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.loader.JSONLoader;
-import com.devsda.platform.shephardcore.model.ExecutionDetails;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shephardcore.model.NodeResponse;
 import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
 import com.devsda.platform.shepherd.constants.NodeState;
@@ -13,7 +13,6 @@ import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.entity.StringEntity;
@@ -22,9 +21,6 @@ import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class NodeExecutor implements Callable<NodeResponse> {

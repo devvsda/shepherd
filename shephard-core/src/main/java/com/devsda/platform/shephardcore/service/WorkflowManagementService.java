@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.service;
 
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
-import com.devsda.platform.shephardcore.model.ClientDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
 import com.devsda.platform.shephardcore.util.RequestValidator;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;

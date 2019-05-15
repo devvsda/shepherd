@@ -3,8 +3,8 @@ package com.devsda.platform.shephardcore.dao;
 
 import com.devsda.platform.shephardcore.mapper.ClientDetailsMapper;
 import com.devsda.platform.shephardcore.mapper.EndpointDetailsMapper;
-import com.devsda.platform.shephardcore.model.ClientDetails;
-import com.devsda.platform.shephardcore.model.EndpointDetails;
+import com.devsda.platform.shepherd.model.ClientDetails;
+import com.devsda.platform.shepherd.model.EndpointDetails;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
@@ -46,6 +46,6 @@ public interface RegisterationDao {
     @SqlUpdate("update endpoint_details set workflow_graph = :endpointDetails.DAGGraph, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
     int updateWorkflowDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
 
-    @SqlUpdate("update endpoint_details set endpoint_details = :endpointDetails.endpointDetails, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
+    @SqlUpdate("update endpoint_details set endpoint_details = :endpointDetails.endpointDetails, workflow_graph = :endpointDetails.DAGGraph, updated_at = :endpointDetails.updatedAt where client_id = :endpointDetails.clientId and endpoint_id = :endpointDetails.endpointId")
     int updateEndpointDetails(@BindBean("endpointDetails") EndpointDetails endpointDetails);
 }
