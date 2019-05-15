@@ -1,6 +1,7 @@
 package com.devsda.platform.shephardcore.application;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
+import com.devsda.platform.shephardcore.consumer.NodeConsumer;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
@@ -14,6 +15,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.skife.jdbi.v2.DBI;
@@ -95,5 +97,10 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
         });
 
         return injector;
+    }
+
+    @Override
+    public void initialize(Bootstrap<ShephardConfiguration> bootstrap) {
+        bootstrap.addCommand(new NodeConsumer());
     }
 }
