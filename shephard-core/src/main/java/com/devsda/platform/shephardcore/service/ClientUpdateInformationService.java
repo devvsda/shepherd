@@ -59,6 +59,7 @@ public class ClientUpdateInformationService {
 
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
         endpointDetails.setEndpointDetails(endpointRequest.getEndpointDetails());
+        endpointDetails.setDAGGraph(endpointRequest.getDAGGraph());
         registerationDao.updateEndpointDetails(endpointDetails);
 
     }
