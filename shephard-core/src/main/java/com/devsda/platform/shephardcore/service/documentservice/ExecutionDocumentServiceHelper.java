@@ -42,15 +42,7 @@ public class ExecutionDocumentServiceHelper {
         if (mongoClient == null)
             return null;
 
-        CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(),
-                fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .codecRegistry(pojoCodecRegistry)
-                .build();
-
         MongoDatabase db = mongoClient.getDatabase(dataBaseName);
-        db.withCodecRegistry(pojoCodecRegistry);
         MongoCollection<Document> collection = db.getCollection(collectionName);
         return collection;
     }
