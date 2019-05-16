@@ -129,12 +129,12 @@ export const fetchExecutionState = (clientName, endpointName, objectId, executio
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState === 4 && xhttp.status === 200) {
       const res = JSON.parse(xhttp.responseText);
-      if (typeof cb === 'function') cb(res.response_data.graph);
+      if (typeof cb === 'function') cb(res.response_data.executionDetails);
     }
   };
 
   const url =
-    getGraphJSON +
+    getExecutionStateUrl +
     '?clientName=' +
     clientName +
     '&endpointName=' +
