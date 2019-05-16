@@ -10,7 +10,7 @@ Please refer Supported Features details here : https://github.com/devvsda/shephe
 In this section, we compared Shepehrd with Azkaban and Airflow. Please refere comparison wiki here : https://github.com/devvsda/shepherd/wiki/Comparison-with-Open-Source-technologies
 
 # Shepherd Architecture
-Please refer Shepherd Architecture in details here : https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture
+Please refer Shepherd Architecture in details here : https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%231%5D, https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%232%5D
 
 # Database Schema : Shepherd
 Please refer Database schema details here : https://github.com/devvsda/shepherd/wiki/Database-Schema
@@ -27,3 +27,6 @@ Please refer Setup wiki of Shepherd here : https://github.com/devvsda/shepherd/w
 # Steps to run Shepherd server through Ansible automated scripts
 Ansible repo to run Shepherd-core : https://github.com/devvsda/shepherd/tree/master/shepherd_installation
 ansible repo to run Dominos Server : https://github.com/devvsda/shepherd/tree/master/dominos_installation
+
+# FAQs
+Please refer link : https://github.com/devvsda/shepherd/wiki/FAQs
