@@ -221,4 +221,25 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
     }
+
+    public ShepherdResponse getAllExecutions(String clientName, String endpointName) {
+
+        try {
+
+            Map<String, String> parameters = new HashMap<>();
+            parameters.put("clientName", clientName);
+            parameters.put("endpointName", endpointName);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            HttpMethod httpMethod = new HttpGetMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(), ShepherdClientConstants.Resources.GET_ALL_EXECUTIONS, parameters, shepherdServerDetails.getHeaders(), null, ShepherdResponse.class);
+            return shepherdResponse;
+
+        } catch (Exception e) {
+            log.error("Get Execution State failed", e);
+            throw new ShepherdInternalException(e);
+        }
+
+    }
 }

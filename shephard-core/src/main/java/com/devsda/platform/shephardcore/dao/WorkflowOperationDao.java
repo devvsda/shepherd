@@ -25,6 +25,10 @@ public interface WorkflowOperationDao {
     @SqlQuery("select * from execution_details where object_id = :objectId and execution_id = :executionId")
     public ExecutionDetails getExecutionDetails(@Bind("objectId") String objectId, @Bind("executionId") String executionId);
 
+    @RegisterMapper(ExecutionDetailsMapper.class)
+    @SqlQuery("select * from execution_details where client_id = :clientId and endpoint_id = :endpointId")
+    public List<ExecutionDetails> getAllExecutions(@Bind("clientId") Integer clientId, @Bind("endpointId") Integer endpointId);
+
     @SqlUpdate("update execution_details set processed_nodes=:processedNodes.toString(), inProcessingNodes=:inProcessingNodes.toString() where execution_id = :executionId")
     public int updateNodeStatus(@Bind("executionId") Integer executionId, @Bind("processedNodes") List<Integer> processedNodes, @Bind("inProcessingNodes") List<Integer> inProcessingNodes);
 

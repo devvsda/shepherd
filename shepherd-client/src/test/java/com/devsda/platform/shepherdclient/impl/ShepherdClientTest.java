@@ -110,4 +110,14 @@ public class ShepherdClientTest {
         System.out.println(getExecutionStateResponse);
     }
 
+    @Test
+    public void fetchAllExecutions() {
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
+
+        ShepherdResponse shepherdResponse = shepherdClient.getAllExecutions(clientName, endpointName);
+
+        System.out.println(shepherdResponse);
+    }
+
 }
