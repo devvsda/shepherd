@@ -5,14 +5,15 @@ import { Grid, Row, Col, Button, ButtonGroup, FormGroup, FormControl, InputGroup
 import AttemptsComponent from './AttemptsComponent';
 import './tree.css';
 import Chart from '../../service/chart';
-import myTreeData from '../../service/treedata.json';
+// import myTreeData from '../../service/treedata.json';
 import { guid } from '../../utils/util';
+import { getVisualizationJSON, fetchExecutionState } from '../../service/service';
 
 import delete_first_user_data_attempt1 from '../../service/delete_first_user_data_attempt1.json';
-import rms_execution1_attempt1 from '../../service/rms_execution1_attempt1.json';
-import delete_user_data_beta_default from '../../service/delete_user_data_beta_default.json';
-import delete_user_data_beta_pf1 from '../../service/delete_user_data_beta_pf1.json';
-import delete_user_data_beta_ip1 from '../../service/delete_user_data_beta_ip1.json';
+// import rms_execution1_attempt1 from '../../service/rms_execution1_attempt1.json';
+// import delete_user_data_beta_default from '../../service/delete_user_data_beta_default.json';
+// import delete_user_data_beta_pf1 from '../../service/delete_user_data_beta_pf1.json';
+// import delete_user_data_beta_ip1 from '../../service/delete_user_data_beta_ip1.json';
 
 function createExecution(endpointName, executionName) {
   let obj = {};
@@ -20,36 +21,6 @@ function createExecution(endpointName, executionName) {
   obj.endpointName = endpointName;
   obj.executionId = guid();
   return obj;
-}
-
-function getCurrentChart(executionId, attemptId, endpointName) {
-  console.log('executionId ' + executionId);
-  console.log('attemptId ' + attemptId);
-  let chartdata = myTreeData; // default data to be shown
-
-  if (endpointName === '46') {
-    chartdata = delete_user_data_beta_default;
-
-    if (executionId === 'cf6a-02e8-871d-394a') {
-      if (attemptId === 'd085-3d91-57f5-6984') {
-        chartdata = delete_user_data_beta_pf1;
-      } else if (attemptId === '4bf8-0f3f-2d5b-7ad0') {
-        chartdata = delete_user_data_beta_ip1;
-      }
-    }
-
-    if (executionId === 'e320-a004-2ee5-7bb9') {
-      if (attemptId === '4bf8-0f3f-2d5b-7ad0') {
-        chartdata = delete_user_data_beta_ip1;
-      }
-    }
-  }
-
-  if (endpointName === '44') {
-    chartdata = rms_execution1_attempt1;
-  }
-
-  return chartdata;
 }
 
 class EndPointComponent extends Component {
@@ -60,9 +31,10 @@ class EndPointComponent extends Component {
     this.executionAddHandler = this.executionAddHandler.bind(this);
     this.initExecutionAttemptMap = this.initExecutionAttemptMap.bind(this);
     this.updateExecutionAttemptMap = this.updateExecutionAttemptMap.bind(this);
+    this.getCurrentChart = this.getCurrentChart.bind(this);
 
     this.state = {
-      currentChart: myTreeData,
+      currentChart: '',
       mode: 'execute_workflow',
       payLoad: {},
       isLoading: false,
@@ -71,6 +43,11 @@ class EndPointComponent extends Component {
       attemptsMap: {},
       currentExecutionInstanceId: ''
     };
+  }
+
+  getCurrentChart(executionId, attemptId, endpointName) {
+    console.log('executionId ' + executionId);
+    console.log('attemptId ' + attemptId);
   }
 
   handleChange(e) {
@@ -83,15 +60,47 @@ class EndPointComponent extends Component {
     });
   }
 
-  renderChart(executionId, attemptId) {
+  renderChart(objectId, executionId) {
     const endpointName = this.props.match.params.endpointName;
-    const currentChart = getCurrentChart(executionId, attemptId, endpointName);
-
-    this.setState({
-      mode: 'render_chart',
-      currentChart: currentChart,
-      currentExecutionInstanceId: executionId
-    });
+    const cn = this.props.match.params.clientName;
+    const that = this;
+    getVisualizationJSON(
+      cn,
+      endpointName,
+      function(res) {
+        fetchExecutionState(cn, endpointName, objectId, executionId, function(response) {
+          for (var i = 0; i < response.nodes.length; i++) {
+            for (var j = 0; j < res.length; j++) {
+              if (response.nodes[i].name == res[j].name) {
+                res[j].nodeState = response.nodes[i].nodeState;
+                switch (response.nodes[i].nodeState) {
+                  case 'PROCESSING':
+                    res[j].class = 'type-inprogress';
+                    break;
+                  case 'COMPLETED':
+                    res[j].class = 'type-OK';
+                    break;
+                  case 'FAILED':
+                    res[j].class = 'type-error';
+                    break;
+                  default:
+                    res[j].class = 'type-pending';
+                }
+                break;
+              }
+            }
+          }
+          setTimeout(function() {
+            console.log(res);
+            that.setState({
+              mode: 'render_chart',
+              currentChart: res,
+              currentExecutionInstanceId: executionId
+            });
+          }, 1000);
+        });
+      }.bind(this)
+    );
   }
 
   restartExecution() {
