@@ -1,28 +1,30 @@
 // IMPORT DATA FROM STATIC JSON FILE
 
 // COMPONENT
-const registerClientUrl = "http://3.95.163.243:8080/shephard-core/register/client";
-const fetchClientsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/clients";
-const fetchEndpointsUrl = "http://3.95.163.243:8080/shephard-core/retrieve/endpoints";
-const createEndpointUrl = "http://3.95.163.243:8080/shephard-core/register/endpoint";
-const getGraphJSON = "http://3.95.163.243:8080/shephard-core/retrieve/graphJSON";
+const registerClientUrl = 'http://3.95.163.243:8080/shephard-core/register/client';
+const fetchClientsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/clients';
+const fetchEndpointsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/endpoints';
+const createEndpointUrl = 'http://3.95.163.243:8080/shephard-core/register/endpoint';
+const getGraphJSON = 'http://3.95.163.243:8080/shephard-core/retrieve/graphXML';
+const updateEndPointUrl = 'http://3.95.163.243:8080/shephard-core/update/endpoint/endpointDetails';
+const executeEndPointUrl = 'http://3.95.163.243:8080/shephard-core/execute/endpoint';
+
 /**
  * get all client
  * @returns {Promise<any>}
  */
-export const fetchClients = (cb) => {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            const res = JSON.parse(xhttp.responseText);
-            if(typeof cb === 'function')
-                cb(res.message);
-        }
-    };
+export const fetchClients = cb => {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data.registered_clients);
+    }
+  };
 
-    xhttp.open("GET", fetchClientsUrl, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
+  xhttp.open('GET', fetchClientsUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
 };
 
 /**
@@ -31,20 +33,19 @@ export const fetchClients = (cb) => {
  * @returns {Promise<any>}
  */
 export const addClient = (clientName, cb) => {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            const res = {
-                clientName: clientName,
-                clientId: JSON.parse(xhttp.responseText).clientId
-            };
-            if(typeof cb === 'function')
-                cb(res);
-        }
-    };
-    xhttp.open("POST", registerClientUrl, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify({"clientName": clientName}));
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = {
+        clientName: clientName,
+        clientId: JSON.parse(xhttp.responseText).clientId
+      };
+      if (typeof cb === 'function') cb(res);
+    }
+  };
+  xhttp.open('POST', registerClientUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send(JSON.stringify({ clientName: clientName }));
 };
 
 /**
@@ -53,18 +54,17 @@ export const addClient = (clientName, cb) => {
  * @returns {Promise<any>}
  */
 export const fetchEndPoints = (clientName, cb) => {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            const res = JSON.parse(xhttp.responseText);
-            if(typeof cb === 'function')
-                cb(res.message);
-        }
-    };
-    const url = fetchEndpointsUrl + "?clientName=" + clientName;
-    xhttp.open("GET", url, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data.registered_endpoints);
+    }
+  };
+  const url = fetchEndpointsUrl + '?clientName=' + clientName;
+  xhttp.open('GET', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
 };
 
 /**
@@ -74,26 +74,47 @@ export const fetchEndPoints = (clientName, cb) => {
  * @returns {Promise<any>}
  */
 export const createEndPoint = (clientName, endpointName, graphDetails, nodesDetails, cb) => {
-    var xhttp = new XMLHttpRequest();
-    const req = {
-        clientName: clientName,
+  var xhttp = new XMLHttpRequest();
+  const req = {
+    clientName: clientName,
+    endpointName: endpointName,
+    graphDetails: graphDetails,
+    nodesDetails: nodesDetails
+  };
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = {
         endpointName: endpointName,
-        graphDetails: graphDetails,
-        nodesDetails: nodesDetails
+        clientName: clientName
+      };
+      if (typeof cb === 'function') cb(res);
     }
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            const res = {
-                endpointName: endpointName,
-                clientName: clientName
-            };
-            if(typeof cb === 'function')
-                cb(res);
-        }
-    };
-    xhttp.open("POST", createEndpointUrl, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(req));
+  };
+  xhttp.open('POST', createEndpointUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send(JSON.stringify(req));
+};
+
+export const updateEndPoint = (clientName, endpointName, graphDetails, nodesDetails, cb) => {
+  var xhttp = new XMLHttpRequest();
+  const req = {
+    clientName: clientName,
+    endpointName: endpointName,
+    graphDetails: graphDetails,
+    nodesDetails: nodesDetails
+  };
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = {
+        endpointName: endpointName,
+        clientName: clientName
+      };
+      if (typeof cb === 'function') cb(res);
+    }
+  };
+  xhttp.open('POST', updateEndPointUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send(JSON.stringify(req));
 };
 
 /**
@@ -101,9 +122,7 @@ export const createEndPoint = (clientName, endpointName, graphDetails, nodesDeta
  * @param endpointId
  * @returns {Promise<any>}
  */
-export const fetchExecutions = (endpointId) => {
-
-};
+export const fetchExecutions = endpointId => {};
 
 /**
  * execute workflow
@@ -112,22 +131,19 @@ export const fetchExecutions = (endpointId) => {
  * @param payload
  * @returns {Promise<any>}
  */
-export const executeWorkflow = (clientName, endpointName, payload) => {
-
-};
+export const executeEndPoint = (clientName, endpointName, payload) => {};
 
 export const getVisualizationJSON = (clientName, endpointName, cb) => {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            const res = JSON.parse(xhttp.responseText);
-            if(typeof cb === 'function')
-                cb(res.message);
-        }
-    };
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data.graph);
+    }
+  };
 
-    const url = getGraphJSON + "?clientName=" + clientName + "&endpointName=" + endpointName;
-    xhttp.open("GET", url, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
+  const url = getGraphJSON + '?clientName=' + clientName + '&endpointName=' + endpointName;
+  xhttp.open('GET', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
 };
