@@ -8,6 +8,8 @@ const createEndpointUrl = 'http://3.95.163.243:8080/shephard-core/register/endpo
 const getGraphJSON = 'http://3.95.163.243:8080/shephard-core/retrieve/graphXML';
 const updateEndPointUrl = 'http://3.95.163.243:8080/shephard-core/update/endpoint/endpointDetails';
 const executeEndPointUrl = 'http://3.95.163.243:8080/shephard-core/execute/endpoint';
+const getExecutionStateUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/executionState';
+const getExecutionsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/getAllExecutions';
 
 /**
  * get all client
@@ -122,7 +124,29 @@ export const updateEndPoint = (clientName, endpointName, graphDetails, nodesDeta
  * @param endpointId
  * @returns {Promise<any>}
  */
-export const fetchExecutions = endpointId => {};
+export const fetchExecutionState = (clientName, endpointName, objectId, executionId, cb) => {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data.graph);
+    }
+  };
+
+  const url =
+    getGraphJSON +
+    '?clientName=' +
+    clientName +
+    '&endpointName=' +
+    endpointName +
+    '&objectId=' +
+    objectId +
+    '&executionId=' +
+    executionId;
+  xhttp.open('GET', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
+};
 
 /**
  * execute workflow
@@ -131,7 +155,27 @@ export const fetchExecutions = endpointId => {};
  * @param payload
  * @returns {Promise<any>}
  */
-export const executeEndPoint = (clientName, endpointName, payload) => {};
+export const executeEndPoint = (clientName, endpointName, initialPayload, cb) => {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data);
+    }
+  };
+
+  const url = executeEndPointUrl;
+  xhttp.open('POST', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+
+  const reqStr = JSON.stringify({
+    clientName,
+    endpointName,
+    initialPayload
+  });
+
+  xhttp.send(reqStr);
+};
 
 export const getVisualizationJSON = (clientName, endpointName, cb) => {
   var xhttp = new XMLHttpRequest();
@@ -143,6 +187,21 @@ export const getVisualizationJSON = (clientName, endpointName, cb) => {
   };
 
   const url = getGraphJSON + '?clientName=' + clientName + '&endpointName=' + endpointName;
+  xhttp.open('GET', url, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
+};
+
+export const getExecutions = (clientName, endpointName, cb) => {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = JSON.parse(xhttp.responseText);
+      if (typeof cb === 'function') cb(res.response_data.executionDetails);
+    }
+  };
+
+  const url = getExecutionsUrl + '?clientName=' + clientName + '&endpointName=' + endpointName;
   xhttp.open('GET', url, true);
   xhttp.setRequestHeader('Content-type', 'application/json');
   xhttp.send();

@@ -216,7 +216,7 @@ class ClientComponent extends Component {
                           Visualise Graph
                         </Button>
                         <Button className="xsmall-btn execute" bsStyle="success" bsSize="small">
-                          <Link to={`/client/${clientName}/${obj.endpointId}`}>Executions</Link>
+                          <Link to={`/client/${clientName}/${obj.endpointName}`}>Executions</Link>
                         </Button>
                         <Button
                           className="xsmall-btn delete"

@@ -57,6 +57,10 @@ class EndPointComponent extends Component {
     super();
     this.renderChart = this.renderChart.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.executionAddHandler = this.executionAddHandler.bind(this);
+    this.initExecutionAttemptMap = this.initExecutionAttemptMap.bind(this);
+    this.updateExecutionAttemptMap = this.updateExecutionAttemptMap.bind(this);
+
     this.state = {
       currentChart: myTreeData,
       mode: 'execute_workflow',
@@ -101,27 +105,38 @@ class EndPointComponent extends Component {
 
   executeEndPoint() {
     const endpointName = this.props.match.params.endpointName;
-    var execution = createExecution(endpointName, this.state.executionFieldValue);
+    const clientName = this.props.match.params.clientName;
+    // var execution = createExecution(endpointName, this.state.executionFieldValue);
 
-    executionAPI.add(execution);
-
-    let attempt = { ...delete_first_user_data_attempt1 };
-    attempt.executionId = execution.executionId;
-    attempt.attemptId = guid();
-    attemptsAPI.add(attempt);
-
-    this.updateExecutionAttemptMap();
+    executionAPI.add(clientName, endpointName, this.state.executionFieldValue, this.executionAddHandler);
   }
 
-  updateExecutionAttemptMap() {
-    const endpointName = this.props.match.params.endpointName;
-    const execs = executionAPI.get(endpointName);
-    const attempts = {};
+  executionAddHandler(data) {
+    console.log('data received');
+    console.log(data);
+    this.updateExecutionAttemptMap(data);
+  }
 
-    execs.map(obj => {
-      let attempt = attemptsAPI.get(obj.executionId);
-      attempts[obj.executionId] = attempt;
-    });
+  updateExecutionAttemptMap(data = {}) {
+    const endpointName = this.props.match.params.endpointName;
+    let execs = [...this.state.executions];
+    let attempts = { ...this.state.attemptsMap };
+
+    const prevAttemptMap = (this.state.attemptsMap && this.state.attemptsMap[data.executionId]) || [];
+
+    if (data.objectId && data.executionId) {
+      execs = [...this.state.executions, data.objectId];
+      attempts = {
+        ...this.state.attemptsMap,
+        [data.executionId]: [
+          ...prevAttemptMap,
+          {
+            id: data.executionId,
+            wfState: 'PROCESSING'
+          }
+        ]
+      };
+    }
 
     this.setState({
       executions: execs,
@@ -131,7 +146,30 @@ class EndPointComponent extends Component {
   }
 
   componentDidMount() {
-    this.updateExecutionAttemptMap();
+    this.initExecutionAttemptMap();
+  }
+
+  initExecutionAttemptMap() {
+    const endpointName = this.props.match.params.endpointName;
+    const clientName = this.props.match.params.clientName;
+    executionAPI.get(clientName, endpointName, res => {
+      const ex = [];
+      const at = {};
+      res.map(item => {
+        if (ex.indexOf(item.objectId) === -1) {
+          ex.push(item.objectId);
+          if (!at[item.objectId]) {
+            at[item.objectId] = [];
+          }
+          at[item.objectId].push({ id: item.executionId, wfState: item.workflowExecutionState });
+        }
+      });
+      this.setState({
+        executions: ex,
+        attemptsMap: at,
+        executionFieldValue: ''
+      });
+    });
   }
 
   componentDidUpdate() {
@@ -158,16 +196,17 @@ class EndPointComponent extends Component {
                   +
                 </span>
               </div>
-              <div>
-                {!this.state.executions.length && <div className="no-history">No Execution history found</div>}
+              <div className="exec-wrapper">
+                {this.state.executions.length == 0 && <div className="no-history">No Execution history found</div>}
                 {this.state.executions.length > 0 &&
                   this.state.executions.map(obj => (
-                    <ul key={obj.executionId} className="executions">
-                      <li className="execution-name">{obj.executionName}</li>
+                    <ul key={obj} className="executions" id={obj}>
+                      <li className="execution-name">{obj}</li>
                       <li className="no-hover-effect attempts">
                         <AttemptsComponent
                           renderChart={this.renderChart}
-                          attemptObj={this.state.attemptsMap[obj.executionId]}
+                          attemptObj={this.state.attemptsMap[obj]}
+                          executionId={obj}
                         />
                       </li>
                     </ul>
@@ -181,7 +220,7 @@ class EndPointComponent extends Component {
                 <FormControl
                   type="text"
                   value={this.state.value}
-                  placeholder="Enter Execution Name"
+                  placeholder="Initial payload"
                   onChange={this.handleChange}
                 />
                 <Button bsStyle="primary" className="add-client" onClick={() => this.executeEndPoint()}>

@@ -9,7 +9,8 @@ import {
   fetchEndPoints,
   createEndPoint,
   updateEndPoint,
-  executeEndPoint
+  executeEndPoint,
+  getExecutions
 } from './service/service';
 
 export const clientsAPI = {
@@ -56,8 +57,10 @@ export const executionAPI = {
   all: function() {
     return {};
   },
-  get: function(endpointName) {
-    return [];
+  get: function(clientName, endpointName, cb) {
+    getExecutions(clientName, endpointName, cb);
   },
-  add: function(clientName, endpointName, initialPayload, cb) {}
+  add: function(clientName, endpointName, initialPayload, cb) {
+    executeEndPoint(clientName, endpointName, initialPayload, cb);
+  }
 };
