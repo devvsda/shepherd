@@ -1,8 +1,8 @@
 package com.devsda.platform.shepherdclient.impl;
 
-import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.model.ShepherdResponse;
 import com.devsda.platform.shepherdclient.constants.Environment;
+import com.devsda.platform.shepherdclient.loader.JSONLoader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.AfterClass;
@@ -92,9 +92,7 @@ public class ShepherdClientTest {
             put("name", "farm_hosue");
         }};
 
-        ExecutionData executionData = new ExecutionData(initialPayload);
-
-        ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, initialPayload);
+        ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, JSONLoader.stringify(initialPayload) );
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(executeEndpointResponse));
     }

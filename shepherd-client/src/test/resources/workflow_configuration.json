@@ -1,10 +1,10 @@
 {
   "teamConfigurations": [
     {
-      "owner": "GuptaAntyFoodShop",
+      "owner": "PummyAntyFoodShop",
       "serverDetails": {
         "protocol": "http",
-        "hostName": "3.95.163.243",
+        "hostName": "localhost",
         "port": "9090"
       },
       "headers": {

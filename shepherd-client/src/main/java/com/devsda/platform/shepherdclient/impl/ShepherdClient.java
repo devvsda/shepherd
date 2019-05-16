@@ -172,7 +172,7 @@ public class ShepherdClient {
         }
     }
 
-    public ShepherdResponse executeEndpoint(String clientName, String endpointName, Map<String, Object> initialPayload) {
+    public ShepherdResponse executeEndpoint(String clientName, String endpointName, String initialPayload) {
 
         try {
 

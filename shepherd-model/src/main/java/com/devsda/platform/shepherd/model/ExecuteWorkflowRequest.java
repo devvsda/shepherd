@@ -32,19 +32,7 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
     private WorkflowExecutionState workflowExecutionState;
 
     @JsonProperty("initialPayload")
-    private Map<String, Object> initialPayload;
-
-    @JsonProperty("executionData")
-    private ExecutionData executionData;
-
-    public ExecutionData getExecutionData() {
-        return executionData;
-    }
-
-    public void setExecutionData(ExecutionData executionData) {
-        this.executionData = executionData;
-    }
-
+    private String initialPayload;
 
     public ExecuteWorkflowRequest() {
         super(ResourceName.EXECUTE_WORKFLOW);
@@ -91,11 +79,11 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
         this.workflowExecutionState = workflowExecutionState;
     }
 
-    public Map<String, Object> getInitialPayload() {
+    public String getInitialPayload() {
         return initialPayload;
     }
 
-    public void setInitialPayload(Map<String, Object> initialPayload) {
+    public void setInitialPayload(String initialPayload) {
         this.initialPayload = initialPayload;
     }
 
@@ -125,8 +113,7 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
                 ", endpointName='" + endpointName + '\'' +
                 ", endpointId=" + endpointId +
                 ", workflowExecutionState=" + workflowExecutionState +
-                ", initialPayload=" + initialPayload +
-                ", executionData=" + executionData +
+                ", initialPayload='" + initialPayload + '\'' +
                 '}';
     }
 }
