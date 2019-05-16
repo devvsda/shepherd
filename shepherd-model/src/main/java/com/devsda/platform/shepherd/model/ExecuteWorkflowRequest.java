@@ -10,29 +10,32 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExecuteWorkflowRequest extends ShepherdRequest {
 
-    @JsonProperty("object_id")
+    @JsonProperty("objectId")
     private String objectId;
 
-    @JsonProperty("execution_id")
+    @JsonProperty("executionId")
     private String executionId;
 
-    @JsonProperty("client_name")
+    @JsonProperty("clientName")
     private String clientName;
 
-    @JsonProperty("client_id")
+    @JsonProperty("clientId")
     private Integer clientId;
 
-    @JsonProperty("endpoint_name")
+    @JsonProperty("endpointName")
     private String endpointName;
 
-    @JsonProperty("endpoint_id")
+    @JsonProperty("endpointId")
     private Integer endpointId;
 
     @JsonProperty("status")
     private WorkflowExecutionState workflowExecutionState;
 
-    @JsonProperty("initial_payload")
+    @JsonProperty("initialPayload")
     private Map<String, Object> initialPayload;
+
+    @JsonProperty("executionData")
+    private ExecutionData executionData;
 
     public ExecutionData getExecutionData() {
         return executionData;
@@ -41,10 +44,6 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
     public void setExecutionData(ExecutionData executionData) {
         this.executionData = executionData;
     }
-
-    @JsonProperty("executionData")
-    ExecutionData executionData;
-
 
 
     public ExecuteWorkflowRequest() {
@@ -127,6 +126,7 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
                 ", endpointId=" + endpointId +
                 ", workflowExecutionState=" + workflowExecutionState +
                 ", initialPayload=" + initialPayload +
+                ", executionData=" + executionData +
                 '}';
     }
 }
