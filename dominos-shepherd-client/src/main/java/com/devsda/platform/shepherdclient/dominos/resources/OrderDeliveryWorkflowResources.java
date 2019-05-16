@@ -41,7 +41,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("validateOrderUpdate", "vaidate order added this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("YES", JSONLoader.stringify(mp))).build();
     }
@@ -63,7 +63,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("GetOrderType", "Get Order Type Updated this value");
 
         // TODO : Process responsibility of this API
-         Thread.sleep(500);
+         Thread.sleep(20000);
 
 
         return Response.ok(new ShepherdExecutionResponse("VEG",JSONLoader.stringify(mp))).build();
@@ -85,7 +85,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("AssignNnVegKitchen", "AssignNnVegKitchen Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -107,7 +107,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("assignVegKitchen", "assignVegKitchen Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -129,7 +129,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("assignChef", "assignChef Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -151,7 +151,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("gatherIngredients", "gatherIngredients Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -173,7 +173,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("cookFood", "cookFood Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         // TODO : Put data to documentDB, which will be used by subsequent nodes.
 
@@ -197,7 +197,7 @@ public class OrderDeliveryWorkflowResources {
         mp.put("cookFood", "cookFood Updated this value");
 
         // TODO : Process responsibility of this API
-        Thread.sleep(500);
+        Thread.sleep(20000);
 
         return Response.ok(new ShepherdExecutionResponse("COMPLETED",JSONLoader.stringify(mp))).build();
     }
