@@ -3,18 +3,18 @@ package com.devsda.platform.shepherdcore.application;
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
-import com.devsda.platform.shepherdcore.model.ShephardConfiguration;
+import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
 import com.devsda.platform.shepherdcore.resources.*;
 import com.devsda.platform.shepherdcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shepherdcore.service.ExecuteWorkflowServiceHelper;
 import com.devsda.platform.shepherdcore.service.NodeExecutor;
 import com.devsda.platform.shepherdcore.util.RequestValidator;
-import com.devsda.platform.shepherdcore.resources.*;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.skife.jdbi.v2.DBI;
@@ -27,22 +27,22 @@ import java.util.EnumSet;
 /**
  * This is a Shepherd Application Context class. Entry point of Shepherd-core.
  */
-public class ShephardApplication extends Application<ShephardConfiguration> {
+public class ShepherdApplication extends Application<ShepherdConfiguration> {
 
     public static void main(String[] args) throws Exception {
-        new ShephardApplication().run(args);
+        new ShepherdApplication().run(args);
     }
 
     /**
      * This is a main run method to start Shepherd application
      *
-     * @param shephardConfiguration
+     * @param shepherdConfiguration
      * @param environment
      * @throws Exception
      */
-    public void run(ShephardConfiguration shephardConfiguration, Environment environment) throws Exception {
+    public void run(ShepherdConfiguration shepherdConfiguration, Environment environment) throws Exception {
 
-        Injector injector = createInjector(shephardConfiguration, environment);
+        Injector injector = createInjector(shepherdConfiguration, environment);
 
         final FilterRegistration.Dynamic cors =
                 environment.servlets().addFilter(ShephardConstants.ServletFilter.CORS, CrossOriginFilter.class);
@@ -66,11 +66,11 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
     /**
      * This method creates a injector
      *
-     * @param shephardConfiguration
+     * @param shepherdConfiguration
      * @param environment
      * @return
      */
-    public Injector createInjector(ShephardConfiguration shephardConfiguration, Environment environment) {
+    public Injector createInjector(ShepherdConfiguration shepherdConfiguration, Environment environment) {
 
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
@@ -78,7 +78,7 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
 
                 // Binding DB layer with Application layer.
                 final DBIFactory factory = new DBIFactory();
-                final DBI jdbi = factory.build(environment, shephardConfiguration.getDatabase(), ShephardConstants.DB.MYSQL);
+                final DBI jdbi = factory.build(environment, shepherdConfiguration.getDatabase(), ShephardConstants.DB.MYSQL);
                 final RegisterationDao registerationDao = jdbi.onDemand(RegisterationDao.class);
                 final WorkflowOperationDao workflowOperationDao = jdbi.onDemand(WorkflowOperationDao.class);
 
@@ -91,10 +91,15 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
                 requestStaticInjection(RequestValidator.class);
 
                 // Other objects
-                bind(ShephardConfiguration.class).toInstance(shephardConfiguration);
+                bind(ShepherdConfiguration.class).toInstance(shepherdConfiguration);
             }
         });
 
         return injector;
+    }
+
+    @Override
+    public void initialize(Bootstrap<ShepherdConfiguration> bootstrap) {
+        bootstrap.addCommand(new NodeConsumer());
     }
 }

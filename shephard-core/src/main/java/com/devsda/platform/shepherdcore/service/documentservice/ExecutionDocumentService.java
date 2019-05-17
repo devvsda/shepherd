@@ -1,7 +1,12 @@
 package com.devsda.platform.shepherdcore.service.documentservice;
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
-import com.devsda.platform.shepherdcore.model.ShephardConfiguration;
+import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
+=======
+import com.devsda.platform.shephardcore.loader.JSONLoader;
+import com.devsda.platform.shephardcore.model.ShephardConfiguration;
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.util.DateUtil;
@@ -26,10 +31,14 @@ public class ExecutionDocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutionDocumentService.class);
     @Inject
-    private ShephardConfiguration shepherdConfiguration;
+    private ShepherdConfiguration shepherdConfiguration;
     private MongoClient mongoClient;
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
     public boolean insertExecutionDetails(ExecuteWorkflowRequest executeWorkflowRequest, Map<String, Object> initialPayload) {
+=======
+    public boolean insertExecutionDetails(ExecuteWorkflowRequest executeWorkflowRequest, String initialPayload) {
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
 
         if(this.mongoClient==null) {
             this.mongoClient = getMongoClient();
@@ -37,11 +46,16 @@ public class ExecutionDocumentService {
         try {
             ExecutionDetailsMetaData metaData = generateExecutionDetailsMetaData(executeWorkflowRequest);
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
             String executionDataJson= "";
             String executionMetaDataJson= "";
             ExecutionData data = executeWorkflowRequest.getExecutionData();
             try {
                 executionDataJson=JSONLoader.stringify(executeWorkflowRequest.getExecutionData());
+=======
+            String executionMetaDataJson= "";
+            try {
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
                 executionMetaDataJson= JSONLoader.stringify(metaData);
             } catch (IOException ex){
                 log.error(String.format("Unable to Process the initial payload for execution id : %s.", executeWorkflowRequest.getExecutionId()), ex);
@@ -51,10 +65,17 @@ public class ExecutionDocumentService {
 
             if (collection != null) {
                 final Document dbObjectInput = new Document();
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
                 dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD,Document.parse(executionDataJson));
                 dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD, Document.parse(executionMetaDataJson));
                 collection.insertOne(dbObjectInput);
                 log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", executionDataJson, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
+=======
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD,Document.parse(initialPayload));
+                dbObjectInput.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD, Document.parse(executionMetaDataJson));
+                collection.insertOne(dbObjectInput);
+                log.debug(String.format("Object : %s inserted successfully in \n collection : %s and db : %s", initialPayload, this.shepherdConfiguration.getDataSourceDetails().getCollectionname(), this.shepherdConfiguration.getDataSourceDetails().getDbname()));
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
                 return true;
             }
         } catch (MongoWriteException e) {
@@ -88,7 +109,11 @@ public class ExecutionDocumentService {
         return null;
     }
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
     public boolean updateExecutionDetails(String objectId, String executionID, ExecutionData updatedInput) throws Exception{
+=======
+    public boolean updateExecutionDetails(String objectId, String executionID, String updatedInput) throws Exception{
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
         if(this.mongoClient == null){
             this.mongoClient = getMongoClient();
         }
@@ -122,6 +147,7 @@ public class ExecutionDocumentService {
         return updateOperation;
     }
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/documentservice/ExecutionDocumentService.java
     private Document getUpdateOperationOnFullExecutionData(ExecutionData executionData) throws Exception{
         Document updateOperation = new Document();
 
@@ -134,6 +160,15 @@ public class ExecutionDocumentService {
             log.error("Problem in executionData", ex);
             throw new Exception("invalid executionData");
         }
+=======
+    private Document getUpdateOperationOnFullExecutionData(String executionData) throws Exception{
+        Document updateOperation = new Document();
+
+        Document setDocument = new Document(ExecutionDocumentConstants.Fields.EXECUTION_DATA_FIELD, Document.parse(executionData));
+        setDocument.append(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.LAST_MODIFIED_DATE,DateUtil.currentDate());
+        updateOperation.append(ExecutionDocumentConstants.Operations.SET_OPERATION, setDocument);
+        updateOperation.append(ExecutionDocumentConstants.Operations.INCREMENT_OPERATION, new Document(ExecutionDocumentConstants.Fields.EXECUTION_METADATA_FIELD + "." + ExecutionDocumentConstants.Fields.UPDATE_COUNT, 1));
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/documentservice/ExecutionDocumentService.java
 
         return updateOperation;
     }

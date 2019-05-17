@@ -1,10 +1,18 @@
 package com.devsda.platform.shepherdcore.service;
 
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/NodeExecutor.java
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherdcore.model.NodeResponse;
 import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
+=======
+import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shephardcore.loader.JSONLoader;
+import com.devsda.platform.shepherd.model.ExecutionDetails;
+import com.devsda.platform.shephardcore.model.NodeResponse;
+import com.devsda.platform.shephardcore.service.documentservice.ExecutionDocumentService;
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/NodeExecutor.java
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
@@ -74,13 +82,20 @@ public class NodeExecutor implements Callable<NodeResponse> {
             Document executionDetailsDoc = executionDocumentService.fetchExecutionDetails(this.node.getObjectId(),this.node.getExecutionId());
             try {
                 String executionDataJson= ((Document)executionDetailsDoc.get("executionData")).toJson();
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/NodeExecutor.java
                 ExecutionData executionData = JSONLoader.loadFromStringifiedObject(executionDataJson, ExecutionData.class);
+=======
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/NodeExecutor.java
 
                 // 2. Execute Node.
                 HttpPostMethod clientNodeRequest= new HttpPostMethod();
                 clientNodeResponse = clientNodeRequest.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
                         nodeConfiguration.getURI(), null , nodeConfiguration.getHeaders(),
+<<<<<<< HEAD:shephard-core/src/main/java/com/devsda/platform/shepherdcore/service/NodeExecutor.java
                         new StringEntity(JSONLoader.stringify(executionData)), ShepherdExecutionResponse.class);
+=======
+                        new StringEntity(executionDataJson), ShepherdExecutionResponse.class);
+>>>>>>> a2832127c981e8796ce10e91b5055513159a5aa6:shephard-core/src/main/java/com/devsda/platform/shephardcore/service/NodeExecutor.java
 
             }catch(Exception ex){
                 throw ex;

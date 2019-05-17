@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.FutureTask;
 
 public class ExecuteWorkflowService {
 
@@ -80,7 +81,11 @@ public class ExecuteWorkflowService {
         log.debug(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
 
         ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
-        executeWorkflowRunner.call();
+
+        FutureTask<Void> futureTask = new FutureTask<>(executeWorkflowRunner);
+        Thread t=new Thread(futureTask);
+        t.start();
+
 
         Map<String, Object> executionWorkflowResponse = new HashMap<>();
         executionWorkflowResponse.put(ShepherdConstants.OBJECT_ID, executeWorkflowRequest.getObjectId());

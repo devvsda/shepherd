@@ -8,7 +8,7 @@ import io.dropwizard.db.DataSourceFactory;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-public class ShephardConfiguration extends Configuration implements Serializable {
+public class ShepherdConfiguration extends Configuration implements Serializable {
 
     @NotNull
     @JsonProperty("environment")
@@ -61,7 +61,7 @@ public class ShephardConfiguration extends Configuration implements Serializable
 
     @Override
     public String toString() {
-        return "ShephardConfiguration{" +
+        return "ShepherdConfiguration{" +
                 "environment=" + environment +
                 ", applicationName='" + applicationName + '\'' +
                 ", database=" + database +

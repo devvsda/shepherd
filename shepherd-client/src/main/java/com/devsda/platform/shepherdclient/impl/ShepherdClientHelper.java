@@ -8,8 +8,6 @@ import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
 public class ShepherdClientHelper {
 
     private static final Logger log = LoggerFactory.getLogger(ShepherdClientHelper.class);
@@ -32,12 +30,9 @@ public class ShepherdClientHelper {
         return registerEndpointRequest;
     }
 
-    public ExecuteWorkflowRequest createExecuteWorkflowRequest(String clientName, String endpointName, Map<String, Object> initialObject) {
+    public ExecuteWorkflowRequest createExecuteWorkflowRequest(String clientName, String endpointName, String initialObject) {
 
         ExecuteWorkflowRequest executeWorkflowRequest = new ExecuteWorkflowRequest();
-        ExecutionData executionData = new ExecutionData(initialObject);
-        executeWorkflowRequest.setExecutionData(executionData);
-
         executeWorkflowRequest.setClientName(clientName);
         executeWorkflowRequest.setEndpointName(endpointName);
         executeWorkflowRequest.setInitialPayload(initialObject);

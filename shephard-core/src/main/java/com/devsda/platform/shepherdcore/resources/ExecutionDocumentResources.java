@@ -50,7 +50,7 @@ public class ExecutionDocumentResources {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID, @NotNull Map<String, Object> updatedExecutionDetails) throws Exception {
+    public Response updateExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID, @NotNull String updatedExecutionDetails) throws Exception {
 
         ExecutionData updatedExecutionData = new ExecutionData(updatedExecutionDetails);
         try {
