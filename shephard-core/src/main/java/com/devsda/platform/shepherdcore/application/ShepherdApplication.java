@@ -1,6 +1,7 @@
 package com.devsda.platform.shepherdcore.application;
 
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
+import com.devsda.platform.shepherdcore.consumer.NodeConsumer;
 import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;

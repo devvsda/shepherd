@@ -1,7 +1,7 @@
-package com.devsda.platform.shephardcore.consumer;
+package com.devsda.platform.shepherdcore.consumer;
 
-import com.devsda.platform.shephardcore.dao.RegisterationDao;
-import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
+import com.devsda.platform.shepherdcore.dao.RegisterationDao;
+import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.model.ClientDetails;
 import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.google.inject.Inject;

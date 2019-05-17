@@ -1,25 +1,25 @@
-package com.devsda.platform.shephardcore.consumer;
+package com.devsda.platform.shepherdcore.consumer;
 
-import com.devsda.platform.shephardcore.application.ShephardApplication;
-import com.devsda.platform.shephardcore.model.ShephardConfiguration;
+import com.devsda.platform.shepherdcore.application.ShepherdApplication;
+import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
 import com.google.inject.Injector;
 import io.dropwizard.cli.ConfiguredCommand;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-public class NodeConsumer extends ConfiguredCommand<ShephardConfiguration> {
+public class NodeConsumer extends ConfiguredCommand<ShepherdConfiguration> {
 
     @Override
-    protected void run(Bootstrap<ShephardConfiguration> bootstrap, Namespace namespace, ShephardConfiguration shephardConfiguration) throws Exception {
+    protected void run(Bootstrap<ShepherdConfiguration> bootstrap, Namespace namespace, ShepherdConfiguration shepherdConfiguration) throws Exception {
         Environment environment = new Environment(bootstrap.getApplication().getName(),
                 bootstrap.getObjectMapper(), bootstrap.getValidatorFactory().getValidator(),
                 bootstrap.getMetricRegistry(), bootstrap.getClassLoader());
-        shephardConfiguration.getMetricsFactory().configure(environment.lifecycle(),
+        shepherdConfiguration.getMetricsFactory().configure(environment.lifecycle(),
                 bootstrap.getMetricRegistry());
-        bootstrap.run(shephardConfiguration, environment);
+        bootstrap.run(shepherdConfiguration, environment);
         
-        Injector injector =  new ShephardApplication().createInjector(shephardConfiguration, environment);
+        Injector injector =  new ShepherdApplication().createInjector(shepherdConfiguration, environment);
 
         SampleExecutor sampleExecutor = injector.getInstance(SampleExecutor.class);
         sampleExecutor.sample();

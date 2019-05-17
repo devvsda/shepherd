@@ -52,9 +52,8 @@ public class ExecutionDocumentResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateExecutionDetails(@PathParam("objectId") String objectId, @PathParam("executionId") String executionID, @NotNull String updatedExecutionDetails) throws Exception {
 
-        ExecutionData updatedExecutionData = new ExecutionData(updatedExecutionDetails);
         try {
-            boolean result = this.executeWorkflowService.updateExecutionDetails(objectId, executionID, updatedExecutionData);
+            boolean result = this.executeWorkflowService.updateExecutionDetails(objectId, executionID, updatedExecutionDetails);
             if (result == false) {
                 return Response.status(Response.Status.NOT_MODIFIED).entity("Could not update the document with executionId: " + executionID + "update :" + updatedExecutionDetails).build();
             }
