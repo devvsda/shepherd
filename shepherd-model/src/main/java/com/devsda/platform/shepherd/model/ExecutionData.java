@@ -1,8 +1,6 @@
 package com.devsda.platform.shepherd.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.Map;
 

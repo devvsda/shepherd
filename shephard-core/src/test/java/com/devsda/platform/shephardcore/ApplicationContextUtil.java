@@ -1,9 +1,9 @@
 package com.devsda.platform.shephardcore;
 
 import com.codahale.metrics.MetricRegistry;
-import com.devsda.platform.shephardcore.application.ShephardApplication;
-import com.devsda.platform.shephardcore.loader.YamlLoader;
-import com.devsda.platform.shephardcore.model.ShephardConfiguration;
+import com.devsda.platform.shepherdcore.application.ShephardApplication;
+import com.devsda.platform.shepherdcore.loader.YamlLoader;
+import com.devsda.platform.shepherdcore.model.ShephardConfiguration;
 import com.google.inject.Injector;
 import io.dropwizard.setup.Environment;
 
