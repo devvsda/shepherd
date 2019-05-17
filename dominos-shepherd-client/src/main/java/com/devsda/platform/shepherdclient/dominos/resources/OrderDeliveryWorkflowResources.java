@@ -31,7 +31,6 @@ public class OrderDeliveryWorkflowResources {
     public Response validateOrder(String doc) throws Exception {
 
         log.info(String.format("Validating order."));
-        Map<String,Object> mp  = doc.getInitialPayload();
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
