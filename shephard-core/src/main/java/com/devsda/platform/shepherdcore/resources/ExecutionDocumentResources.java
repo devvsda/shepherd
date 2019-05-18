@@ -2,7 +2,6 @@ package com.devsda.platform.shepherdcore.resources;
 
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
-import com.devsda.platform.shepherd.model.ExecutionData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import org.bson.Document;
@@ -13,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Map;
 
 @Path(ShephardConstants.Resources.EXECUTION_DETAILS)
 @Produces(MediaType.APPLICATION_JSON)

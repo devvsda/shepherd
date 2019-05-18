@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdcore.service.queueservice;
 
+import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,25 +29,42 @@ public class RabbitMqOperations {
             factory.setPort(portNumber);
 
             connection = factory.newConnection();
+            log.info(String.format("created a new Connection Id %s on %s:%d/%s",connection.getId(),hostName,portNumber,virtualHost));
+        }else{
+            log.warn("Connection is already established, No new connection created");
+            log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",connection.getId(),connection.getAddress(),connection.getPort(),connection.getServerProperties().toString()));
         }
+
+        // creating channel if it is not already created.
         if(channel==null) {
             channel = connection.createChannel();
+            log.info(String.format("created a new channel with channelNumber %d on connectionId %s", channel.getChannelNumber(), connection.getId()));
+        }else{
+            log.warn("Channel is already present, No new channel created");
+            log.info(String.format("channel already present with channelNumer %d",channel.getChannelNumber()));
         }
     }
 
-    public Connection createQueueConnection(String connectionString) throws
+    public void createQueueConnection(String connectionString) throws
             URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException {
 
         if(connection==null) {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setUri(connectionString);
             connection = factory.newConnection();
-        }
-        if(channel==null){
-            channel = connection.createChannel();
+            log.info(String.format("created a new Connection Id %s on %s:%d",connection.getId(),connection.getAddress(),connection.getPort()));
+        }else{
+            log.warn("Connection is already established, No new connection created");
+            log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",connection.getId(),connection.getAddress(),connection.getPort(),connection.getServerProperties().toString()));
         }
 
-        return connection;
+        if(channel==null){
+            channel = connection.createChannel();
+            log.info(String.format("created a new channel with channelNumber %d on connectionId %s", channel.getChannelNumber(), connection.getId()));
+        }else{
+            log.warn("Channel is already present, No new channel created");
+            log.info(String.format("channel already present with channelNumer %d",channel.getChannelNumber()));
+        }
     }
 
     public void gracefulShutdown()
@@ -67,11 +85,11 @@ public class RabbitMqOperations {
         channel.queueDelete(queueName, ifUnused, ifEmpty);
     }
 
-    public void purgeAllMessages(Channel channel, String queueName) throws IOException {
+    public void purgeAllMessages(String queueName) throws IOException {
         channel.queuePurge(queueName);
     }
 
-    public void publishMessage(Channel channel, String exchangeName, String routingKey, String message) throws IOException {
+    public void publishMessage(String exchangeName, String routingKey, String message) throws IOException {
 
         if (message == null || message.equals("")) {
             return;
@@ -86,24 +104,22 @@ public class RabbitMqOperations {
     public GetResponse pullMessage(String queueName, Boolean autoAck) throws IOException {
         GetResponse response = channel.basicGet(queueName, autoAck);
         if (response == null) {
-            log.info(String.format("No message received from queue %s",queueName));
+            log.info(String.format("No message received from queue %s", queueName));
             return null;
-        } else {
-            return response;
         }
+        return response;
     }
 
 
     public void ackReceivedMessage(long deliveryTag, Boolean multipleAckEnabled) throws IOException {
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
         channel.basicAck(deliveryTag, multipleAckEnabled);
     }
 
-    public static String fetchMessageFromGetResponse(GetResponse response){
+    public static <T> T  fetchMessageFromGetResponse(GetResponse response, Class<T> clazz) throws IOException{
         byte[] body = response.getBody();
         String responseMessage = new String(body);
         log.info(String.format("following message is received %s",responseMessage));
-        return responseMessage;
+        return JSONLoader.loadFromStringifiedObject(responseMessage,clazz);
     }
 }
 

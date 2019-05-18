@@ -40,16 +40,6 @@ public class RabbitMQOperations {
         connection.close();
     }
 
-    /**
-     * Bind a queue to an exchange, with no extra arguments.
-     * @see com.rabbitmq.client.AMQP.Queue.Bind
-     * @see com.rabbitmq.client.AMQP.Queue.BindOk
-     * @param queueName the name of the queue
-     * @param exchangeName the name of the exchange
-     * @param routingKey the routing key to use for the binding
-     * @return a binding-confirm method if the binding was successfully created
-     * @throws java.io.IOException if an error is encountered
-     */
     public void bindQueue(Channel channel, String exchangeName, String queueName, String routingKey, boolean isDurable)
             throws IOException {
        AMQP.Exchange.DeclareOk exchangeDeclareResponse =channel.exchangeDeclare(exchangeName, "direct", true);
@@ -85,7 +75,6 @@ public class RabbitMQOperations {
     }
 
     public void receiveMessage(Channel channel, String queueName) throws IOException {
-        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
         GetResponse response = channel.basicGet("first_queue", false);
         if (response == null) {

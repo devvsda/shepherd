@@ -3,7 +3,6 @@ package com.devsda.platform.shepherdcore.service.documentservice;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
-import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.google.inject.Inject;
 import com.mongodb.MongoClient;
