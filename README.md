@@ -12,6 +12,9 @@ In this section, we compared Shepehrd with Azkaban and Airflow. Please refere co
 # Shepherd Architecture
 Please refer Shepherd Architecture in details here : [Part#1](https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%231%5D), [Part#2](https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%232%5D)
 
+# How to create Endpoint ?
+Please refer wiki : [Endpoint creation details](https://github.com/devvsda/shepherd/wiki/How-to-create-Endpoint-%3F)
+
 # Database Schema : Shepherd
 Please refer Database schema details here : [Database Schema Details](https://github.com/devvsda/shepherd/wiki/Database-Schema)
 
