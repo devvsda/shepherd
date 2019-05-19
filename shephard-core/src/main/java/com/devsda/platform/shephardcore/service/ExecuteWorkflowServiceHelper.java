@@ -17,27 +17,25 @@ public class ExecuteWorkflowServiceHelper {
     @Inject
     private WorkflowOperationDao workflowOperationDao;
 
-    public Boolean isNodeReadyToExecute(String nodeName, Map<String, List<String>> nodeToParentNodeMapping, Map<String, Node> nameToNodeMapping) {
+    public Boolean isNodeReadyToExecute(Node node) {
 
-        log.info(String.format("Checking weather node : %s is ready to execute", nodeName));
+        log.info(String.format("Checking weather node : %s is ready to execute", node.getName()));
 
-        List<String> parentNodeNames = nodeToParentNodeMapping.get(nodeName);
+        List<String> parentNodeNames = node.getParentNodes();
 
-        for (String parent : parentNodeNames) {
+        for (String parentNodeName : parentNodeNames) {
 
-            Node parentNode = nameToNodeMapping.get(parent);
-
-            Node parentNodeDao = workflowOperationDao.getNode(parentNode.getName(), parentNode.getObjectId(), parentNode.getExecutionId());
+            Node parentNodeDao = workflowOperationDao.getNode(parentNodeName, node.getObjectId(), node.getExecutionId());
 
             log.info(String.format("Node state as per DAO : %s", parentNodeDao));
 
             if (parentNodeDao == null || !NodeState.COMPLETED.equals(parentNodeDao.getNodeState())) {
-                log.info(String.format("Node : %s is not ready to execute.", nodeName));
+                log.info(String.format("Node : %s is not ready to execute.", node.getName()));
                 return Boolean.FALSE;
             }
         }
 
-        log.info(String.format("Node : %s is ready to execute.", nodeName));
+        log.info(String.format("Node : %s is ready to execute.", node.getName()));
         return Boolean.TRUE;
     }
 }

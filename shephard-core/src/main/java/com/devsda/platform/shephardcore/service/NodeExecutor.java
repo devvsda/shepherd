@@ -26,97 +26,149 @@ import java.util.concurrent.Callable;
 public class NodeExecutor implements Callable<NodeResponse> {
 
     private static final Logger log = LoggerFactory.getLogger(NodeExecutor.class);
+
     @Inject
     private static WorkflowOperationDao workflowOperationDao;
+
     @Inject
     private static ExecutionDocumentService executionDocumentService;
 
-    private NodeConfiguration nodeConfiguration;
-    private ServerDetails serverDetails;
+    @Inject
+    private static ExecuteWorkflowServiceHelper executeWorkflowServiceHelper;
+
     private Node node;
 
-    public NodeExecutor(Node node, NodeConfiguration nodeConfiguration, ServerDetails serverDetails) {
+    public NodeExecutor(Node node) {
         this.node = node;
-        this.nodeConfiguration = nodeConfiguration;
-        this.serverDetails = serverDetails;
     }
 
     @Override
     public NodeResponse call() throws Exception {
 
-
-        log.info(String.format("Executing node : %s. NodeConfiguration : %s, Server details : %s", nodeConfiguration.getName(), nodeConfiguration, serverDetails));
-
         String response = null;
         Node node = null;
+        NodeConfiguration nodeConfiguration = node.getNodeConfiguration();
+        ServerDetails serverDetails = nodeConfiguration.getServerDetails();
+
+        log.info(String.format("Executing node : %s. NodeConfiguration : %s", nodeConfiguration.getName(), nodeConfiguration));
 
         try {
 
-            ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getObjectId(), this.node.getExecutionId());
+            Boolean isExecutionInKilledState = isExecutionInKilledState();
 
-            if (WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState())) {
-                log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
-                        this.node.getExecutionId(), this.node.getName()));
-                this.node.setUpdatedAt(DateUtil.currentDate());
-                this.node.setNodeState(NodeState.KILLED);
-                this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-                workflowOperationDao.createNode(this.node);
-                return new NodeResponse(nodeConfiguration.getName(), NodeState.KILLED, response);
+            if (isExecutionInKilledState) {
+                NodeResponse nodeResponse = killThisNode();
+                return nodeResponse;
             }
 
-            // 1. Create entry in Node table.
-            this.node.setUpdatedAt(DateUtil.currentDate());
-            this.node.setNodeState(NodeState.PROCESSING);
-            this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-            workflowOperationDao.createNode(this.node);
+            // Create node with PROCESSING state.
+            createNodeInDB();
+
             ShepherdExecutionResponse clientNodeResponse = null;
 
+            // Fetch document of this execution.
             Document executionDetailsDoc = executionDocumentService.fetchExecutionDetails(this.node.getObjectId(),this.node.getExecutionId());
-            try {
-                String executionDataJson= ((Document)executionDetailsDoc.get("executionData")).toJson();
+            String executionDataJson= ((Document)executionDetailsDoc.get("executionData")).toJson();
 
-                // 2. Execute Node.
-                HttpPostMethod clientNodeRequest= new HttpPostMethod();
-                clientNodeResponse = clientNodeRequest.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
-                        nodeConfiguration.getURI(), null , nodeConfiguration.getHeaders(),
-                        new StringEntity(executionDataJson), ShepherdExecutionResponse.class);
+            // Execute Node.
+            HttpPostMethod clientNodeRequest= new HttpPostMethod();
+            clientNodeResponse = clientNodeRequest.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
+                    nodeConfiguration.getURI(), null , nodeConfiguration.getHeaders(),
+                    new StringEntity(executionDataJson), ShepherdExecutionResponse.class);
 
-            }catch(Exception ex){
-                throw ex;
-            }
+            boolean isExecutionDocumentUpdated = executionDocumentService.updateExecutionDetails(this.node.getObjectId(),this.node.getExecutionId(), clientNodeResponse.getExecutionData());
 
-            boolean isExecutionDocumentUpddated = executionDocumentService.updateExecutionDetails(this.node.getObjectId(),this.node.getExecutionId(), clientNodeResponse.getExecutionData());
+            log.info(String.format("Response of Node : %s is %s, isExecutionDocumentUpdated %s", nodeConfiguration.getName(), clientNodeResponse.getResponseEdge(),isExecutionDocumentUpdated));
 
-            log.info(String.format("Response of Node : %s is %s, isExecutionDocumentUpddated %s", nodeConfiguration.getName(), clientNodeResponse.getResponseEdge(),isExecutionDocumentUpddated));
+            // Update Node status as Completed in Node table.
+            updateNodeStatus(NodeState.COMPLETED);
 
-            // 3. Update Node status as Completed in Node table.
-            this.node.setNodeState(NodeState.COMPLETED);
-            this.node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(this.node);
+            // TODO: Push Children nodes.
+            // pushChildrenNodesToRabbitMQ(clientNodeResponse.getResponseEdge());
 
             return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
 
         } catch(UnableToExecuteStatementException e) {
+            // This exception occurs in UNCONDITIONAL workflow. When we try to execute same node twice.
             log.info(String.format("Node : %s already under processing. Skipping this execution to avoid duplicity.",
-                    this.nodeConfiguration.getName()), e);
+                    nodeConfiguration.getName()), e);
             return new NodeResponse(nodeConfiguration.getName(), NodeState.SKIPPED, null);
 
         } catch (HttpResponseException e) {
 
-            log.error(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
-            this.node.setNodeState(NodeState.FAILED);
-            this.node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(this.node);
-            throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", this.nodeConfiguration.getName()), e);
+            log.error(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
+            updateNodeStatus(NodeState.FAILED);
+            throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
 
         } catch (Exception e) {
 
-            log.error(String.format("Node : %s failed internally.", this.nodeConfiguration.getName()), e);
-            this.node.setNodeState(NodeState.FAILED);
-            this.node.setUpdatedAt(DateUtil.currentDate());
-            workflowOperationDao.updateNode(this.node);
-            throw new NodeFailureException(String.format("Node : %s failed internally.", this.nodeConfiguration.getName()), e);
+            log.error(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
+            updateNodeStatus(NodeState.FAILED);
+            throw new NodeFailureException(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
 
         }
+    }
+
+    private void pushChildrenNodesToRabbitMQ(String edgeName) {
+
+        Boolean isGraphConditional = (this.node.getParentNodes() == null);
+
+        if(isGraphConditional) {
+
+            for(Connection connection : this.node.getConnections()) {
+
+                if(connection.getEdgeName().equalsIgnoreCase(edgeName)) {
+                    // TODO : Push node-message to primary queue : RabbitMQ.
+                    return;
+                }
+            }
+        } else {
+
+            for (Connection connection : this.node.getConnections()) {
+
+                Boolean isChildNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(connection.getNode());
+
+                if(isChildNodeReadyToExecute) {
+                    // TODO : Push to primary Queue
+                } else {
+                    // TODO : Push to secondary Queue.
+                }
+            }
+        }
+    }
+
+    private Boolean isExecutionInKilledState() {
+
+        // Check weather execution is killed by customer or not. If yes, then no need to execute this node.
+        ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails(this.node.getObjectId(), this.node.getExecutionId());
+
+        if ( WorkflowExecutionState.KILLED.equals(executionDetails.getWorkflowExecutionState()) ) {
+            return Boolean.TRUE;
+        }
+
+        return Boolean.FALSE;
+    }
+
+    private NodeResponse killThisNode() {
+        log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
+                this.node.getExecutionId(), this.node.getName()));
+        this.node.setUpdatedAt(DateUtil.currentDate());
+        this.node.setNodeState(NodeState.KILLED);
+        this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+        workflowOperationDao.createNode(this.node);
+        return new NodeResponse(this.node.getName(), NodeState.KILLED, null);
+    }
+
+    private void createNodeInDB() {
+        this.node.setUpdatedAt(DateUtil.currentDate());
+        this.node.setNodeState(NodeState.PROCESSING);
+        this.node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+        workflowOperationDao.createNode(this.node);
+    }
+
+    private void updateNodeStatus(NodeState nodeState) {
+        this.node.setNodeState(nodeState);
+        this.node.setUpdatedAt(DateUtil.currentDate());
+        workflowOperationDao.updateNode(this.node);
     }
 }

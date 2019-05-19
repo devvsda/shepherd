@@ -1,7 +1,7 @@
 package com.devsda.platform.shephardcore.application;
 
 import com.devsda.platform.shephardcore.constants.ShephardConstants;
-import com.devsda.platform.shephardcore.consumer.NodeConsumer;
+import com.devsda.platform.shephardcore.consumer.NodeExecutorConsumer;
 import com.devsda.platform.shephardcore.dao.RegisterationDao;
 import com.devsda.platform.shephardcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shephardcore.model.ShephardConfiguration;
@@ -101,6 +101,6 @@ public class ShephardApplication extends Application<ShephardConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ShephardConfiguration> bootstrap) {
-        bootstrap.addCommand(new NodeConsumer());
+        bootstrap.addCommand(new NodeExecutorConsumer());
     }
 }

@@ -70,6 +70,8 @@ public class ExecuteWorkflowService {
         executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.PROCESSING);
         executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
         executeWorkflowRequest.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+
+        // Create entry in execution_details table.
         workflowOperationDao.executeWorkflow(executeWorkflowRequest);
 
         executionDocumentService.insertExecutionDetails(executeWorkflowRequest, executeWorkflowRequest.getInitialPayload());
@@ -80,6 +82,10 @@ public class ExecuteWorkflowService {
         GraphConfiguration graphConfiguration = JSONLoader.loadFromStringifiedObject(endpointDetails.getEndpointDetails(), GraphConfiguration.class);
 
         log.debug(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
+
+        // TODO : 1. Need to push global details from json file to Redis.
+        // TODO : 2. Need to push Node details to Redis.
+        // TODO : 3. Push root node message to RabbitMQ.
 
         ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
 
