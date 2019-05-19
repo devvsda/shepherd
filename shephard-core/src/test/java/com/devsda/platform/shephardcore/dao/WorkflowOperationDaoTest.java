@@ -37,7 +37,7 @@ public class WorkflowOperationDaoTest {
     @Test
     public void createNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, "objectId", "executionId",  NodeState.PROCESSING, null);
+        Node node = ObjectFactory.createNode("NameTest", "objectId", "executionId",  NodeState.PROCESSING, null);
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         workflowOperationDao.createNode(node);
 
@@ -46,9 +46,8 @@ public class WorkflowOperationDaoTest {
     @Test
     public void updateNodeTest() {
 
-        Node node = ObjectFactory.createNode("NameTest", null, "objectId", "executionId", NodeState.FAILED, "TEST FAILURE");
+        Node node = ObjectFactory.createNode("NameTest", "objectId", "executionId", NodeState.FAILED, "TEST FAILURE");
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-        node.setNodeId(1);
 
         workflowOperationDao.updateNode(node);
 
