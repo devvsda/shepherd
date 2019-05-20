@@ -3,7 +3,6 @@ package com.devsda.platform.shepherdclient.impl;
 import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
-import com.devsda.platform.shepherd.model.ExecutionData;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

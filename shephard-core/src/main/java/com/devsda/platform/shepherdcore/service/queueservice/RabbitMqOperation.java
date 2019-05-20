@@ -1,6 +1,10 @@
 package com.devsda.platform.shepherdcore.service.queueservice;
 
+import com.devsda.platform.shepherd.model.Node;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
+import com.devsda.platform.shepherdcore.service.NodeExecutor;
+import com.devsda.utils.httputils.loader.JsonLoader;
+import com.google.inject.Inject;
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +24,9 @@ public class RabbitMqOperation {
     private static final Logger log = LoggerFactory.getLogger(RabbitMqOperation.class);
     private static Connection consumerConnection;
     private static Connection publisherConnection;
+
+    @Inject
+    private NodeExecutor nodeExecutor;
 
     public static Connection createQueueConnection(String userName, String password,
                                             String virtualHost, String hostName, Integer portNumber, ConnectionType type)
@@ -156,16 +163,19 @@ public class RabbitMqOperation {
                                                byte[] body)
                             throws IOException
                     {
-                        String routingKey = envelope.getRoutingKey();
-                        String contentType = properties.getContentType();
                         long deliveryTag = envelope.getDeliveryTag();
-                        String message = "";
 
                         try {
-                            message = new String(body);
+                            String message = new String(body);
+                            Node nodeToExecute = JSONLoader.loadFromStringifiedObject(message, Node.class);
+
+                            nodeExecutor.call(nodeToExecute);
+
                             System.out.println("Message received : "+ message + "delivery Tag "+ deliveryTag);
                         } catch (Exception ex) {
                             System.out.println("Unable to convert byte[] message in string");
+                            ex.printStackTrace();
+                            // TODO : NACK
                         }
 
                         if(!autoAck) {

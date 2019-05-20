@@ -65,7 +65,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         log.info(String.format("Submitting node : %s to thread-pool for execution", rootNode));
 
 
-        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNode));
+        Future<NodeResponse> rootNodeFuture = null; // executorService.submit(null);
 
         // TODO : Remove this. No need of this logic, once RabbitMQ comes into picture.
         Deque<Future<NodeResponse>> futureObjects = new LinkedList<>();
@@ -162,7 +162,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
         thisNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
         thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
-        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj));
+        Future<NodeResponse> childNodeResponse = null; // executorService.submit(null); // new NodeExecutor(thisNodeObj));
         futureObjects.addLast(childNodeResponse);
     }
 }

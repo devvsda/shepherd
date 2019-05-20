@@ -33,6 +33,9 @@ public class ExecuteWorkflowService {
     @Inject
     private ExecutionDocumentService executionDocumentService;
 
+    @Inject
+    private ExecuteWorkflowServiceHelper executeWorkflowServiceHelper;
+
     /**
      * This method helps to execute workflow.
      *
@@ -86,11 +89,13 @@ public class ExecuteWorkflowService {
         // TODO : 2. Need to push Node details to Redis.
         // TODO : 3. Push root node message to RabbitMQ.
 
-        ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
+        // ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
 
-        FutureTask<Void> futureTask = new FutureTask<>(executeWorkflowRunner);
-        Thread t=new Thread(futureTask);
-        t.start();
+        executeWorkflowServiceHelper.triggerExecution(executeWorkflowRequest, graph, graphConfiguration);
+//
+//        FutureTask<Void> futureTask = new FutureTask<>(executeWorkflowRunner);
+//        Thread t=new Thread(futureTask);
+//        t.start();
 
 
         Map<String, Object> executionWorkflowResponse = new HashMap<>();

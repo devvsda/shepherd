@@ -2,9 +2,6 @@
 environment: dev
 applicationName: shephard-core
 
-readyToExecuteQueueMessageCount: 10
-nodeExecutorConsumerConcurrency: 10
-
 # Database settings.
 database:
   # the name of your JDBC driver

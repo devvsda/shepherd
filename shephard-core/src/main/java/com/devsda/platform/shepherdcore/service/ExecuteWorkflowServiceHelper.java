@@ -1,14 +1,30 @@
 package com.devsda.platform.shepherdcore.service;
 
+import com.devsda.platform.shepherd.constants.GraphType;
+import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
+import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
+import com.devsda.platform.shepherd.exception.NodeFailureException;
+import com.devsda.platform.shepherd.model.*;
+import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
-import com.devsda.platform.shepherd.model.Node;
+import com.devsda.platform.shepherdcore.loader.JSONLoader;
+import com.devsda.platform.shepherdcore.model.NodeResponse;
+import com.devsda.platform.shepherdcore.service.queueservice.RabbitMqOperation;
+import com.devsda.platform.shepherdcore.util.GraphUtil;
 import com.google.inject.Inject;
+import com.rabbitmq.client.BuiltinExchangeType;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Named;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 public class ExecuteWorkflowServiceHelper {
 
@@ -16,6 +32,13 @@ public class ExecuteWorkflowServiceHelper {
 
     @Inject
     private WorkflowOperationDao workflowOperationDao;
+
+    @Named("publisher")
+    @Inject
+    private Connection publisherConnection;
+
+    @Inject
+    private RabbitMqOperation rabbitMqOperation;
 
     public Boolean isNodeReadyToExecute(Node node) {
 
@@ -37,5 +60,30 @@ public class ExecuteWorkflowServiceHelper {
 
         log.info(String.format("Node : %s is ready to execute.", node.getName()));
         return Boolean.TRUE;
+    }
+
+    public void triggerExecution(ExecuteWorkflowRequest executeWorkflowRequest, Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
+
+        // TODO : Need to push all the rows to Redis.
+        Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodePOJOMapping(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(), graph, graphConfiguration);
+
+        Node rootNode = GraphUtil.getRootNode(nodeNameToNodeMapping);
+
+        try {
+
+            Channel channel = rabbitMqOperation.createChannel(publisherConnection);
+            rabbitMqOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+            rabbitMqOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(rootNode));
+
+        } catch (Exception e) {
+
+            log.error(String.format("Execution : %s failed.", executeWorkflowRequest.getExecutionId()), e);
+            executeWorkflowRequest.setWorkflowExecutionState(WorkflowExecutionState.FAILED);
+            executeWorkflowRequest.setUpdatedAt(DateUtil.currentDate());
+            executeWorkflowRequest.setErrorMessage(e.getLocalizedMessage());
+            workflowOperationDao.updateExecutionStatus(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(),
+                    executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
+
+        }
     }
 }
