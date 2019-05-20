@@ -53,27 +53,21 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
     @Override
     public Void call() throws InterruptedException, ExecutionException {
 
-        Map<String, NodeConfiguration> nodeNameToNodeConfigurationMapping = GraphUtil.getNodeNameToNodeConfigurationMapping(this.graphConfiguration);
-        Map<String, TeamConfiguration> teamNameToTeamConfigurationMapping = GraphUtil.getTeamNameToTeamConfigurationMapping(this.graphConfiguration);
+        // TODO : Need to push all the rows to Redis.
+        Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodePOJOMapping(this.executeWorkflowRequest.getObjectId(), this.executeWorkflowRequest.getExecutionId(), this.graph, this.graphConfiguration);
 
-        Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodeMapping(this.graph);
-        Map<String, List<String>> nodeToParentNodesMapping = GraphUtil.getNodeToParentNodesMapping(this.graph);
+        Node rootNode = GraphUtil.getRootNode(nodeNameToNodeMapping);
 
-        String rootNode = GraphUtil.getRootNode(this.graph);
-
+        // TODO : Remove this.
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         log.info(String.format("Created thread-pool of count : %s", 10));
 
-        NodeConfiguration rootNodeConfiguration = nodeNameToNodeConfigurationMapping.get(rootNode);
-        ServerDetails rootNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(rootNode).getOwner()).getServerDetails();
-
         log.info(String.format("Submitting node : %s to thread-pool for execution", rootNode));
 
-        Node rootNodeObj = nodeNameToNodeMapping.get(rootNode);
-        rootNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
-        rootNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
-        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNodeObj, rootNodeConfiguration, rootNodeServerDetails));
 
+        Future<NodeResponse> rootNodeFuture = executorService.submit(new NodeExecutor(rootNode));
+
+        // TODO : Remove this. No need of this logic, once RabbitMQ comes into picture.
         Deque<Future<NodeResponse>> futureObjects = new LinkedList<>();
         futureObjects.addFirst(rootNodeFuture);
 
@@ -110,8 +104,7 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                         if (connection.getEdgeName().equalsIgnoreCase(nodeResponse.getClientResponse())) {
 
-                            pushNodeToQueue(childNodeName,
-                                    nodeNameToNodeConfigurationMapping, teamNameToTeamConfigurationMapping, nodeNameToNodeMapping,
+                            pushNodeToQueue(childNodeName, nodeNameToNodeMapping,
                                     executorService, futureObjects);
 
                         } else {
@@ -120,12 +113,11 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
 
                     } else {
 
-                        Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(childNodeName, nodeToParentNodesMapping, nodeNameToNodeMapping);
+                        Boolean isNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(connection.getNode());
 
                         if (Boolean.TRUE.equals(isNodeReadyToExecute)) {
 
-                            pushNodeToQueue(childNodeName,
-                                    nodeNameToNodeConfigurationMapping, teamNameToTeamConfigurationMapping, nodeNameToNodeMapping,
+                            pushNodeToQueue(childNodeName, nodeNameToNodeMapping,
                                     executorService, futureObjects);
 
                         } else {
@@ -163,18 +155,14 @@ public class ExecuteWorkflowRunner implements Callable<Void> {
         return null;
     }
 
-    private void pushNodeToQueue(String childNodeName, Map<String,
-            NodeConfiguration> nodeNameToNodeConfigurationMapping, Map<String,
-            TeamConfiguration> teamNameToTeamConfigurationMapping, Map<String, Node> nodeNameToNodeMapping,
+    private void pushNodeToQueue(String childNodeName, Map<String, Node> nodeNameToNodeMapping,
                                  ExecutorService executorService, Deque<Future<NodeResponse>> futureObjects) {
         log.info(String.format("Pushing node : %s to Queue", childNodeName));
-        NodeConfiguration childNodeConfiguration = nodeNameToNodeConfigurationMapping.get(childNodeName);
-        ServerDetails childNodeServerDetails = teamNameToTeamConfigurationMapping.get(nodeNameToNodeMapping.get(childNodeName).getOwner()).getServerDetails();
 
         Node thisNodeObj = nodeNameToNodeMapping.get(childNodeName);
         thisNodeObj.setObjectId(this.executeWorkflowRequest.getObjectId());
         thisNodeObj.setExecutionId(this.executeWorkflowRequest.getExecutionId());
-        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj, childNodeConfiguration, childNodeServerDetails));
+        Future<NodeResponse> childNodeResponse = executorService.submit(new NodeExecutor(thisNodeObj));
         futureObjects.addLast(childNodeResponse);
     }
 }

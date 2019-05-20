@@ -37,7 +37,7 @@ public class RabbitMqOperationTest {
         object2.join();
 
     }
-    
+
     @Test
     public void publishMessageTest() {
 

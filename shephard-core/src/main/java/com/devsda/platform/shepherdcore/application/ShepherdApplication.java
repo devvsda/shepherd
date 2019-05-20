@@ -1,7 +1,7 @@
 package com.devsda.platform.shepherdcore.application;
 
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
-import com.devsda.platform.shepherdcore.consumer.NodeConsumer;
+import com.devsda.platform.shepherdcore.consumer.NodeExecutorConsumer;
 import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
@@ -10,6 +10,7 @@ import com.devsda.platform.shepherdcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shepherdcore.service.ExecuteWorkflowServiceHelper;
 import com.devsda.platform.shepherdcore.service.NodeExecutor;
 import com.devsda.platform.shepherdcore.util.RequestValidator;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -101,6 +102,6 @@ public class ShepherdApplication extends Application<ShepherdConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ShepherdConfiguration> bootstrap) {
-        bootstrap.addCommand(new NodeConsumer());
+        bootstrap.addCommand(new NodeExecutorConsumer());
     }
 }

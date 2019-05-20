@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdcore.util;
 
+import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,21 @@ public class GraphUtil {
 
     private static final Logger log = LoggerFactory.getLogger(GraphUtil.class);
 
-    public static Map<String, List<String>> getNodeToParentNodesMapping(Graph graph) {
+    public static Node getRootNode(Map<String, Node> nodeNameToNodePOJOMapping) {
+
+        for (Map.Entry<String, Node> nodeEntry : nodeNameToNodePOJOMapping.entrySet()) {
+
+            Node node = nodeEntry.getValue();
+
+            if(node.getParentNodes() == null) {
+                return node;
+            }
+        }
+
+        return null;
+    }
+
+    public static Map<String, List<String>> getNodeNameToParentNodePOJOsMapping(Graph graph) {
 
         Map<String, List<String>> nodeToParentNodesRelation = new HashMap<>();
 
@@ -27,7 +42,6 @@ public class GraphUtil {
             for (Connection connection : node.getConnections()) {
                 String destinationNode = connection.getNodeName();
                 List<String> parentNodes = nodeToParentNodesRelation.get(destinationNode);
-                ;
 
                 if (parentNodes == null) {
                     parentNodes = new ArrayList<>();
@@ -42,69 +56,78 @@ public class GraphUtil {
         return nodeToParentNodesRelation;
     }
 
-    public static Map<String, Node> getNodeNameToNodeMapping(Graph graph) {
+    public static Map<String, Node> getNodeNameToNodePOJOMapping(String objectId, String executionId, Graph graph, GraphConfiguration graphConfiguration) {
 
-        log.debug(String.format("Generating node name to node details mapping."));
+        log.debug(String.format("Generating node name to node configuration mapping."));
 
         Map<String, Node> nameWiseNodeMapping = new HashMap<>();
 
         for (Node node : graph.getNodes()) {
+
+            node.setObjectId(objectId);
+            node.setExecutionId(executionId);
+
             nameWiseNodeMapping.put(node.getName(), node);
         }
 
-        return nameWiseNodeMapping;
+        setGlobalSettingsInNode(nameWiseNodeMapping, graphConfiguration);
+        if (GraphType.UNCONDITIONAL.equals(graph.getGraphType())) {
+            setParentNodes(nameWiseNodeMapping, graph);
+        }
+        setChildrenNodes(nameWiseNodeMapping);
 
+        return nameWiseNodeMapping;
     }
 
-    public static String getRootNode(Graph graph) {
+    public static void setParentNodes(Map<String, Node> nameWiseNodeMapping, Graph graph ) {
 
-        Map<String, List<String>> nodeToParentNodeRelation = getNodeToParentNodesMapping(graph);
+        Map<String, List<String>> nodeNameToParentNodePOJOsMapping = getNodeNameToParentNodePOJOsMapping(graph);
 
-        for (Map.Entry<String, List<String>> relation : nodeToParentNodeRelation.entrySet()) {
+        for (Map.Entry<String, Node> nodeEntry : nameWiseNodeMapping.entrySet() ) {
 
-            if (relation.getValue() == null) {
-                return relation.getKey();
-            }
+            Node node = nodeEntry.getValue();
+
+            List<String> parentNodeNames = nodeNameToParentNodePOJOsMapping.get(node.getName());
+
+            node.setParentNodes(parentNodeNames);
         }
 
-        return null;
     }
 
-    public static Map<String, NodeConfiguration> getNodeNameToNodeConfigurationMapping(GraphConfiguration graphConfiguration) {
+    public static void setChildrenNodes(Map<String, Node> nameWiseNodeMapping) {
 
-        log.debug(String.format("Generating node name to node configuration mapping."));
+        for(Map.Entry<String, Node> nodeEntry : nameWiseNodeMapping.entrySet()) {
 
-        Map<String, NodeConfiguration> nodeNameToConfigurationMapping = new HashMap<>();
+            Node node = nodeEntry.getValue();
+
+            for(Connection connection : node.getConnections()) {
+
+                connection.setNode(nameWiseNodeMapping.get(connection.getNodeName()));
+            }
+        }
+    }
+
+    public static void setGlobalSettingsInNode(Map<String, Node> nameWiseNodeMapping, GraphConfiguration graphConfiguration) {
 
         for (TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
 
             for (NodeConfiguration nodeConfiguration : teamConfiguration.getNodeConfigurations()) {
 
-                Map<String, String> nodeHeaders = nodeConfiguration.getHeaders();
+                // Update headers.
+                Map<String, String> nodeHeaders = new HashMap<>(nodeConfiguration.getHeaders());
 
-                if (nodeHeaders == null) {
-                    nodeHeaders = new HashMap<>();
-                    nodeConfiguration.setHeaders(nodeHeaders);
+                nodeConfiguration.setHeaders(teamConfiguration.getHeaders());
+
+                if (nodeHeaders != null) {
+                    nodeConfiguration.getHeaders().putAll(nodeHeaders);
                 }
 
-                nodeHeaders.putAll(teamConfiguration.getHeaders());
-                nodeNameToConfigurationMapping.put(nodeConfiguration.getName(), nodeConfiguration);
+                // Add server details.
+                nodeConfiguration.setServerDetails(teamConfiguration.getServerDetails());
+
+                Node node = nameWiseNodeMapping.get(nodeConfiguration.getName());
+                node.setNodeConfiguration(nodeConfiguration);
             }
         }
-
-        return nodeNameToConfigurationMapping;
-    }
-
-    public static Map<String, TeamConfiguration> getTeamNameToTeamConfigurationMapping(GraphConfiguration graphConfiguration) {
-
-        log.debug(String.format("Generating team name to team configuration mapping."));
-
-        Map<String, TeamConfiguration> teamNameToConfigurationMapping = new HashMap<>();
-
-        for (TeamConfiguration teamConfiguration : graphConfiguration.getTeamConfigurations()) {
-            teamNameToConfigurationMapping.put(teamConfiguration.getOwner(), teamConfiguration);
-        }
-
-        return teamNameToConfigurationMapping;
     }
 }
