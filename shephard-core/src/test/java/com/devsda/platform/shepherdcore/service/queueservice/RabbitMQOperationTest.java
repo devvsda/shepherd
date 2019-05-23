@@ -11,14 +11,14 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMqOperationTest {
+public class RabbitMQOperationTest {
 
-    private static RabbitMqOperation rabbitMQOperation;
+    private static RabbitMQOperation rabbitMQOperation;
     private static Channel channel;
 
     @BeforeClass
     public static void setup() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException, TimeoutException {
-        rabbitMQOperation = new RabbitMqOperation();
+        rabbitMQOperation = new RabbitMQOperation();
     }
 
     @AfterClass

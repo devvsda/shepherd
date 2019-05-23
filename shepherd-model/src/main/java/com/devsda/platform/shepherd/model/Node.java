@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherd.model;
 
+import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ResourceName;
 
@@ -11,6 +12,8 @@ public class Node extends ShepherdRequest {
 
     private String objectId;
     private String executionId;
+
+    private GraphType graphType;
 
     private List<Connection> connections;
     private List<String> parentNodes;
@@ -88,12 +91,21 @@ public class Node extends ShepherdRequest {
         this.nodeConfiguration = nodeConfiguration;
     }
 
+    public GraphType getGraphType() {
+        return graphType;
+    }
+
+    public void setGraphType(GraphType graphType) {
+        this.graphType = graphType;
+    }
+
     @Override
     public String toString() {
         return "Node{" +
                 "name='" + name + '\'' +
                 ", objectId='" + objectId + '\'' +
                 ", executionId='" + executionId + '\'' +
+                ", graphType=" + graphType +
                 ", connections=" + connections +
                 ", parentNodes=" + parentNodes +
                 ", nodeConfiguration=" + nodeConfiguration +

@@ -46,4 +46,13 @@ public class ShephardConstants {
         public static final String MYSQL = "mysql";
     }
 
+    public static class RabbitMQ {
+        public static final String PUBLISHER = "publisher";
+        public static final String CONSUMER = "consumer";
+    }
+
+    public static class CustomCommand {
+        public static final String NODE_EXECUTOR_COMMAND = "NodeExecutorCommand";
+    }
+
 }

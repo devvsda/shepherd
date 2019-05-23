@@ -1,68 +1,29 @@
 package com.devsda.platform.shepherdcore.consumer;
 
-import com.devsda.platform.shepherdcore.application.ShepherdApplication;
-import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
-import com.devsda.platform.shepherd.model.Node;
-import com.google.inject.Injector;
-import io.dropwizard.cli.ConfiguredCommand;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
-import net.sourceforge.argparse4j.inf.Namespace;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.devsda.platform.shepherdcore.constants.ShephardConstants;
+import com.devsda.platform.shepherdcore.service.queueservice.RabbitMQOperation;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
 
-public class NodeExecutorConsumer extends ConfiguredCommand<ShepherdConfiguration> {
+public class NodeExecutorConsumer {
 
-    private static final Logger log = LoggerFactory.getLogger(NodeExecutorConsumer.class);
+    @Named(ShephardConstants.RabbitMQ.CONSUMER)
+    @Inject
+    private Connection consumerConnection;
 
-    @Override
-    protected void run(Bootstrap<ShepherdConfiguration> bootstrap, Namespace namespace, ShepherdConfiguration shephardConfiguration) throws Exception {
-        Environment environment = new Environment(bootstrap.getApplication().getName(),
-                bootstrap.getObjectMapper(), bootstrap.getValidatorFactory().getValidator(),
-                bootstrap.getMetricRegistry(), bootstrap.getClassLoader());
-        shephardConfiguration.getMetricsFactory().configure(environment.lifecycle(),
-                bootstrap.getMetricRegistry());
-        bootstrap.run(shephardConfiguration, environment);
-        
-        Injector injector =  new ShepherdApplication().createInjector(shephardConfiguration, environment);
+    @Inject
+    private RabbitMQOperation rabbitMQOperation;
 
+    public void consume() throws IOException {
 
-        // Execute Cron to poll RabbitMQ.
-        while(true) {
+        Channel channel = rabbitMQOperation.createChannel(consumerConnection);
+        channel.basicQos(3);
+        channel.queueDeclare("first_queue", true, false, false, null);
+        rabbitMQOperation.consumeMessage(channel, "first_queue", "myConsumerTag",false);
 
-            try {
-
-                // TODO : Poll x messages from Queue.
-                List<Node> readyToExecuteNodes = null;
-
-                if(readyToExecuteNodes == null || readyToExecuteNodes.isEmpty()) {
-                    continue;
-                }
-
-                ExecutorService executorService = Executors.newFixedThreadPool(10);
-
-                for(Node node : readyToExecuteNodes) {
-                    // executorService.submit(new NodeExecutor());
-                }
-
-
-
-            } catch (Exception e) {
-                log.error("NodeExecutorConsumer failed.", e);
-            }
-        }
-
-
-
-
-        //
-    }
-
-    public NodeExecutorConsumer() {
-        super("NodeExecutorConsumer", "Helps execute ready to execute node-messges from primary queue.");
     }
 }

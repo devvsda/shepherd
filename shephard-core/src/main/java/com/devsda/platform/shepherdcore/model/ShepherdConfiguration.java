@@ -26,6 +26,16 @@ public class ShepherdConfiguration extends Configuration implements Serializable
     @JsonProperty("datasource")
     private DataSourceDetails dataSourceDetails;
 
+    @NotNull
+    @JsonProperty("rabbitMQserverUrl")
+    private String rabbitMQServerUrl;
+
+    // TODO : RabbitMQ details should move to data class.
+    @NotNull
+    @JsonProperty("readyToExecuteQueue")
+    private String readyToExecuteQueue;
+
+
     public Environment getEnvironment() {
         return environment;
     }
@@ -58,6 +68,13 @@ public class ShepherdConfiguration extends Configuration implements Serializable
         this.dataSourceDetails = dataSourceDetails;
     }
 
+    public String getRabbitMQServerUrl() {
+        return rabbitMQServerUrl;
+    }
+
+    public void setRabbitMQServerUrl(String rabbitMQServerUrl) {
+        this.rabbitMQServerUrl = rabbitMQServerUrl;
+    }
 
     @Override
     public String toString() {
@@ -66,6 +83,7 @@ public class ShepherdConfiguration extends Configuration implements Serializable
                 ", applicationName='" + applicationName + '\'' +
                 ", database=" + database +
                 ", dataSourceDetails=" + dataSourceDetails +
+                ", rabbitMQServerUrl='" + rabbitMQServerUrl + '\'' +
                 '}';
     }
 }

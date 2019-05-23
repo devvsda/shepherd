@@ -2,9 +2,6 @@
 environment: dev
 applicationName: shephard-core
 
-readyToExecuteQueueMessageCount: 10
-nodeExecutorConsumerConcurrency: 10
-
 # Database settings.
 database:
   # the name of your JDBC driver
@@ -17,6 +14,22 @@ database:
   url: jdbc:mysql://shepherd.cpdwhawnvczl.us-east-1.rds.amazonaws.com:3306/shepherd_master
 
   initialSize: 1
+
+datasource :
+  prefix: mongodb
+  user: ashutosh
+  password: mOngo%407218
+  clusters:
+    - shepherd-cluster0-shard-00-00-lovgv.mongodb.net:27017
+    - shepherd-cluster0-shard-00-01-lovgv.mongodb.net:27017
+    - shepherd-cluster0-shard-00-02-lovgv.mongodb.net:27017
+  path: /test
+  params: ssl=true&replicaSet=Shepherd-Cluster0-shard-0&authSource=admin&retryWrites=true
+  dbname: shepherd
+  collectionname: execution_details
+
+rabbitMQserverUrl: amqp://admin:superpassword@3.87.203.156:5672/vhost
+readyToExecuteQueue: first_queue
 
 server:
   rootPath: /shephard-core
@@ -53,16 +66,3 @@ logging:
       archivedFileCount: 7
       timeZone: UTC
       maxFileSize: 10MB
-
-datasource :
-  prefix: mongodb
-  user: ashutosh
-  password: mOngo%407218
-  clusters:
-    - shepherd-cluster0-shard-00-00-lovgv.mongodb.net:27017
-    - shepherd-cluster0-shard-00-01-lovgv.mongodb.net:27017
-    - shepherd-cluster0-shard-00-02-lovgv.mongodb.net:27017
-  path: /test
-  params: ssl=true&replicaSet=Shepherd-Cluster0-shard-0&authSource=admin&retryWrites=true
-  dbname: shepherd
-  collectionname: execution_details

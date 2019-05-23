@@ -66,14 +66,13 @@ public class GraphUtil {
 
             node.setObjectId(objectId);
             node.setExecutionId(executionId);
+            node.setGraphType(graph.getGraphType());
 
             nameWiseNodeMapping.put(node.getName(), node);
         }
 
         setGlobalSettingsInNode(nameWiseNodeMapping, graphConfiguration);
-        if (GraphType.UNCONDITIONAL.equals(graph.getGraphType())) {
-            setParentNodes(nameWiseNodeMapping, graph);
-        }
+        setParentNodes(nameWiseNodeMapping, graph);
         setChildrenNodes(nameWiseNodeMapping);
 
         return nameWiseNodeMapping;
@@ -100,6 +99,10 @@ public class GraphUtil {
 
             Node node = nodeEntry.getValue();
 
+            if (node.getConnections() == null) {
+                continue;
+            }
+
             for(Connection connection : node.getConnections()) {
 
                 connection.setNode(nameWiseNodeMapping.get(connection.getNodeName()));
@@ -114,13 +117,14 @@ public class GraphUtil {
             for (NodeConfiguration nodeConfiguration : teamConfiguration.getNodeConfigurations()) {
 
                 // Update headers.
-                Map<String, String> nodeHeaders = new HashMap<>(nodeConfiguration.getHeaders());
+                Map<String, String> nodeHeaders = nodeConfiguration.getHeaders();
 
-                nodeConfiguration.setHeaders(teamConfiguration.getHeaders());
-
-                if (nodeHeaders != null) {
-                    nodeConfiguration.getHeaders().putAll(nodeHeaders);
+                if(nodeHeaders == null) {
+                    nodeHeaders = new HashMap<>();
                 }
+
+                nodeConfiguration.setHeaders(new HashMap<>(teamConfiguration.getHeaders()));
+                nodeConfiguration.getHeaders().putAll(nodeHeaders);
 
                 // Add server details.
                 nodeConfiguration.setServerDetails(teamConfiguration.getServerDetails());
