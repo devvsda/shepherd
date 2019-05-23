@@ -30,7 +30,6 @@ datasource :
 
 rabbitMQserverUrl: amqp://admin:superpassword@3.87.203.156:5672/vhost
 readyToExecuteQueue: first_queue
-notReadyToExecuteQueue: y
 
 server:
   rootPath: /shephard-core

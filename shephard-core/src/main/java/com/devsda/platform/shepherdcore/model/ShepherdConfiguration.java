@@ -30,10 +30,10 @@ public class ShepherdConfiguration extends Configuration implements Serializable
     @JsonProperty("rabbitMQserverUrl")
     private String rabbitMQServerUrl;
 
+    // TODO : RabbitMQ details should move to data class.
     @NotNull
-    @JsonProperty("")
+    @JsonProperty("readyToExecuteQueue")
     private String readyToExecuteQueue;
-
 
 
     public Environment getEnvironment() {

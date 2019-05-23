@@ -90,7 +90,7 @@ public class NodeExecutor {
 
             pushChildrenNodesToRabbitMQ(clientNodeResponse.getResponseEdge(), node);
 
-            updateExecutionStatus(node);
+            updateExecutionStatus(node, WorkflowExecutionState.COMPLETED, null);
 
             return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
 
@@ -98,18 +98,23 @@ public class NodeExecutor {
             // This exception occurs in UNCONDITIONAL workflow. When we try to execute same node twice.
             log.info(String.format("Node : %s already under processing. Skipping this execution to avoid duplicity.",
                     nodeConfiguration.getName()), e);
+            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
             return new NodeResponse(nodeConfiguration.getName(), NodeState.SKIPPED, null);
 
         } catch (HttpResponseException e) {
 
             log.error(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
+            node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
+            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
             throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
 
         } catch (Exception e) {
 
             log.error(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
+            node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
+            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
             throw new NodeFailureException(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
 
         }
@@ -117,7 +122,11 @@ public class NodeExecutor {
 
     private void pushChildrenNodesToRabbitMQ(String edgeName, Node node) throws Exception {
 
-        Boolean isGraphConditional = ( node.getParentNodes() == null);
+        Boolean isGraphConditional = GraphType.CONDITIONAL.equals(node.getGraphType());
+
+        if (node.getConnections() == null) {
+            return;
+        }
 
         if(isGraphConditional) {
 
@@ -179,16 +188,16 @@ public class NodeExecutor {
     private void updateNodeStatus(Node node, NodeState nodeState) {
          node.setNodeState(nodeState);
          node.setUpdatedAt(DateUtil.currentDate());
-        workflowOperationDao.updateNode( node);
+        workflowOperationDao.updateNode(node);
     }
 
-    public void updateExecutionStatus(Node node) {
+    public void updateExecutionStatus(Node node, WorkflowExecutionState workflowExecutionState, String errorMessage) {
 
         List<Connection> childernNodes = node.getConnections();
 
         if (GraphType.CONDITIONAL.equals(node.getGraphType()) &&
                 (childernNodes == null || childernNodes.isEmpty())) {
-            workflowOperationDao.updateExecutionStatus(node.getObjectId(), node.getExecutionId(), WorkflowExecutionState.COMPLETED, null);
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(), node.getExecutionId(), workflowExecutionState, errorMessage);
             return;
         }
 

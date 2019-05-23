@@ -49,7 +49,7 @@
           "URI": "/dominos-shepherd-client/order-management-workflow/cookFood",
           "httpMethod": "POST",
           "headers": {
-            "content-type": "application/pdf"
+            "content-type": "application/json"
           }
         },
         {

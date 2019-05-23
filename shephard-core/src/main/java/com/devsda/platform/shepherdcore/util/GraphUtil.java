@@ -72,9 +72,7 @@ public class GraphUtil {
         }
 
         setGlobalSettingsInNode(nameWiseNodeMapping, graphConfiguration);
-        if (GraphType.UNCONDITIONAL.equals(graph.getGraphType())) {
-            setParentNodes(nameWiseNodeMapping, graph);
-        }
+        setParentNodes(nameWiseNodeMapping, graph);
         setChildrenNodes(nameWiseNodeMapping);
 
         return nameWiseNodeMapping;
