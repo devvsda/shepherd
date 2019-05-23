@@ -39,7 +39,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("ValidateOrderUpdate", "Validate order added this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("YES", JSONLoader.stringify(mp))).build();
     }
@@ -60,7 +60,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("GetOrderType", "Get Order Type Updated this value");
 
-         Thread.sleep(20000);
+         Thread.sleep(2000);
 
 
         return Response.ok(new ShepherdExecutionResponse("VEG",JSONLoader.stringify(mp))).build();
@@ -81,7 +81,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("AssignNnVegKitchen", "AssignNnVegKitchen Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -102,7 +102,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("AssignVegKitchen", "assignVegKitchen Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -123,7 +123,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("AssignChef", "assignChef Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -144,7 +144,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("GatherIngredients", "gatherIngredients Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -165,7 +165,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("CookFood", "cookFood Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -186,7 +186,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("NotifyClient", "cookFood Updated this value");
 
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("COMPLETED",JSONLoader.stringify(mp))).build();
     }

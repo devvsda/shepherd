@@ -16,8 +16,8 @@
 
 - name: Copy shepherd jar to server.
   copy:
-    src: /Users/hijhamb/side_project/shephard/shephard-core/target/shephard-core-1.0-SNAPSHOT.jar
-    dest: /home/admin/shepherd/shephard-core.jar
+    src: /Users/hijhamb/side_project/shephard/shephard-core/target/shepherd-core-1.0-SNAPSHOT.jar
+    dest: /home/admin/shepherd/shepherd-core.jar
     owner: admin
     group: admin
     mode: 0755
@@ -31,10 +31,15 @@
     mode: 0755
     
 - name: Kill running server
-  shell: if [[  $(ps aux | grep shephard-core | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[s]hephard-core' | awk '{print $2}'); fi
+  shell: if [[  $(ps aux | grep shepherd-core | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[s]hepherd-core' | awk '{print $2}'); fi
 
   
 - name: Run shepherd-core
-  shell: nohup java -cp shephard-core.jar com.devsda.platform.shephardcore.application.ShephardApplication server shepherd-configuration.yaml > /dev/null 2>&1 &
+  shell: nohup java -cp shepherd-core.jar com.devsda.platform.shepherdcore.application.ShepherdApplication server shepherd-configuration.yaml > /dev/null 2>&1 &
+  args:
+    chdir: /home/admin/shepherd/
+
+- name: Run Node Executor
+  shell: nohup java -cp shepherd-core.jar com.devsda.platform.shepherdcore.application.ShepherdApplication NodeExecutorCommand shepherd-configuration.yaml > /dev/null 2>&1 &
   args:
     chdir: /home/admin/shepherd/
