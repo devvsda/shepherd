@@ -89,14 +89,7 @@ public class ExecuteWorkflowService {
         // TODO : 2. Need to push Node details to Redis.
         // TODO : 3. Push root node message to RabbitMQ.
 
-        // ExecuteWorkflowRunner executeWorkflowRunner = new ExecuteWorkflowRunner(graph, graphConfiguration, executeWorkflowRequest);
-
         executeWorkflowServiceHelper.triggerExecution(executeWorkflowRequest, graph, graphConfiguration);
-//
-//        FutureTask<Void> futureTask = new FutureTask<>(executeWorkflowRunner);
-//        Thread t=new Thread(futureTask);
-//        t.start();
-
 
         Map<String, Object> executionWorkflowResponse = new HashMap<>();
         executionWorkflowResponse.put(ShepherdConstants.OBJECT_ID, executeWorkflowRequest.getObjectId());

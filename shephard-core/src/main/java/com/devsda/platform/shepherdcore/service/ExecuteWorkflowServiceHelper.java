@@ -1,16 +1,13 @@
 package com.devsda.platform.shepherdcore.service;
 
-import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
-import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
-import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
+import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
-import com.devsda.platform.shepherdcore.model.NodeResponse;
-import com.devsda.platform.shepherdcore.service.queueservice.RabbitMqOperation;
+import com.devsda.platform.shepherdcore.service.queueservice.RabbitMQOperation;
 import com.devsda.platform.shepherdcore.util.GraphUtil;
 import com.google.inject.Inject;
 import com.rabbitmq.client.BuiltinExchangeType;
@@ -20,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -30,15 +25,15 @@ public class ExecuteWorkflowServiceHelper {
 
     private static final Logger log = LoggerFactory.getLogger(ExecuteWorkflowServiceHelper.class);
 
-    @Inject
-    private WorkflowOperationDao workflowOperationDao;
-
-    @Named("publisher")
+    @Named(ShephardConstants.RabbitMQ.PUBLISHER)
     @Inject
     private Connection publisherConnection;
 
     @Inject
-    private RabbitMqOperation rabbitMqOperation;
+    private WorkflowOperationDao workflowOperationDao;
+
+    @Inject
+    private RabbitMQOperation rabbitMQOperation;
 
     public Boolean isNodeReadyToExecute(Node node) {
 
@@ -71,9 +66,9 @@ public class ExecuteWorkflowServiceHelper {
 
         try {
 
-            Channel channel = rabbitMqOperation.createChannel(publisherConnection);
-            rabbitMqOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
-            rabbitMqOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(rootNode));
+            Channel channel = rabbitMQOperation.createChannel(publisherConnection);
+            rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+            rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(rootNode));
 
         } catch (Exception e) {
 

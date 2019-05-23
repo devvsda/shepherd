@@ -1,5 +1,7 @@
 package com.devsda.platform.shepherdcore.service;
 
+import com.devsda.platform.shepherd.constants.GraphType;
+import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
@@ -12,7 +14,7 @@ import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
 import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
-import com.devsda.platform.shepherdcore.service.queueservice.RabbitMqOperation;
+import com.devsda.platform.shepherdcore.service.queueservice.RabbitMQOperation;
 import com.devsda.utils.httputils.methods.HttpPostMethod;
 import com.google.inject.Inject;
 import com.rabbitmq.client.BuiltinExchangeType;
@@ -25,11 +27,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
-import java.util.concurrent.Callable;
+import java.util.List;
 
 public class NodeExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(NodeExecutor.class);
+
+    @Named(ShephardConstants.RabbitMQ.PUBLISHER)
+    @Inject
+    private com.rabbitmq.client.Connection publisherConnection;
 
     @Inject
     private WorkflowOperationDao workflowOperationDao;
@@ -40,21 +46,10 @@ public class NodeExecutor {
     @Inject
     private ExecuteWorkflowServiceHelper executeWorkflowServiceHelper;
 
-    @Named("publisher")
     @Inject
-    private com.rabbitmq.client.Connection publisherConnection;
+    private RabbitMQOperation rabbitMQOperation;
 
-    @Inject
-    private RabbitMqOperation rabbitMqOperation;
-
-    // private Node node;
-
-//    public NodeExecutor(Node node) {
-//         node = node;
-//    }
-
-    // @Override
-    public NodeResponse call(Node node) throws Exception {
+    public NodeResponse execute(Node node) throws Exception {
 
         String response = null;
         NodeConfiguration nodeConfiguration = node.getNodeConfiguration();
@@ -95,6 +90,8 @@ public class NodeExecutor {
 
             pushChildrenNodesToRabbitMQ(clientNodeResponse.getResponseEdge(), node);
 
+            updateExecutionStatus(node);
+
             return new NodeResponse(nodeConfiguration.getName(), NodeState.COMPLETED, response);
 
         } catch(UnableToExecuteStatementException e) {
@@ -127,9 +124,9 @@ public class NodeExecutor {
             for(Connection connection :  node.getConnections()) {
 
                 if(connection.getEdgeName().equalsIgnoreCase(edgeName)) {
-                    Channel channel = rabbitMqOperation.createChannel(publisherConnection);
-                    rabbitMqOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
-                    rabbitMqOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
+                    Channel channel = rabbitMQOperation.createChannel(publisherConnection);
+                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                    rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                     return;
                 }
             }
@@ -140,9 +137,9 @@ public class NodeExecutor {
                 Boolean isChildNodeReadyToExecute = executeWorkflowServiceHelper.isNodeReadyToExecute(connection.getNode());
 
                 if(isChildNodeReadyToExecute) {
-                    Channel channel = rabbitMqOperation.createChannel(publisherConnection);
-                    rabbitMqOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
-                    rabbitMqOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
+                    Channel channel = rabbitMQOperation.createChannel(publisherConnection);
+                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                    rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                 } else {
                     // TODO : Push to secondary Queue.
                 }
@@ -183,5 +180,18 @@ public class NodeExecutor {
          node.setNodeState(nodeState);
          node.setUpdatedAt(DateUtil.currentDate());
         workflowOperationDao.updateNode( node);
+    }
+
+    public void updateExecutionStatus(Node node) {
+
+        List<Connection> childernNodes = node.getConnections();
+
+        if (GraphType.CONDITIONAL.equals(node.getGraphType()) &&
+                (childernNodes == null || childernNodes.isEmpty())) {
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(), node.getExecutionId(), WorkflowExecutionState.COMPLETED, null);
+            return;
+        }
+
+        // TODO: Implement UNCONDITIONAL workflow logic.
     }
 }

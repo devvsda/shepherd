@@ -66,6 +66,7 @@ public class GraphUtil {
 
             node.setObjectId(objectId);
             node.setExecutionId(executionId);
+            node.setGraphType(graph.getGraphType());
 
             nameWiseNodeMapping.put(node.getName(), node);
         }

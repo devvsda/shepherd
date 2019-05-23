@@ -3,7 +3,6 @@ package com.devsda.platform.shepherdcore.service.queueservice;
 import com.devsda.platform.shepherd.model.Node;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.devsda.platform.shepherdcore.service.NodeExecutor;
-import com.devsda.utils.httputils.loader.JsonLoader;
 import com.google.inject.Inject;
 import com.rabbitmq.client.*;
 import org.slf4j.Logger;
@@ -14,14 +13,13 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitMqOperation {
+public class RabbitMQOperation {
 
-    private static final Logger log = LoggerFactory.getLogger(RabbitMqOperation.class);
+    private static final Logger log = LoggerFactory.getLogger(RabbitMQOperation.class);
     private static Connection consumerConnection;
     private static Connection publisherConnection;
 
@@ -169,7 +167,7 @@ public class RabbitMqOperation {
                             String message = new String(body);
                             Node nodeToExecute = JSONLoader.loadFromStringifiedObject(message, Node.class);
 
-                            nodeExecutor.call(nodeToExecute);
+                            nodeExecutor.execute(nodeToExecute);
 
                             System.out.println("Message received : "+ message + "delivery Tag "+ deliveryTag);
                         } catch (Exception ex) {

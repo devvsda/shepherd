@@ -2,16 +2,13 @@ package com.devsda.platform.shepherdcore.application;
 
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.consumer.NodeExecutorCommand;
-import com.devsda.platform.shepherdcore.consumer.NodeExecutorConsumer;
 import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
 import com.devsda.platform.shepherdcore.resources.*;
-import com.devsda.platform.shepherdcore.service.ExecuteWorkflowRunner;
 import com.devsda.platform.shepherdcore.service.ExecuteWorkflowServiceHelper;
-import com.devsda.platform.shepherdcore.service.NodeExecutor;
 import com.devsda.platform.shepherdcore.service.queueservice.ConnectionType;
-import com.devsda.platform.shepherdcore.service.queueservice.RabbitMqOperation;
+import com.devsda.platform.shepherdcore.service.queueservice.RabbitMQOperation;
 import com.devsda.platform.shepherdcore.util.RequestValidator;
 
 import com.google.inject.AbstractModule;
@@ -79,15 +76,15 @@ public class ShepherdApplication extends Application<ShepherdConfiguration> {
         environment.jersey().register(injector.getInstance(WorkflowManagementResources.class));
     }
 
-    private Connection initializeReadyToExecuteQueueProducerConnection(RabbitMqOperation rabbitMqOperation) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException{
-        String connectionString = "amqp://admin:superpassword@3.87.203.156:5672/vhost";
-        Connection publisherConnection = rabbitMqOperation.createQueueConnection(connectionString, ConnectionType.publisher);
+    private Connection initializeReadyToExecuteQueueProducerConnection(String rabbitMQServerURL, RabbitMQOperation rabbitMQOperation)
+            throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException{
+        Connection publisherConnection = rabbitMQOperation.createQueueConnection(rabbitMQServerURL, ConnectionType.publisher);
         return publisherConnection;
     }
 
-    private Connection initializeReadyToExecuteQueueConsumerConnection(RabbitMqOperation rabbitMqOperation) throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException{
-        String connectionString = "amqp://admin:superpassword@3.87.203.156:5672/vhost";
-        Connection consumerConnection = rabbitMqOperation.createQueueConnection(connectionString, ConnectionType.consumer);
+    private Connection initializeReadyToExecuteQueueConsumerConnection(String rabbitMQServerURL, RabbitMQOperation rabbitMQOperation)
+            throws URISyntaxException, NoSuchAlgorithmException, KeyManagementException, IOException, TimeoutException{
+        Connection consumerConnection = rabbitMQOperation.createQueueConnection(rabbitMQServerURL, ConnectionType.consumer);
         return consumerConnection;
     }
 
@@ -114,19 +111,21 @@ public class ShepherdApplication extends Application<ShepherdConfiguration> {
                     bind(RegisterationDao.class).toInstance(registerationDao);
                     bind(WorkflowOperationDao.class).toInstance(workflowOperationDao);
 
-                    bind(Connection.class).annotatedWith(Names.named("publisher")).toInstance(initializeReadyToExecuteQueueProducerConnection(new RabbitMqOperation()));
-                    bind(Connection.class).annotatedWith(Names.named("consumer")).toInstance(initializeReadyToExecuteQueueConsumerConnection(new RabbitMqOperation()));
+                    bind(Connection.class).annotatedWith(Names.named(ShephardConstants.RabbitMQ.PUBLISHER))
+                            .toInstance(initializeReadyToExecuteQueueProducerConnection(
+                                    shepherdConfiguration.getRabbitMQServerUrl(), new RabbitMQOperation()));
+                    bind(Connection.class).annotatedWith(Names.named(ShephardConstants.RabbitMQ.CONSUMER))
+                            .toInstance(initializeReadyToExecuteQueueConsumerConnection(
+                                    shepherdConfiguration.getRabbitMQServerUrl(), new RabbitMQOperation()));
 
 
-                    requestStaticInjection(ExecuteWorkflowRunner.class);
                     requestStaticInjection(ExecuteWorkflowServiceHelper.class);
-                    // requestStaticInjection(NodeExecutor.class);
                     requestStaticInjection(RequestValidator.class);
 
                     // Other objects
                     bind(ShepherdConfiguration.class).toInstance(shepherdConfiguration);
                 } catch (Exception  e) {
-                    log.error("Failed to create DI", e);
+                    log.error("Failed to create DI tree", e);
                 }
             }
         });

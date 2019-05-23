@@ -1,6 +1,7 @@
 package com.devsda.platform.shepherdcore.consumer;
 
 import com.devsda.platform.shepherdcore.application.ShepherdApplication;
+import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.model.ShepherdConfiguration;
 import com.devsda.platform.shepherd.model.Node;
 import com.google.inject.Injector;
@@ -40,10 +41,9 @@ public class NodeExecutorCommand extends ConfiguredCommand<ShepherdConfiguration
 
         nodeExecutorConsumer.consume();
 
-
     }
 
     public NodeExecutorCommand() {
-        super("NodeExecutorCommand", "Helps execute ready to execute node-messges from primary queue.");
+        super(ShephardConstants.CustomCommand.NODE_EXECUTOR_COMMAND, "Helps execute ready to execute node-messges from primary queue.");
     }
 }
