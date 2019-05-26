@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { endPointsAPI } from '../../dataController';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, ButtonGroup } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import '../App.css';
 import xml2js from 'xml2js';
 import { pd } from 'pretty-data';
 import Chart from '../../service/chart';
 import { getVisualizationJSON } from '../../service/service';
+import EndpointListComponent from '../EndpointListComponent';
+import UpdateEndpointComponent from '../UpdateEndpointComponent';
+import AddEndpointComponent from '../AddEndpointComponent';
+import VisualizationGraph from '../VisualizationGraph';
 
 function FieldGroup({ id, label, help, ...props }) {
   return (
@@ -24,6 +28,15 @@ class ClientComponent extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleXMLChange = this.handleXMLChange.bind(this);
     this.handleJSONChange = this.handleJSONChange.bind(this);
+    this.showData = this.showData.bind(this);
+    this.showGraph = this.showGraph.bind(this);
+    this.deleteEndpoint = this.deleteEndpoint.bind(this);
+    this.validateXML = this.validateXML.bind(this);
+    this.validateJSON = this.validateJSON.bind(this);
+    this.updateEndPoint = this.updateEndPoint.bind(this);
+    this.addEndPoint = this.addEndPoint.bind(this);
+    this.showAddEndpoint = this.showAddEndpoint.bind(this);
+
     this.state = {
       nameValue: '',
       XMLValue: '',
@@ -140,6 +153,7 @@ class ClientComponent extends Component {
   }
 
   showAddEndpoint() {
+    console.log('clicked gete');
     this.setState({
       showData: false,
       showVisualization: false,
@@ -173,10 +187,6 @@ class ClientComponent extends Component {
     }
     const clientName = this.props.match.params.clientName;
 
-    console.log('this.state.nameValue');
-    console.log(this.state.nameValue);
-
-    const isEndPointAvailable = this.state.endPoints.length;
     return (
       <Grid fluid={true}>
         <Row className="show-grid">
@@ -189,147 +199,57 @@ class ClientComponent extends Component {
                   </Link>
                 )}
                 <span>{clientName}</span>
-                <span title="Add Endpoint" className="add-element" onClick={this.showAddEndpoint.bind(this)}>
+                <span title="Add Endpoint" className="add-element" onClick={this.showAddEndpoint}>
                   +
                 </span>
               </div>
-              {!isEndPointAvailable && <div className="no-history">No Endpoint Available</div>}
-              {isEndPointAvailable > 0 && (
-                <ul>
-                  {this.state.endPoints.map(obj => (
-                    <li key={obj.endpointName}>
-                      <span className="end-point">{obj.endpointName}</span>
-                      <ButtonGroup>
-                        <Button
-                          className="xsmall-btn"
-                          bsSize="xsmall"
-                          onClick={this.showData.bind(this, obj.endpointName)}
-                        >
-                          Data
-                        </Button>
-                        <Button
-                          className="xsmall-btn"
-                          bsStyle="info"
-                          bsSize="xsmall"
-                          onClick={this.showGraph.bind(this, obj.endpointName)}
-                        >
-                          Visualise Graph
-                        </Button>
-                        <Button className="xsmall-btn execute" bsStyle="success" bsSize="small">
-                          <Link to={`/client/${clientName}/${obj.endpointName}`}>Executions</Link>
-                        </Button>
-                        <Button
-                          className="xsmall-btn delete"
-                          bsStyle="danger"
-                          bsSize="small"
-                          onClick={this.deleteEndpoint.bind(this, obj.endpointId)}
-                        >
-                          Delete
-                        </Button>
-                      </ButtonGroup>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <EndpointListComponent
+                endPoints={this.state.endPoints}
+                showGraph={this.showGraph}
+                deleteEndpoint={this.deleteEndpoint}
+                showData={this.showData}
+                clientName={clientName}
+              />
             </div>
           </Col>
           <Col md={9} mdPull={9} className="right-panel">
             {this.state.showData && (
-              <div>
-                <div className="right-panel-heading">Data for `{this.state.currentEndpoint}`</div>
-                <form>
-                  <FormGroup controlId="formBasicText">
-                    <br />
-                    <FieldGroup
-                      id="formControlsText"
-                      type="text"
-                      label="Enter Endpoint name"
-                      placeholder="Endpoint name"
-                      onChange={this.handleNameChange}
-                      value={this.state.nameValue}
-                    />
-                    <FormGroup controlId="formControlsTextarea">
-                      <ControlLabel>Workflow Graph in XML format</ControlLabel>
-                      <FormControl
-                        componentClass="textarea"
-                        placeholder="textarea"
-                        rows="15"
-                        onChange={this.handleXMLChange}
-                        onBlur={this.validateXML.bind(this)}
-                        value={this.state.XMLValue}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId="formControlsTextarea">
-                      <ControlLabel>Endpoint Details in JSON format</ControlLabel>
-                      <FormControl
-                        componentClass="textarea"
-                        placeholder="textarea"
-                        rows="25"
-                        onChange={this.handleJSONChange}
-                        onBlur={this.validateJSON}
-                        value={this.state.JSONValue}
-                      />
-                    </FormGroup>
-                  </FormGroup>
-                </form>
-                <div style={{ textAlign: 'right' }}>
-                  <Button bsStyle="info" className="update-endpoint" onClick={() => this.updateEndPoint(clientName)}>
-                    Update
-                  </Button>
-                  <p style={{ fontSize: '10px' }}>
-                    <i>*Update is currently disabled</i>
-                  </p>
-                </div>
-              </div>
+              <UpdateEndpointComponent
+                currentEndpoint={this.state.currentEndpoint}
+                handleNameChange={this.handleNameChange}
+                nameValue={this.state.nameValue}
+                handleXMLChange={this.handleXMLChange}
+                validateXML={this.validateXML}
+                XMLValue={this.state.XMLValue}
+                handleJSONChange={this.handleJSONChange}
+                validateJSON={this.validateJSON}
+                JSONValue={this.state.JSONValue}
+                updateEndPoint={this.updateEndPoint}
+                clientName={clientName}
+              />
             )}
             {this.state.showVisualization && (
               <div>
-                <div className="right-panel-heading">Visualization for `{this.state.currentEndpoint}`</div>
-                <svg width="960" height="600">
+                <div className="right-panel-heading">Visualization for {this.state.currentEndpoint}</div>
+                <svg width="960" height="800">
                   <g />
                 </svg>
               </div>
             )}
             {!(this.state.showData || this.state.showVisualization) && (
-              <div>
-                <div className="right-panel-heading">Add New End Point</div>
-                <form>
-                  <FormGroup controlId="formBasicText">
-                    <br />
-                    <FieldGroup
-                      id="formControlsText"
-                      type="text"
-                      label="Enter Endpoint name"
-                      placeholder="Endpoint name"
-                      onChange={this.handleNameChange}
-                      value={this.state.nameValue}
-                    />
-                    <FormGroup controlId="formControlsTextarea">
-                      <ControlLabel>Workflow Graph in XML format</ControlLabel>
-                      <FormControl
-                        componentClass="textarea"
-                        placeholder="textarea"
-                        onChange={this.handleXMLChange}
-                        onBlur={this.validateXML.bind(this)}
-                        value={this.state.XMLValue}
-                      />
-                    </FormGroup>
-                    <FormGroup controlId="formControlsTextarea">
-                      <ControlLabel>Endpoint Details in JSON format</ControlLabel>
-                      <FormControl
-                        componentClass="textarea"
-                        placeholder="textarea"
-                        onChange={this.handleJSONChange}
-                        onBlur={this.validateJSON}
-                        value={this.state.JSONValue}
-                      />
-                    </FormGroup>
-                    <Button bsStyle="info" className="add-client" onClick={() => this.addEndPoint(clientName)}>
-                      Add Endpoint
-                    </Button>
-                  </FormGroup>
-                </form>
-              </div>
+              <AddEndpointComponent
+                currentEndpoint={this.state.currentEndpoint}
+                handleNameChange={this.handleNameChange}
+                nameValue={this.state.nameValue}
+                handleXMLChange={this.handleXMLChange}
+                validateXML={this.validateXML}
+                XMLValue={this.state.XMLValue}
+                handleJSONChange={this.handleJSONChange}
+                validateJSON={this.validateJSON}
+                JSONValue={this.state.JSONValue}
+                addEndPoint={this.addEndPoint}
+                clientName={clientName}
+              />
             )}
           </Col>
         </Row>

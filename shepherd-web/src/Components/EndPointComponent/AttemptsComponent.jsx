@@ -16,7 +16,7 @@ class AttemptsComponent extends Component {
       <ul>
         {attempts.map((obj, ind) => (
           <li key={ind} className="attempt" onClick={() => this.clickHandler(executionId, obj.id)}>
-            Attempt number {ind + 1}
+            {obj.id}
           </li>
         ))}
       </ul>
