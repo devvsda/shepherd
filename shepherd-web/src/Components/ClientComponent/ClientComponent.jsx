@@ -285,7 +285,7 @@ class ClientComponent extends Component {
             {this.state.showVisualization && (
               <div>
                 <div className="right-panel-heading">Visualization for `{this.state.currentEndpoint}`</div>
-                <svg width="960" height="600">
+                <svg width="960" height="800">
                   <g />
                 </svg>
               </div>

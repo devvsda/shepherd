@@ -137,7 +137,7 @@ class EndPointComponent extends Component {
       execs = [...this.state.executions, data.objectId];
       attempts = {
         ...this.state.attemptsMap,
-        [data.executionId]: [
+        [data.objectId]: [
           ...prevAttemptMap,
           {
             id: data.executionId,
@@ -257,7 +257,7 @@ class EndPointComponent extends Component {
                   </Button>
                 </ButtonGroup>
                 <div>
-                  <svg className="endpoint" width="960" height="600">
+                  <svg className="endpoint" width="960" height="800">
                     <g />
                   </svg>
                 </div>
