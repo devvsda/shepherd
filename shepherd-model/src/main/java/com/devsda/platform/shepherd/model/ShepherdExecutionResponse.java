@@ -8,9 +8,9 @@ public class ShepherdExecutionResponse {
     private String responseEdge;
 
     @JsonProperty("executionData")
-    private ExecutionData executionData;
+    private String executionData;
 
-    public ShepherdExecutionResponse(String responseEdge, ExecutionData executionData) {
+    public ShepherdExecutionResponse(String responseEdge, String executionData) {
         this.responseEdge = responseEdge;
         this.executionData = executionData;
     }
@@ -26,6 +26,14 @@ public class ShepherdExecutionResponse {
     public ShepherdExecutionResponse() {
     }
 
+    public String getExecutionData() {
+        return executionData;
+    }
+
+    public void setExecutionData(String executionData) {
+        this.executionData = executionData;
+    }
+
     @Override
     public String toString() {
         return "ShepherdExecutionResponse{" +
@@ -33,13 +41,4 @@ public class ShepherdExecutionResponse {
                 ", executionData=" + executionData +
                 '}';
     }
-
-    public ExecutionData getExecutionData() {
-        return executionData;
-    }
-
-    public void setExecutionData(ExecutionData executionData) {
-        this.executionData = executionData;
-    }
-
 }

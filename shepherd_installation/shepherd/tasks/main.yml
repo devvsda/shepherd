@@ -29,9 +29,9 @@
     owner: admin
     group: admin
     mode: 0755
-
+    
 - name: Kill running server
-  shell: if [[  $(ps aux | grep shepherd | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[s]hepherd' | awk '{print $2}'); fi
+  shell: if [[  $(ps aux | grep shephard-core | grep -vc grep) > 0 ]] ; then sudo kill -9 $(ps aux | grep '[s]hephard-core' | awk '{print $2}'); fi
 
   
 - name: Run shepherd-core

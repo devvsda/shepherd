@@ -100,8 +100,16 @@ public class ClientDataRetrievelService {
         executionDetails.setNodes(nodes);
 
         return executionDetails;
+    }
 
+    public List<ExecutionDetails> getAllExecutions(String clientName, String endpointName) {
 
+        ClientDetails clientDetails = RequestValidator.validateClient(clientName);
+        EndpointDetails endpointDetails = RequestValidator.validateEndpoint(clientDetails.getClientId(), clientName, endpointName);
+
+        List<ExecutionDetails> executionDetails = workflowOperationDao.getAllExecutions(clientDetails.getClientId(), endpointDetails.getEndpointId());
+
+        return executionDetails;
     }
 
 }

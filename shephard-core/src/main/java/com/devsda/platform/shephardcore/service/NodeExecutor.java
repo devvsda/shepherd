@@ -74,13 +74,12 @@ public class NodeExecutor implements Callable<NodeResponse> {
             Document executionDetailsDoc = executionDocumentService.fetchExecutionDetails(this.node.getObjectId(),this.node.getExecutionId());
             try {
                 String executionDataJson= ((Document)executionDetailsDoc.get("executionData")).toJson();
-                ExecutionData executionData = JSONLoader.loadFromStringifiedObject(executionDataJson, ExecutionData.class);
 
                 // 2. Execute Node.
                 HttpPostMethod clientNodeRequest= new HttpPostMethod();
                 clientNodeResponse = clientNodeRequest.call(serverDetails.getProtocol(), serverDetails.getHostName(), serverDetails.getPort(),
                         nodeConfiguration.getURI(), null , nodeConfiguration.getHeaders(),
-                        new StringEntity(JSONLoader.stringify(executionData)), ShepherdExecutionResponse.class);
+                        new StringEntity(executionDataJson), ShepherdExecutionResponse.class);
 
             }catch(Exception ex){
                 throw ex;

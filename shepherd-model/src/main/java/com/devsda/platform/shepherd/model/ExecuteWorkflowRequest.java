@@ -10,42 +10,29 @@ import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExecuteWorkflowRequest extends ShepherdRequest {
 
-    @JsonProperty("object_id")
+    @JsonProperty("objectId")
     private String objectId;
 
-    @JsonProperty("execution_id")
+    @JsonProperty("executionId")
     private String executionId;
 
-    @JsonProperty("client_name")
+    @JsonProperty("clientName")
     private String clientName;
 
-    @JsonProperty("client_id")
+    @JsonProperty("clientId")
     private Integer clientId;
 
-    @JsonProperty("endpoint_name")
+    @JsonProperty("endpointName")
     private String endpointName;
 
-    @JsonProperty("endpoint_id")
+    @JsonProperty("endpointId")
     private Integer endpointId;
 
     @JsonProperty("status")
     private WorkflowExecutionState workflowExecutionState;
 
-    @JsonProperty("initial_payload")
-    private Map<String, Object> initialPayload;
-
-    public ExecutionData getExecutionData() {
-        return executionData;
-    }
-
-    public void setExecutionData(ExecutionData executionData) {
-        this.executionData = executionData;
-    }
-
-    @JsonProperty("executionData")
-    ExecutionData executionData;
-
-
+    @JsonProperty("initialPayload")
+    private String initialPayload;
 
     public ExecuteWorkflowRequest() {
         super(ResourceName.EXECUTE_WORKFLOW);
@@ -92,11 +79,11 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
         this.workflowExecutionState = workflowExecutionState;
     }
 
-    public Map<String, Object> getInitialPayload() {
+    public String getInitialPayload() {
         return initialPayload;
     }
 
-    public void setInitialPayload(Map<String, Object> initialPayload) {
+    public void setInitialPayload(String initialPayload) {
         this.initialPayload = initialPayload;
     }
 
@@ -126,7 +113,7 @@ public class ExecuteWorkflowRequest extends ShepherdRequest {
                 ", endpointName='" + endpointName + '\'' +
                 ", endpointId=" + endpointId +
                 ", workflowExecutionState=" + workflowExecutionState +
-                ", initialPayload=" + initialPayload +
+                ", initialPayload='" + initialPayload + '\'' +
                 '}';
     }
 }

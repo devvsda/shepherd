@@ -193,4 +193,35 @@ public class ClientDataRetrievalResources {
 
     }
 
+    @GET
+    @Path(ShephardConstants.Resources.GET_ALL_EXECUTIONS)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAllExecutions(@QueryParam("clientName") String clientName, @QueryParam("endpointName") String endpointName) {
+
+
+        try {
+
+            log.info(String.format("Processing Get All Executions Request for client : %s, endpoint : %s",
+                    clientName, endpointName));
+
+            List<ExecutionDetails> executionDetails = clientDataRetrievelService.getAllExecutions(clientName, endpointName);
+
+            log.info(String.format("Successfully fetched all executions for client : %s, endpoint : %s", clientName, endpointName));
+
+            Map<String, Object> shepherdResponse = new HashMap<>();
+            shepherdResponse.put("executionDetails", executionDetails);
+
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_ALL_EXECUTIONS, shepherdResponse, "Successfully retrieved all executions for given client and endpoint.", null)).build();
+
+        } catch (Throwable e) {
+
+            log.error(String.format("Get Execution Details API failed for clientName : %s," +
+                    " endpointName : %s", clientName, endpointName), e);
+            return Response.ok(resourceHelper.createShepherdResponse(ResourceName.GET_ALL_EXECUTIONS, null, null, "Failed to retrieve all executions for given client, and endpoint.")).build();
+
+        }
+
+    }
+
 }
