@@ -1,15 +1,12 @@
 package com.devsda.platform.shepherdcore.service;
 
-import com.devsda.platform.shepherd.constants.GraphType;
+import com.devsda.platform.shepherd.constants.*;
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.devsda.platform.shepherdcore.model.NodeResponse;
 import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
-import com.devsda.platform.shepherd.constants.NodeState;
-import com.devsda.platform.shepherd.constants.ShepherdConstants;
-import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
 import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
@@ -67,7 +64,7 @@ public class NodeExecutor {
             }
 
             // Create node with PROCESSING state.
-            createNodeInDB(node);
+            createOrUpdateNodeInDB(node);
 
             ShepherdExecutionResponse clientNodeResponse = null;
 
@@ -171,23 +168,31 @@ public class NodeExecutor {
     private NodeResponse killThisNode(Node node) {
         log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
                  node.getExecutionId(),  node.getName()));
-         node.setUpdatedAt(DateUtil.currentDate());
-         node.setNodeState(NodeState.KILLED);
-         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+        node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(NodeState.KILLED);
+        node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         workflowOperationDao.createNode( node);
         return new NodeResponse( node.getName(), NodeState.KILLED, null);
     }
 
-    private void createNodeInDB(Node node) {
-         node.setUpdatedAt(DateUtil.currentDate());
-         node.setNodeState(NodeState.PROCESSING);
-         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-        workflowOperationDao.createNode( node);
+    private void createOrUpdateNodeInDB(Node node) {
+
+        node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(NodeState.PROCESSING);
+        node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+
+        if ( ResourceName.EXECUTE_WORKFLOW.equals(node.getResourceName())) {
+            workflowOperationDao.createNode( node);
+        } else {
+            workflowOperationDao.updateNode(node);
+        }
+
+
     }
 
     private void updateNodeStatus(Node node, NodeState nodeState) {
-         node.setNodeState(nodeState);
-         node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(nodeState);
+        node.setUpdatedAt(DateUtil.currentDate());
         workflowOperationDao.updateNode(node);
     }
 

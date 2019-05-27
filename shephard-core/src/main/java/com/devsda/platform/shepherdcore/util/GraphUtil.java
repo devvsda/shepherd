@@ -1,6 +1,7 @@
 package com.devsda.platform.shepherdcore.util;
 
 import com.devsda.platform.shepherd.constants.GraphType;
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class GraphUtil {
         return nodeToParentNodesRelation;
     }
 
-    public static Map<String, Node> getNodeNameToNodePOJOMapping(String objectId, String executionId, Graph graph, GraphConfiguration graphConfiguration) {
+    public static Map<String, Node> getNodeNameToNodePOJOMapping(String objectId, String executionId, Graph graph, GraphConfiguration graphConfiguration, ResourceName resourceName) {
 
         log.debug(String.format("Generating node name to node configuration mapping."));
 
@@ -67,6 +68,7 @@ public class GraphUtil {
             node.setObjectId(objectId);
             node.setExecutionId(executionId);
             node.setGraphType(graph.getGraphType());
+            node.setResourceName(resourceName);
 
             nameWiseNodeMapping.put(node.getName(), node);
         }

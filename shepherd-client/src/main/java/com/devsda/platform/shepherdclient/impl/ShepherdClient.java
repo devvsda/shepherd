@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdclient.impl;
 
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.exception.GraphLoaderException;
 import com.devsda.platform.shepherd.exception.ShepherdInternalException;
 import com.devsda.platform.shepherd.model.*;
@@ -198,6 +199,33 @@ public class ShepherdClient {
             throw new ShepherdInternalException(e);
         }
 
+    }
+
+    public ShepherdResponse resumeExecution(String clientName, String endpointName, String objectId, String executionId) {
+
+        try {
+
+            WorkflowManagementRequest resumeExecutionRequest = shepherdClientHelper.createWorkflowManagementRequest(clientName, endpointName, objectId, executionId, ResourceName.RESUME_EXECUTION);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            // Call Shepherd Server.
+            HttpMethod httpMethod = new HttpPostMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(),
+                    serverDetails.getHostName(), serverDetails.getPort(),
+                    ShepherdClientConstants.Resources.RESUME_ENDPOINT,
+                    null, shepherdServerDetails.getHeaders(),
+                    new StringEntity(JSONLoader.stringify(resumeExecutionRequest)), ShepherdResponse.class);
+            // Return response.
+            return shepherdResponse;
+
+        } catch (IOException e) {
+            log.error("Failed to stringify object.", e);
+            throw new ShepherdInternalException(e);
+        } catch (URISyntaxException e) {
+            log.error("Failed to hit given endpoint", e);
+            throw new ShepherdInternalException(e);
+        }
     }
 
     public ShepherdResponse getExecutionState(String clientName, String endpointName, String objectId, String executionId) {
