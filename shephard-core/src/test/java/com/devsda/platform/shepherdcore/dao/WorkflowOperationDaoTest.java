@@ -1,6 +1,6 @@
 package com.devsda.platform.shepherdcore.dao;
 
-import com.devsda.platform.shephardcore.ApplicationContextUtil;
+import com.devsda.platform.shepherdcore.ApplicationContextUtil;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;
@@ -86,5 +86,11 @@ public class WorkflowOperationDaoTest {
         ExecutionDetails executionDetails = workflowOperationDao.getExecutionDetails("objectId", "executionId");
         System.out.println(executionDetails);
 
+    }
+
+    @Test
+    public void deleteAllExecutionsTest() {
+        workflowOperationDao.deleteAllExecutions();
+        workflowOperationDao.deleteAllNodes();
     }
 }

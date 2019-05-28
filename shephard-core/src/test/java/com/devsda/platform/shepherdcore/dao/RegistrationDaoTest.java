@@ -1,6 +1,6 @@
 package com.devsda.platform.shepherdcore.dao;
 
-import com.devsda.platform.shephardcore.ApplicationContextUtil;
+import com.devsda.platform.shepherdcore.ApplicationContextUtil;
 import com.devsda.platform.shepherd.model.ClientDetails;
 import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.devsda.platform.shepherd.constants.ShepherdConstants;

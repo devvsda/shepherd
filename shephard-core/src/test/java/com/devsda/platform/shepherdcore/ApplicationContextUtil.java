@@ -1,4 +1,4 @@
-package com.devsda.platform.shephardcore;
+package com.devsda.platform.shepherdcore;
 
 import com.codahale.metrics.MetricRegistry;
 import com.devsda.platform.shepherdcore.application.ShepherdApplication;

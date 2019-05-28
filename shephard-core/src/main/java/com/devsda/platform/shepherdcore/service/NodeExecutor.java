@@ -1,15 +1,12 @@
 package com.devsda.platform.shepherdcore.service;
 
-import com.devsda.platform.shepherd.constants.GraphType;
+import com.devsda.platform.shepherd.constants.*;
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.model.ExecutionDetails;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
 import com.devsda.platform.shepherdcore.model.NodeResponse;
 import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
-import com.devsda.platform.shepherd.constants.NodeState;
-import com.devsda.platform.shepherd.constants.ShepherdConstants;
-import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.exception.ClientNodeFailureException;
 import com.devsda.platform.shepherd.exception.NodeFailureException;
 import com.devsda.platform.shepherd.model.*;
@@ -67,7 +64,7 @@ public class NodeExecutor {
             }
 
             // Create node with PROCESSING state.
-            createNodeInDB(node);
+            createOrUpdateNodeInDB(node);
 
             ShepherdExecutionResponse clientNodeResponse = null;
 
@@ -98,7 +95,6 @@ public class NodeExecutor {
             // This exception occurs in UNCONDITIONAL workflow. When we try to execute same node twice.
             log.info(String.format("Node : %s already under processing. Skipping this execution to avoid duplicity.",
                     nodeConfiguration.getName()), e);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
             return new NodeResponse(nodeConfiguration.getName(), NodeState.SKIPPED, null);
 
         } catch (HttpResponseException e) {
@@ -106,7 +102,8 @@ public class NodeExecutor {
             log.error(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
             node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(),
+                    node.getExecutionId(), WorkflowExecutionState.FAILED, e.getMessage());
             throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
 
         } catch (Exception e) {
@@ -114,7 +111,8 @@ public class NodeExecutor {
             log.error(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
             node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(),
+                    node.getExecutionId(), WorkflowExecutionState.FAILED, e.getMessage());
             throw new NodeFailureException(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
 
         }
@@ -134,8 +132,10 @@ public class NodeExecutor {
 
                 if(connection.getEdgeName().equalsIgnoreCase(edgeName)) {
                     Channel channel = rabbitMQOperation.createChannel(publisherConnection);
-                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
-                    rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
+                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,
+                            "shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                    rabbitMQOperation.publishMessage(channel,
+                            "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                     return;
                 }
             }
@@ -171,23 +171,31 @@ public class NodeExecutor {
     private NodeResponse killThisNode(Node node) {
         log.info(String.format("Execution id : %s is in killed state. Skipping execution of ndoe : %s",
                  node.getExecutionId(),  node.getName()));
-         node.setUpdatedAt(DateUtil.currentDate());
-         node.setNodeState(NodeState.KILLED);
-         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+        node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(NodeState.KILLED);
+        node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
         workflowOperationDao.createNode( node);
         return new NodeResponse( node.getName(), NodeState.KILLED, null);
     }
 
-    private void createNodeInDB(Node node) {
-         node.setUpdatedAt(DateUtil.currentDate());
-         node.setNodeState(NodeState.PROCESSING);
-         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
-        workflowOperationDao.createNode( node);
+    private void createOrUpdateNodeInDB(Node node) {
+
+        node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(NodeState.PROCESSING);
+        node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
+
+        Node storedNode = workflowOperationDao.getNode(node.getName(), node.getObjectId(), node.getExecutionId());
+
+        if(storedNode == null) {
+            workflowOperationDao.createNode( node);
+        } else if (NodeState.KILLED.equals(storedNode.getNodeState()) || NodeState.FAILED.equals(storedNode.getNodeState())) {
+            workflowOperationDao.updateNode(node);
+        }
     }
 
     private void updateNodeStatus(Node node, NodeState nodeState) {
-         node.setNodeState(nodeState);
-         node.setUpdatedAt(DateUtil.currentDate());
+        node.setNodeState(nodeState);
+        node.setUpdatedAt(DateUtil.currentDate());
         workflowOperationDao.updateNode(node);
     }
 

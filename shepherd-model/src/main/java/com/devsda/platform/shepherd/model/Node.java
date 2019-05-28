@@ -99,6 +99,7 @@ public class Node extends ShepherdRequest {
         this.graphType = graphType;
     }
 
+
     @Override
     public String toString() {
         return "Node{" +

@@ -169,10 +169,9 @@ public class RabbitMQOperation {
 
                             nodeExecutor.execute(nodeToExecute);
 
-                            System.out.println("Message received : "+ message + "delivery Tag "+ deliveryTag);
-                        } catch (Exception ex) {
-                            System.out.println("Unable to convert byte[] message in string");
-                            ex.printStackTrace();
+                           log.debug(String.format("Message received : %s. delivery Tag : %s.", message, deliveryTag));
+                        } catch (Exception e) {
+                            log.error("Node-message processing failed.", e);
                             // TODO : NACK
                         }
 

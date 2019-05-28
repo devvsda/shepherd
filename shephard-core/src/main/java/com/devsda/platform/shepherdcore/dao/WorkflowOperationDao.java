@@ -46,4 +46,11 @@ public interface WorkflowOperationDao {
     @RegisterMapper(NodeDetailsMapper.class)
     @SqlQuery("select * from node_details where object_id = :objectId and execution_id = :executionId")
     public List<Node> getAllNodes(@Bind("objectId") String objectId, @Bind("executionId") String executionId);
+
+
+    @SqlUpdate("delete from execution_details")
+    public void deleteAllExecutions();
+
+    @SqlUpdate("delete from node_details")
+    public void deleteAllNodes();
 }

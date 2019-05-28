@@ -17,8 +17,8 @@ public class WorkflowManagementRequest extends ShepherdRequest {
     @JsonProperty("endpointName")
     private String endpointName;
 
-    public WorkflowManagementRequest(ResourceName resourceName) {
-        super(resourceName);
+    public WorkflowManagementRequest() {
+        super(null);
     }
 
     public String getObjectId() {

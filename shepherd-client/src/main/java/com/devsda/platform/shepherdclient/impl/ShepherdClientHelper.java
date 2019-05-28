@@ -1,9 +1,11 @@
 package com.devsda.platform.shepherdclient.impl;
 
 import com.devsda.platform.shepherd.constants.ResourceName;
+import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.model.ExecuteWorkflowRequest;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
+import com.devsda.platform.shepherd.model.WorkflowManagementRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,5 +39,18 @@ public class ShepherdClientHelper {
         executeWorkflowRequest.setInitialPayload(initialObject);
         executeWorkflowRequest.setResourceName(ResourceName.EXECUTE_WORKFLOW);
         return executeWorkflowRequest;
+    }
+
+    public WorkflowManagementRequest createWorkflowManagementRequest(String clientName, String endpointName, String objectId, String executionId, ResourceName resourceName) {
+
+        WorkflowManagementRequest workflowManagementRequest = new WorkflowManagementRequest();
+
+        workflowManagementRequest.setClientName(clientName);
+        workflowManagementRequest.setEndpointName(endpointName);
+        workflowManagementRequest.setObjectId(objectId);
+        workflowManagementRequest.setExecutionId(executionId);
+        workflowManagementRequest.setResourceName(resourceName);
+
+        return workflowManagementRequest;
     }
 }

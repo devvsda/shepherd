@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherdcore.service;
 
+import com.devsda.platform.shepherd.constants.ResourceName;
 import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
@@ -60,7 +61,7 @@ public class ExecuteWorkflowServiceHelper {
     public void triggerExecution(ExecuteWorkflowRequest executeWorkflowRequest, Graph graph, GraphConfiguration graphConfiguration) throws InterruptedException, ExecutionException {
 
         // TODO : Need to push all the rows to Redis.
-        Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodePOJOMapping(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(), graph, graphConfiguration);
+        Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodePOJOMapping(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(), graph, graphConfiguration, ResourceName.EXECUTE_WORKFLOW);
 
         Node rootNode = GraphUtil.getRootNode(nodeNameToNodeMapping);
 
