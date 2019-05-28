@@ -223,7 +223,61 @@ public class ShepherdClient {
             log.error("Failed to stringify object.", e);
             throw new ShepherdInternalException(e);
         } catch (URISyntaxException e) {
-            log.error("Failed to hit given endpoint", e);
+            log.error("Failed to resume given execution", e);
+            throw new ShepherdInternalException(e);
+        }
+    }
+
+    public ShepherdResponse killExecution(String clientName, String endpointName, String objectId, String executionId) {
+
+        try {
+
+            WorkflowManagementRequest resumeExecutionRequest = shepherdClientHelper.createWorkflowManagementRequest(clientName, endpointName, objectId, executionId, ResourceName.KILL_EXECUTION);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            // Call Shepherd Server.
+            HttpMethod httpMethod = new HttpPostMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(),
+                    serverDetails.getHostName(), serverDetails.getPort(),
+                    ShepherdClientConstants.Resources.KILL_ENDPOINT,
+                    null, shepherdServerDetails.getHeaders(),
+                    new StringEntity(JSONLoader.stringify(resumeExecutionRequest)), ShepherdResponse.class);
+            // Return response.
+            return shepherdResponse;
+
+        } catch (IOException e) {
+            log.error("Failed to stringify object.", e);
+            throw new ShepherdInternalException(e);
+        } catch (URISyntaxException e) {
+            log.error("Failed to kill given execution", e);
+            throw new ShepherdInternalException(e);
+        }
+    }
+
+    public ShepherdResponse restartExecution(String clientName, String endpointName, String objectId, String executionId) {
+
+        try {
+
+            WorkflowManagementRequest resumeExecutionRequest = shepherdClientHelper.createWorkflowManagementRequest(clientName, endpointName, objectId, executionId, ResourceName.RESTART_EXECUTION);
+
+            ServerDetails serverDetails = shepherdServerDetails.getServerDetails();
+
+            // Call Shepherd Server.
+            HttpMethod httpMethod = new HttpPostMethod();
+            ShepherdResponse shepherdResponse = httpMethod.call(serverDetails.getProtocol(),
+                    serverDetails.getHostName(), serverDetails.getPort(),
+                    ShepherdClientConstants.Resources.RESTART_ENDPOINT,
+                    null, shepherdServerDetails.getHeaders(),
+                    new StringEntity(JSONLoader.stringify(resumeExecutionRequest)), ShepherdResponse.class);
+            // Return response.
+            return shepherdResponse;
+
+        } catch (IOException e) {
+            log.error("Failed to stringify object.", e);
+            throw new ShepherdInternalException(e);
+        } catch (URISyntaxException e) {
+            log.error("Failed to restart given execution", e);
             throw new ShepherdInternalException(e);
         }
     }

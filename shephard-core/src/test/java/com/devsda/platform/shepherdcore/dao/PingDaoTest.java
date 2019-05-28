@@ -1,6 +1,6 @@
 package com.devsda.platform.shepherdcore.dao;
 
-import com.devsda.platform.shephardcore.ApplicationContextUtil;
+import com.devsda.platform.shepherdcore.ApplicationContextUtil;
 import com.google.inject.Injector;
 import org.junit.Assert;
 import org.junit.BeforeClass;

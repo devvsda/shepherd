@@ -1,6 +1,6 @@
 server :
   protocol : http
-  hostName : 3.95.163.243
+  hostName : localhost
   port : 8080
 
 headers :

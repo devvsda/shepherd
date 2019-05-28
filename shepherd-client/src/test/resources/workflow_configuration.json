@@ -17,7 +17,10 @@
         {
           "name": "ValidateOrder",
           "URI": "/dominos-shepherd-client/order-management-workflow/validateOrder",
-          "httpMethod": "POST"
+          "httpMethod": "POST",
+          "headers": {
+            "content-type": "application/json"
+          }
         },
         {
           "name": "GetOrderType",
@@ -47,10 +50,7 @@
         {
           "name": "CookFood",
           "URI": "/dominos-shepherd-client/order-management-workflow/cookFood",
-          "httpMethod": "POST",
-          "headers": {
-            "content-type": "application/json"
-          }
+          "httpMethod": "POST"
         },
         {
           "name": "NotifyClient",

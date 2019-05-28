@@ -145,6 +145,7 @@ public class WorkflowManagementService {
         executeWorkflowRequest.setResourceName(ResourceName.RESTART_EXECUTION);
         executeWorkflowRequest.setClientName(restartWorkflowRequest.getClientName());
         executeWorkflowRequest.setEndpointName(restartWorkflowRequest.getEndpointName());
+        executeWorkflowRequest.setInitialPayload("{\"name\": \"hitesh\"}");
         executeWorkflowRequest.setObjectId(restartWorkflowRequest.getObjectId());
 
         Map<String, Object> restartedExecutionResponse = executeWorkflowService.executeWorkflow(executeWorkflowRequest);

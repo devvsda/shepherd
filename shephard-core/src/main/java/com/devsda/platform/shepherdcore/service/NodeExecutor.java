@@ -95,7 +95,6 @@ public class NodeExecutor {
             // This exception occurs in UNCONDITIONAL workflow. When we try to execute same node twice.
             log.info(String.format("Node : %s already under processing. Skipping this execution to avoid duplicity.",
                     nodeConfiguration.getName()), e);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
             return new NodeResponse(nodeConfiguration.getName(), NodeState.SKIPPED, null);
 
         } catch (HttpResponseException e) {
@@ -103,7 +102,8 @@ public class NodeExecutor {
             log.error(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
             node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(),
+                    node.getExecutionId(), WorkflowExecutionState.FAILED, e.getMessage());
             throw new ClientNodeFailureException(String.format("Node : %s failed at client side.", nodeConfiguration.getName()), e);
 
         } catch (Exception e) {
@@ -111,7 +111,8 @@ public class NodeExecutor {
             log.error(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
             node.setErrorMessage(e.getMessage());
             updateNodeStatus(node, NodeState.FAILED);
-            updateExecutionStatus(node, WorkflowExecutionState.FAILED, e.getMessage());
+            workflowOperationDao.updateExecutionStatus(node.getObjectId(),
+                    node.getExecutionId(), WorkflowExecutionState.FAILED, e.getMessage());
             throw new NodeFailureException(String.format("Node : %s failed internally.", nodeConfiguration.getName()), e);
 
         }
@@ -131,8 +132,10 @@ public class NodeExecutor {
 
                 if(connection.getEdgeName().equalsIgnoreCase(edgeName)) {
                     Channel channel = rabbitMQOperation.createChannel(publisherConnection);
-                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
-                    rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
+                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,
+                            "shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                    rabbitMQOperation.publishMessage(channel,
+                            "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                     return;
                 }
             }
@@ -181,13 +184,13 @@ public class NodeExecutor {
         node.setNodeState(NodeState.PROCESSING);
         node.setSubmittedBy(ShepherdConstants.PROCESS_OWNER);
 
-        if ( ResourceName.EXECUTE_WORKFLOW.equals(node.getResourceName())) {
+        Node storedNode = workflowOperationDao.getNode(node.getName(), node.getObjectId(), node.getExecutionId());
+
+        if(storedNode == null) {
             workflowOperationDao.createNode( node);
-        } else {
+        } else if (NodeState.KILLED.equals(storedNode.getNodeState()) || NodeState.FAILED.equals(storedNode.getNodeState())) {
             workflowOperationDao.updateNode(node);
         }
-
-
     }
 
     private void updateNodeStatus(Node node, NodeState nodeState) {
