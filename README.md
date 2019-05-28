@@ -7,7 +7,7 @@ Shepherd is a platform to create, schedule and monitor workflows programmaticall
 Please refer Supported Features details here : [Supported features](https://github.com/devvsda/shepherd/wiki/Supported-Features])
 
 # Comparison of Shepherd with open-source technologies
-In this section, we compared Shepehrd with Azkaban and Airflow. Please refere comparison wiki here : [Comparison with open-sourrce technologies](https://github.com/devvsda/shepherd/wiki/Comparison-with-Open-Source-technologies)
+In this section, we compared Shepehrd with Azkaban and Airflow. Please refere comparison wiki here : [Comparison with open-source technologies](https://github.com/devvsda/shepherd/wiki/Comparison-with-Open-Source-technologies)
 
 # Shepherd Architecture
 Please refer Shepherd Architecture in details here : [Part#1](https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%231%5D), [Part#2](https://github.com/devvsda/shepherd/wiki/Shepherd-Architecture%5BPart%232%5D)
