@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
-import java.util.Map;
 
 @Path(DominosShepherdClientConstants.Resources.ORDER_MANAGEMENT_WORKFLOW)
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,7 +29,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateOrder(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing ValidateOrderUpdate"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -38,10 +37,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("validateOrderUpdate", "vaidate order added this value");
+        mp.put("ValidateOrderUpdate", "Validate order added this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("YES", JSONLoader.stringify(mp))).build();
     }
@@ -52,7 +50,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getOrderType(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing GetOrderType"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -62,8 +60,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("GetOrderType", "Get Order Type Updated this value");
 
-        // TODO : Process responsibility of this API
-         Thread.sleep(20000);
+         Thread.sleep(2000);
 
 
         return Response.ok(new ShepherdExecutionResponse("VEG",JSONLoader.stringify(mp))).build();
@@ -75,7 +72,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response assignNonVegKitchen(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing AssignNnVegKitchen"));
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
                 = new TypeReference<HashMap<String,Object>>() {};
@@ -84,8 +81,7 @@ public class OrderDeliveryWorkflowResources {
 
         mp.put("AssignNnVegKitchen", "AssignNnVegKitchen Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -96,7 +92,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response assignVegKitchen(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing AssignVegKitchen"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -104,10 +100,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("assignVegKitchen", "assignVegKitchen Updated this value");
+        mp.put("AssignVegKitchen", "assignVegKitchen Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -118,7 +113,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response assignChef(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing AssignChef"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -126,10 +121,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("assignChef", "assignChef Updated this value");
+        mp.put("AssignChef", "assignChef Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -140,7 +134,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response gatherIngredients(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing GatherIngredients"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -148,10 +142,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("gatherIngredients", "gatherIngredients Updated this value");
+        mp.put("GatherIngredients", "gatherIngredients Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -162,7 +155,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response cookFood(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing CookFood"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -170,12 +163,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("cookFood", "cookFood Updated this value");
+        mp.put("CookFood", "cookFood Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
-
-        // TODO : Put data to documentDB, which will be used by subsequent nodes.
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("Yes",JSONLoader.stringify(mp))).build();
     }
@@ -186,7 +176,7 @@ public class OrderDeliveryWorkflowResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response notifyClient(String doc) throws Exception {
 
-        log.info(String.format("Validating order."));
+        log.info(String.format("Executing NotifyClient"));
 
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<HashMap<String,Object>> typeRef
@@ -194,10 +184,9 @@ public class OrderDeliveryWorkflowResources {
 
         HashMap<String,Object> mp = mapper.readValue(doc, typeRef);
 
-        mp.put("cookFood", "cookFood Updated this value");
+        mp.put("NotifyClient", "cookFood Updated this value");
 
-        // TODO : Process responsibility of this API
-        Thread.sleep(20000);
+        Thread.sleep(2000);
 
         return Response.ok(new ShepherdExecutionResponse("COMPLETED",JSONLoader.stringify(mp))).build();
     }

@@ -1,5 +1,6 @@
 package com.devsda.platform.shepherd.model;
 
+import com.devsda.platform.shepherd.constants.GraphType;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherd.constants.ResourceName;
 
@@ -7,14 +8,17 @@ import java.util.List;
 
 public class Node extends ShepherdRequest {
 
-    private Integer nodeId;
     private String name;
 
     private String objectId;
     private String executionId;
 
+    private GraphType graphType;
+
     private List<Connection> connections;
-    private List<Node> parentNodes;
+    private List<String> parentNodes;
+    private NodeConfiguration nodeConfiguration;
+
     private String owner;
     private NodeState nodeState;
 
@@ -55,20 +59,12 @@ public class Node extends ShepherdRequest {
         this.nodeState = nodeState;
     }
 
-    public List<Node> getParentNodes() {
+    public List<String> getParentNodes() {
         return parentNodes;
     }
 
-    public void setParentNodes(List<Node> parentNodes) {
+    public void setParentNodes(List<String> parentNodes) {
         this.parentNodes = parentNodes;
-    }
-
-    public Integer getNodeId() {
-        return nodeId;
-    }
-
-    public void setNodeId(Integer nodeId) {
-        this.nodeId = nodeId;
     }
 
     public String getObjectId() {
@@ -87,15 +83,33 @@ public class Node extends ShepherdRequest {
         this.executionId = executionId;
     }
 
+    public NodeConfiguration getNodeConfiguration() {
+        return nodeConfiguration;
+    }
+
+    public void setNodeConfiguration(NodeConfiguration nodeConfiguration) {
+        this.nodeConfiguration = nodeConfiguration;
+    }
+
+    public GraphType getGraphType() {
+        return graphType;
+    }
+
+    public void setGraphType(GraphType graphType) {
+        this.graphType = graphType;
+    }
+
+
     @Override
     public String toString() {
         return "Node{" +
-                "nodeId=" + nodeId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", objectId='" + objectId + '\'' +
                 ", executionId='" + executionId + '\'' +
+                ", graphType=" + graphType +
                 ", connections=" + connections +
                 ", parentNodes=" + parentNodes +
+                ", nodeConfiguration=" + nodeConfiguration +
                 ", owner='" + owner + '\'' +
                 ", nodeState=" + nodeState +
                 '}';

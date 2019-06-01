@@ -38,8 +38,8 @@ public class ShepherdClientTest {
     @Test
     public void retrieveEndpointTest() {
 
-        String clientName = "dominos11";
-        String endpointName = "validate_dev";
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
 
         ShepherdResponse shepherdResponse = shepherdClient.retrieveEndpoint(clientName, endpointName);
 
@@ -55,16 +55,6 @@ public class ShepherdClientTest {
 
         ShepherdResponse registerEndpointResponse = shepherdClient.registerEndpoint("dominos11", "validate_dev", graphFilePath, endpointFilePath);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
-    }
-
-
-    @Test
-    public void updateWorkflowDetailsTest() throws Exception {
-        String graphFilePath = "./src/test/resources/sample_workflow.xml";
-
-        ShepherdResponse registerEndpointResponse = shepherdClient.updateWorkflowDetails("dominos", "logistics_dev", graphFilePath);
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(registerEndpointResponse));
     }
@@ -95,6 +85,48 @@ public class ShepherdClientTest {
         ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, JSONLoader.stringify(initialPayload) );
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(executeEndpointResponse));
+    }
+
+    @Test
+    public void resumeExecutionTest() throws Exception {
+
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
+
+        String objectId = "2b2b98c98c7345a2ab8f55878afdf0e2";
+        String executionId = "055cc19de4ff4f54b27338bf76be1ec3";
+
+        ShepherdResponse resumeExecutionResponse = shepherdClient.resumeExecution(clientName, endpointName, objectId, executionId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(resumeExecutionResponse));
+    }
+
+    @Test
+    public void killExecutionTest() throws Exception {
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
+
+        String objectId = "2b2b98c98c7345a2ab8f55878afdf0e2";
+        String executionId = "055cc19de4ff4f54b27338bf76be1ec3";
+
+        ShepherdResponse resumeExecutionResponse = shepherdClient.killExecution(clientName, endpointName, objectId, executionId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(resumeExecutionResponse));
+    }
+
+    @Test
+    public void restartExecutionTest() throws Exception {
+
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
+
+        String objectId = "bcc6e0f0dd2949bab5f333cd2895a906";
+        String executionId = "6ff0602db00e4597a40b43ca17114ddf";
+
+        ShepherdResponse resumeExecutionResponse = shepherdClient.restartExecution(clientName, endpointName, objectId, executionId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(resumeExecutionResponse));
+
     }
 
     @Test

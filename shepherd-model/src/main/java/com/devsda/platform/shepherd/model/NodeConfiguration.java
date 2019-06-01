@@ -1,9 +1,11 @@
 package com.devsda.platform.shepherd.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class NodeConfiguration {
 
     @JsonProperty("name")
@@ -17,6 +19,9 @@ public class NodeConfiguration {
 
     @JsonProperty("headers")
     private Map<String, String> headers;
+
+    @JsonProperty("serverDetails")
+    private ServerDetails serverDetails;
 
     public String getName() {
         return name;
@@ -50,6 +55,14 @@ public class NodeConfiguration {
         this.headers = headers;
     }
 
+    public ServerDetails getServerDetails() {
+        return serverDetails;
+    }
+
+    public void setServerDetails(ServerDetails serverDetails) {
+        this.serverDetails = serverDetails;
+    }
+
     @Override
     public String toString() {
         return "NodeConfiguration{" +
@@ -57,6 +70,7 @@ public class NodeConfiguration {
                 ", URI='" + URI + '\'' +
                 ", httpMethod='" + httpMethod + '\'' +
                 ", headers=" + headers +
+                ", serverDetails=" + serverDetails +
                 '}';
     }
 }
