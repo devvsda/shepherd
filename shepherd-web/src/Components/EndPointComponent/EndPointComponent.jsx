@@ -7,7 +7,7 @@ import './tree.css';
 import Chart from '../../service/chart';
 // import myTreeData from '../../service/treedata.json';
 import { guid } from '../../utils/util';
-import { getVisualizationJSON, fetchExecutionState } from '../../service/service';
+import { getVisualizationJSON, fetchExecutionState, killExecution } from '../../service/service';
 
 import delete_first_user_data_attempt1 from '../../service/delete_first_user_data_attempt1.json';
 // import rms_execution1_attempt1 from '../../service/rms_execution1_attempt1.json';
@@ -32,6 +32,7 @@ class EndPointComponent extends Component {
     this.initExecutionAttemptMap = this.initExecutionAttemptMap.bind(this);
     this.updateExecutionAttemptMap = this.updateExecutionAttemptMap.bind(this);
     this.getCurrentChart = this.getCurrentChart.bind(this);
+    this.killExec = this.killExec.bind(this);
 
     this.state = {
       currentChart: '',
@@ -41,8 +42,16 @@ class EndPointComponent extends Component {
       executionFieldValue: '',
       executions: [],
       attemptsMap: {},
-      currentExecutionInstanceId: ''
+      currentExecutionId: '',
+      currentAttemptId: ''
     };
+  }
+
+  killExec(clientName, endpointName, executionId, attemptId) {
+    console.log(`${clientName} ${endpointName} ${executionId} ${attemptId} is killed`);
+    // killExecution(clientName, endpointName, executionId, attemptId, function(res) {
+    //   console.log(`${clientName} ${endpointName} ${executionId} ${attemptId} is killed`);
+    // });
   }
 
   getCurrentChart(executionId, attemptId, endpointName) {
@@ -95,7 +104,8 @@ class EndPointComponent extends Component {
             that.setState({
               mode: 'render_chart',
               currentChart: res,
-              currentExecutionInstanceId: executionId
+              currentExecutionId: objectId,
+              currentAttemptId: executionId
             });
           }, 1000);
         });
@@ -105,7 +115,7 @@ class EndPointComponent extends Component {
 
   restartExecution() {
     let attempt = { ...delete_first_user_data_attempt1 };
-    attempt.executionId = this.state.currentExecutionInstanceId;
+    attempt.executionId = this.state.currentExecutionId;
     attempt.attemptId = guid();
     attemptsAPI.add(attempt);
 
@@ -188,6 +198,8 @@ class EndPointComponent extends Component {
   render() {
     const endpointName = this.props.match.params.endpointName;
     const clientName = this.props.match.params.clientName;
+    const currentExecutionId = this.state.currentExecutionId;
+    const currentAttemptId = this.state.currentAttemptId;
 
     return (
       <Grid fluid={true}>
@@ -252,7 +264,13 @@ class EndPointComponent extends Component {
                   >
                     Restart
                   </Button>
-                  <Button bsStyle="danger" bsSize="small">
+                  <Button
+                    bsStyle="danger"
+                    bsSize="small"
+                    onClick={() => {
+                      this.killExec(clientName, endpointName, currentExecutionId, currentAttemptId);
+                    }}
+                  >
                     Kill
                   </Button>
                 </ButtonGroup>

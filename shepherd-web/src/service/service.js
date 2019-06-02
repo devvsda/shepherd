@@ -149,6 +149,36 @@ export const fetchExecutionState = (clientName, endpointName, objectId, executio
 };
 
 /**
+ * create endpoint
+ * @param graphDetails
+ * @param nodesDetails
+ * @returns {Promise<any>}
+ */
+export const killExecution = (clientName, endpointName, objectId, executionId, cb) => {
+  var xhttp = new XMLHttpRequest();
+  const req = {
+    clientName,
+    endpointName,
+    objectId,
+    executionId
+  };
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+      const res = {
+        endpointName,
+        clientName,
+        objectId,
+        executionId
+      };
+      if (typeof cb === 'function') cb(res);
+    }
+  };
+  xhttp.open('POST', createEndpointUrl, true);
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send(JSON.stringify(req));
+};
+
+/**
  * execute workflow
  * @param client_name
  * @param endponit_name
