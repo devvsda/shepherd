@@ -36,7 +36,7 @@ public class RabbitMQOperation {
                          virtualHost,  hostName,  portNumber);
                 log.info(String.format("created a new Connection Id %s on %s:%d/%s",consumerConnection.getId(),hostName,portNumber,virtualHost));
             }else{
-                log.warn("Connection is already established, No new connection created");
+                log.warn("Connection is already established, Using already present consumer connection");
                 log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",consumerConnection.getId(),consumerConnection.getAddress(),consumerConnection.getPort(),consumerConnection.getServerProperties().toString()));
             }
             connection = consumerConnection;
@@ -47,7 +47,7 @@ public class RabbitMQOperation {
                         virtualHost,  hostName,  portNumber);
                 log.info(String.format("created a new Connection Id %s on %s:%d/%s",publisherConnection.getId(),hostName,portNumber,virtualHost));
             }else{
-                log.warn("Connection is already established, No new connection created");
+                log.warn("Connection is already established, Using already present publisher connection");
                 log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",publisherConnection.getId(),publisherConnection.getAddress(),publisherConnection.getPort(),publisherConnection.getServerProperties().toString()));
             }
             connection = publisherConnection;
@@ -82,7 +82,7 @@ public class RabbitMQOperation {
                 consumerConnection = createConnection(connectionString);
                 log.info(String.format("created a new Connection Id %s on %s:%d", consumerConnection.getId(), consumerConnection.getAddress(), consumerConnection.getPort()));
             }else{
-                log.warn("Connection is already established, No new connection created");
+                log.warn("Consumer Connection is already established,  Using already present consumer connection");
                 log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",consumerConnection.getId(),consumerConnection.getAddress(),consumerConnection.getPort(),consumerConnection.getServerProperties().toString()));
             }
             connection = consumerConnection;
@@ -91,7 +91,7 @@ public class RabbitMQOperation {
                 publisherConnection = createConnection(connectionString);
                 log.info(String.format("created a new Connection Id %s on %s:%d", publisherConnection.getId(), publisherConnection.getAddress(), publisherConnection.getPort()));
             }else{
-                log.warn("Connection is already established, No new connection created");
+                log.warn("Publisher Connection is already established,  Using already present publisher connection");
                 log.info(String.format("one connection is already present with Id %s on %s:%d with properties %s",publisherConnection.getId(),publisherConnection.getAddress(),publisherConnection.getPort(),publisherConnection.getServerProperties().toString()));
             }
             connection = publisherConnection;
@@ -172,11 +172,11 @@ public class RabbitMQOperation {
                            log.debug(String.format("Message received : %s. delivery Tag : %s.", message, deliveryTag));
                         } catch (Exception e) {
                             log.error("Node-message processing failed.", e);
-                            // TODO : NACK
+                            channel.basicNack(deliveryTag,false,true);
                         }
 
                         if(!autoAck) {
-                            channel.basicAck(deliveryTag, true);
+                            channel.basicAck(deliveryTag, false);
                         }
                     }
                 });

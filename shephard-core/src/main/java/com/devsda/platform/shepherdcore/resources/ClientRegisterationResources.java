@@ -68,7 +68,7 @@ public class ClientRegisterationResources {
         try {
             log.info(String.format("Processing register endpoint for %s", registerEndpointRequest));
 
-            Integer endpointId = clientRegisterationService.registerEndpoint(registerEndpointRequest);
+            String endpointId = clientRegisterationService.registerEndpoint(registerEndpointRequest);
 
             log.info(String.format("Processing successfully completed for register client for %s", registerEndpointRequest));
 
