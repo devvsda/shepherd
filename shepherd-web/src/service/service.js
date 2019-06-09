@@ -15,18 +15,32 @@ const getExecutionsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/getAll
  * get all client
  * @returns {Promise<any>}
  */
-export const fetchClients = cb => {
+export const getAllClientsOld = cb => {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState === 4 && xhttp.status === 200) {
       const res = JSON.parse(xhttp.responseText);
-      if (typeof cb === 'function') cb(res.response_data.registered_clients);
+      // if (typeof cb === 'function') cb(res.response_data.registered_clients);
+      return new Promise((resolve, reject) => resolve(res.response_data.registered_clients));
     }
   };
 
   xhttp.open('GET', fetchClientsUrl, true);
   xhttp.setRequestHeader('Content-type', 'application/json');
   xhttp.send();
+};
+
+export const getAllClients = () => {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', fetchClientsUrl);
+    xhr.onload = () => {
+      const res = JSON.parse(xhr.responseText);
+      return resolve(res.response_data.registered_clients);
+    };
+    xhr.onerror = () => reject(xhr.statusText);
+    xhr.send();
+  });
 };
 
 /**
