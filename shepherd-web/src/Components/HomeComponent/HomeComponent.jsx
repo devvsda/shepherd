@@ -10,19 +10,20 @@ class HomeComponent extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.addClient = this.addClient.bind(this);
     this.state = {
-      value: '',
-      clients: [],
-      isLoading: true
+      value: ''
+      // clients: [],
+      // isLoading: true
     };
   }
 
   componentDidMount() {
-    clientsAPI.all(data => {
-      this.setState({
-        clients: data,
-        isLoading: false
-      });
-    });
+    this.props.fetchClients();
+    // clientsAPI.all(data => {
+    //   this.setState({
+    //     clients: data,
+    //     isLoading: false
+    //   });
+    // });
   }
 
   handleChange(e) {
@@ -32,22 +33,22 @@ class HomeComponent extends Component {
   addClient() {
     let clientName = this.state.value;
     const cb = client => {
-      this.setState({
-        clients: [...this.state.clients, client],
-        value: '',
-        isLoading: false
-      });
+      // this.setState({
+      //   clients: [...this.state.clients, client],
+      //   value: '',
+      //   isLoading: false
+      // });
     };
     if (this.state.value.trim() !== '') {
-      this.setState({
-        isLoading: true
-      });
+      // this.setState({
+      //   isLoading: true
+      // });
       clientsAPI.add(clientName, cb);
     }
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return <div className="loading-panel" />;
     }
     return (
@@ -62,7 +63,7 @@ class HomeComponent extends Component {
                 </span>
               </div>
               <ul>
-                {this.state.clients.map(obj => (
+                {this.props.clients.map(obj => (
                   <li key={obj.clientId}>
                     <Link to={`/client/${obj.clientName}`} className="clients">
                       {obj.clientName}

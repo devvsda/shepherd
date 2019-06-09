@@ -5,10 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './Components/App';
 import registerServiceWorker from './registerServiceWorker';
+import configureStore from './store/configureStore';
+import { Provider } from 'react-redux';
 
-ReactDOM.render((
+const store = configureStore();
+
+ReactDOM.render(
+  <Provider store={store}>
     <BrowserRouter>
-        <App />
+      <App />
     </BrowserRouter>
-), document.getElementById('root'));
+  </Provider>,
+  document.getElementById('root')
+);
 registerServiceWorker();
