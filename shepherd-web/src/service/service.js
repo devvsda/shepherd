@@ -15,32 +15,18 @@ const getExecutionsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/getAll
  * get all client
  * @returns {Promise<any>}
  */
-export const getAllClientsOld = cb => {
+export const fetchClients = cb => {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState === 4 && xhttp.status === 200) {
       const res = JSON.parse(xhttp.responseText);
-      // if (typeof cb === 'function') cb(res.response_data.registered_clients);
-      return new Promise((resolve, reject) => resolve(res.response_data.registered_clients));
+      if (typeof cb === 'function') cb(res.response_data.registered_clients);
     }
   };
 
   xhttp.open('GET', fetchClientsUrl, true);
   xhttp.setRequestHeader('Content-type', 'application/json');
   xhttp.send();
-};
-
-export const getAllClients = () => {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', fetchClientsUrl);
-    xhr.onload = () => {
-      const res = JSON.parse(xhr.responseText);
-      return resolve(res.response_data.registered_clients);
-    };
-    xhr.onerror = () => reject(xhr.statusText);
-    xhr.send();
-  });
 };
 
 /**
@@ -160,36 +146,6 @@ export const fetchExecutionState = (clientName, endpointName, objectId, executio
   xhttp.open('GET', url, true);
   xhttp.setRequestHeader('Content-type', 'application/json');
   xhttp.send();
-};
-
-/**
- * create endpoint
- * @param graphDetails
- * @param nodesDetails
- * @returns {Promise<any>}
- */
-export const killExecution = (clientName, endpointName, objectId, executionId, cb) => {
-  var xhttp = new XMLHttpRequest();
-  const req = {
-    clientName,
-    endpointName,
-    objectId,
-    executionId
-  };
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState === 4 && xhttp.status === 200) {
-      const res = {
-        endpointName,
-        clientName,
-        objectId,
-        executionId
-      };
-      if (typeof cb === 'function') cb(res);
-    }
-  };
-  xhttp.open('POST', createEndpointUrl, true);
-  xhttp.setRequestHeader('Content-type', 'application/json');
-  xhttp.send(JSON.stringify(req));
 };
 
 /**

@@ -1,3 +1,0 @@
-export const FETCH_CLIENTS = 'FETCH_CLIENTS';
-export const RECEIVE_CLIENTS = 'RECEIVE_CLIENTS';
-export const ADD_CLIENT = 'ADD_CLIENT';

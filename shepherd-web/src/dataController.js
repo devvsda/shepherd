@@ -5,7 +5,7 @@ import attempt1 from './service/attempt1.json';
 
 import {
   addClient,
-  getAllClients,
+  fetchClients,
   fetchEndPoints,
   createEndPoint,
   updateEndPoint,
@@ -15,7 +15,7 @@ import {
 
 export const clientsAPI = {
   all: function(cb) {
-    // getAllClients(cb);
+    fetchClients(cb);
   },
   get: function(id) {
     return {};
