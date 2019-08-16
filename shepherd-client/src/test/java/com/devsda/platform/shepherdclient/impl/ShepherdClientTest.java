@@ -90,11 +90,11 @@ public class ShepherdClientTest {
     @Test
     public void resumeExecutionTest() throws Exception {
 
-        String clientName = "creative_universe";
-        String endpointName = "paiting_orders_dev";
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
 
-        String objectId = "12911010afc2404e88b7d393d600f2ce";
-        String executionId = "20065b729c694be88169a71129d3819f";
+        String objectId = "2b2b98c98c7345a2ab8f55878afdf0e2";
+        String executionId = "055cc19de4ff4f54b27338bf76be1ec3";
 
         ShepherdResponse resumeExecutionResponse = shepherdClient.resumeExecution(clientName, endpointName, objectId, executionId);
         ObjectMapper objectMapper = new ObjectMapper();
