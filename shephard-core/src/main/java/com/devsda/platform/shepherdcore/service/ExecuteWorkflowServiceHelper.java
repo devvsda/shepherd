@@ -62,7 +62,6 @@ public class ExecuteWorkflowServiceHelper {
 
         // TODO : Need to push all the rows to Redis.
         Map<String, Node> nodeNameToNodeMapping = GraphUtil.getNodeNameToNodePOJOMapping(executeWorkflowRequest.getObjectId(), executeWorkflowRequest.getExecutionId(), graph, graphConfiguration, ResourceName.EXECUTE_WORKFLOW);
-
         Node rootNode = GraphUtil.getRootNode(nodeNameToNodeMapping);
 
         try {
