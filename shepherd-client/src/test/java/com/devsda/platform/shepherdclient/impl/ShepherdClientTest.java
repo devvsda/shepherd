@@ -103,15 +103,41 @@ public class ShepherdClientTest {
 
     @Test
     public void killExecutionTest() throws Exception {
-        String clientName = "bcci";
-        String endpointName = "selection_dev";
+        String clientName = "swiggy";
+        String endpointName = "order_management_dev";
 
-        String objectId = "2b2b98c98c7345a2ab8f55878afdf0e2";
-        String executionId = "055cc19de4ff4f54b27338bf76be1ec3";
+        String objectId = "c9af4c7e0203445d80ed766229d53a8e";
+        String executionId = "05fcf0aa0b2f4b24942b993cbfc2badb";
 
         ShepherdResponse resumeExecutionResponse = shepherdClient.killExecution(clientName, endpointName, objectId, executionId);
         ObjectMapper objectMapper = new ObjectMapper();
         System.out.println(objectMapper.writeValueAsString(resumeExecutionResponse));
+    }
+
+
+    @Test
+    public void executeAndKillTest() throws Exception {
+
+        String clientName = "bcci";
+        String endpointName = "selection_dev";
+
+        Map<String, Object> initialPayload = new HashMap<String, Object>() {{
+            put("size", "medium");
+            put("base", "cheese_crust");
+            put("name", "farm_hosue");
+        }};
+
+        ShepherdResponse executeEndpointResponse = shepherdClient.executeEndpoint(clientName, endpointName, JSONLoader.stringify(initialPayload) );
+
+        Map<String, Object> stringObjectMap = executeEndpointResponse.getResponseData();
+
+        String objectId = (String) stringObjectMap.get("objectId");
+        String executionId = (String) stringObjectMap.get("executionId");
+
+        System.out.println(objectId);
+        System.out.println(executionId);
+
+        ShepherdResponse resumeExecutionResponse = shepherdClient.killExecution(clientName, endpointName, objectId, executionId);
     }
 
     @Test
