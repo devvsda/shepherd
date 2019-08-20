@@ -28,8 +28,8 @@ datasource :
   dbname: shepherd
   collectionname: execution_details
 
-rabbitMQserverUrl: amqp://admin:superpassword@3.87.203.156:5672/vhost
-readyToExecuteQueue: first_queue
+rabbitMQserverUrl: amqp://admin:superpassword@3.86.138.81:5672/vhost
+readyToExecuteQueue: first-queue
 
 server:
   rootPath: /shephard-core

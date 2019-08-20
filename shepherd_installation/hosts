@@ -1,6 +1,6 @@
 [all:vars]
 
-ansible_ssh_private_key_file=/Users/hijhamb/secrets/devsda_1.pem
+ansible_ssh_private_key_file=/Users/hijhamb/secrets/hitesh_jhamb.pem
 
 [instances]
-3.95.163.243 ansible_user=admin ansible_python_interpreter="/usr/bin/env python3"
+3.86.138.81 ansible_user=admin ansible_python_interpreter="/usr/bin/env python3"
