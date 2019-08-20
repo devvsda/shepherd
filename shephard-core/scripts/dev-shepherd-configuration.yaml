@@ -9,9 +9,9 @@ database:
   # the username
   user: shepherd
   # the password
-  password: shepherd
+  password: Li8iUEwD4y6UNpNNtt8s
   # the JDBC URL
-  url: jdbc:mysql://shepherd.cpdwhawnvczl.us-east-1.rds.amazonaws.com:3306/shepherd_master
+  url: jdbc:mysql://shepherd.cquds1gz89vo.us-east-1.rds.amazonaws.com:3306/shepherd_master
 
   initialSize: 1
 
