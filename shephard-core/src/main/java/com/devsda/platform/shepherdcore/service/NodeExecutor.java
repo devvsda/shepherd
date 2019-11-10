@@ -133,7 +133,7 @@ public class NodeExecutor {
                 if(connection.getEdgeName().equalsIgnoreCase(edgeName)) {
                     Channel channel = rabbitMQOperation.createChannel(publisherConnection);
                     rabbitMQOperation.decalareExchangeAndBindQueue(channel,
-                            "shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                            "shepherd_exchange","first_queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
                     rabbitMQOperation.publishMessage(channel,
                             "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                     return;
@@ -147,7 +147,7 @@ public class NodeExecutor {
 
                 if(isChildNodeReadyToExecute) {
                     Channel channel = rabbitMQOperation.createChannel(publisherConnection);
-                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                    rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first_queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
                     rabbitMQOperation.publishMessage(channel, "shepherd_exchange", "routingKey", JSONLoader.stringify(connection.getNode()));
                 } else {
                     // TODO : Push to secondary Queue.

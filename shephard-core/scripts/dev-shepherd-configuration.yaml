@@ -29,7 +29,7 @@ datasource :
   collectionname: execution_details
 
 rabbitMQserverUrl: amqp://admin:superpassword@3.86.138.81:5672/vhost
-readyToExecuteQueue: first-queue
+readyToExecuteQueue: first_queue
 
 server:
   rootPath: /shephard-core

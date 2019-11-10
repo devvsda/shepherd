@@ -65,7 +65,7 @@ public class RabbitMQOperationTest {
                 Connection publisherConnection = rabbitMQOperation.createQueueConnection(connectionString,ConnectionType.publisher);
                 Channel channel = rabbitMQOperation.createChannel(publisherConnection);
 
-                rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first-queue","routingKey",BuiltinExchangeType.DIRECT,true,6000);
+                rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange","first_queue","routingKey",BuiltinExchangeType.DIRECT,true,6000);
 
                 // this we need to add outside of the rabbitmq file scope
                 boolean autoAck = false;

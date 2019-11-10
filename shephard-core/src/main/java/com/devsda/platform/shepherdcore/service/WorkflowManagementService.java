@@ -104,7 +104,7 @@ public class WorkflowManagementService {
 
                 Channel channel = rabbitMQOperation.createChannel(publisherConnection);
                 rabbitMQOperation.decalareExchangeAndBindQueue(channel,"shepherd_exchange",
-                        "first-queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
+                        "first_queue","routingKey", BuiltinExchangeType.DIRECT,true,6000);
                 rabbitMQOperation.publishMessage(channel, "shepherd_exchange",
                         "routingKey", JSONLoader.stringify(readyToExecuteNodeBO));
 
