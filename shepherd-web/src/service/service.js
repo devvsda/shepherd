@@ -1,15 +1,15 @@
 // IMPORT DATA FROM STATIC JSON FILE
 
 // COMPONENT
-const registerClientUrl = 'http://3.95.163.243:8080/shephard-core/register/client';
-const fetchClientsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/clients';
-const fetchEndpointsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/endpoints';
-const createEndpointUrl = 'http://3.95.163.243:8080/shephard-core/register/endpoint';
-const getGraphJSON = 'http://3.95.163.243:8080/shephard-core/retrieve/graphXML';
-const updateEndPointUrl = 'http://3.95.163.243:8080/shephard-core/update/endpoint/endpointDetails';
-const executeEndPointUrl = 'http://3.95.163.243:8080/shephard-core/execute/endpoint';
-const getExecutionStateUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/executionState';
-const getExecutionsUrl = 'http://3.95.163.243:8080/shephard-core/retrieve/getAllExecutions';
+const registerClientUrl = 'http://3.86.138.81:8080/shephard-core/register/client';
+const fetchClientsUrl = 'http://3.86.138.81:8080/shephard-core/retrieve/clients';
+const fetchEndpointsUrl = 'http://3.86.138.81:8080/shephard-core/retrieve/endpoints';
+const createEndpointUrl = 'http://3.86.138.81:8080/shephard-core/register/endpoint';
+const getGraphJSON = 'http://3.86.138.81:8080/shephard-core/retrieve/graphXML';
+const updateEndPointUrl = 'http://3.86.138.81:8080/shephard-core/update/endpoint/endpointDetails';
+const executeEndPointUrl = 'http://3.86.138.81:8080/shephard-core/execute/endpoint';
+const getExecutionStateUrl = 'http://3.86.138.81:8080/shephard-core/retrieve/executionState';
+const getExecutionsUrl = 'http://3.86.138.81:8080/shephard-core/retrieve/getAllExecutions';
 
 /**
  * get all client
