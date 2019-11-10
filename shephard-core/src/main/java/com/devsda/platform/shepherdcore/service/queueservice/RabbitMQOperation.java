@@ -115,7 +115,6 @@ public class RabbitMQOperation {
     public void decalareExchangeAndBindQueue(Channel channel ,String exchangeName, String queueName, String routingKey, BuiltinExchangeType exchangeType,Boolean  isDurable, long messageExpirationTime)
             throws IOException {
         AMQP.Exchange.DeclareOk exchangeDeclareResponse =channel.exchangeDeclare(exchangeName, exchangeType, isDurable);
-        Map<String, Object> args = new HashMap<String, Object>();
         channel.queueDeclare(queueName, isDurable, false, false, null);
         channel.queueBind(queueName, exchangeName, routingKey);
         log.info(String.format("exchange %s is declared response %s with queue %s with RoutingKey %s", exchangeName, exchangeDeclareResponse.toString(),queueName, routingKey));
