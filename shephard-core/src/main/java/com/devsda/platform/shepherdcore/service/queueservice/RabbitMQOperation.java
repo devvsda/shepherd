@@ -116,8 +116,7 @@ public class RabbitMQOperation {
             throws IOException {
         AMQP.Exchange.DeclareOk exchangeDeclareResponse =channel.exchangeDeclare(exchangeName, exchangeType, isDurable);
         Map<String, Object> args = new HashMap<String, Object>();
-        args.put("x-message-ttl", messageExpirationTime);
-        channel.queueDeclare(queueName, isDurable, false, false, args);
+        channel.queueDeclare(queueName, isDurable, false, false, null);
         channel.queueBind(queueName, exchangeName, routingKey);
         log.info(String.format("exchange %s is declared response %s with queue %s with RoutingKey %s", exchangeName, exchangeDeclareResponse.toString(),queueName, routingKey));
     }
@@ -136,9 +135,15 @@ public class RabbitMQOperation {
             return;
         }
 
+        AMQP.BasicProperties properties = new AMQP.BasicProperties.Builder()
+                .expiration("60000")
+                .deliveryMode(2)
+                .contentType("text/plain")
+                .build();
+
         byte[] messageBodyBytes = message.getBytes();
         channel.basicPublish(exchangeName, routingKey,
-                MessageProperties.PERSISTENT_TEXT_PLAIN,
+                properties,
                 messageBodyBytes);
     }
 
