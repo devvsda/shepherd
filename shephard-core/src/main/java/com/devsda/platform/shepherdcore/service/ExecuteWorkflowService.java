@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.FutureTask;
 
 public class ExecuteWorkflowService {
 
@@ -46,14 +45,15 @@ public class ExecuteWorkflowService {
 
         // validate.
         // Get ClientId , and EndpointId.
-        ClientDetails clientDetails = registerationDao.getClientDetails(executeWorkflowRequest.getClientName());
+        ClientDetails clientDetails = executeWorkflowServiceHelper.getClientDetailsAndSave(executeWorkflowRequest.getClientName());
 
         if (clientDetails == null) {
             throw new ClientInvalidRequestException(String.format("ClientName : %s does not exists.", executeWorkflowRequest.getClientName()));
         }
 
         // Get endpoint details.
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), executeWorkflowRequest.getEndpointName());
+        // get Endpoint details and save it in Redis
+        EndpointDetails endpointDetails = executeWorkflowServiceHelper.getEndpointDetailsAndSave(clientDetails.getClientId(), executeWorkflowRequest.getEndpointName());
 
         if (endpointDetails == null) {
             log.error(String.format("Endpoint : %s is not present for client : %s", endpointDetails.getEndpointName(), endpointDetails.getClientName()));
@@ -85,9 +85,8 @@ public class ExecuteWorkflowService {
 
         log.debug(String.format("Graph : %s. GraphConfiguration : %s", graph, graphConfiguration));
 
-        // TODO : 1. Need to push global details from json file to Redis.
-        // TODO : 2. Need to push Node details to Redis.
-        // TODO : 3. Push root node message to RabbitMQ.
+//        // TODO : 2. Need to push Node details to Redis.
+//        // TODO : 3. Push root node message to RabbitMQ.
 
         executeWorkflowServiceHelper.triggerExecution(executeWorkflowRequest, graph, graphConfiguration);
 

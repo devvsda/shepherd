@@ -5,9 +5,12 @@ import com.devsda.platform.shepherd.constants.WorkflowExecutionState;
 import com.devsda.platform.shepherd.model.*;
 import com.devsda.platform.shepherd.util.DateUtil;
 import com.devsda.platform.shepherdcore.constants.ShephardConstants;
+import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.constants.NodeState;
 import com.devsda.platform.shepherdcore.loader.JSONLoader;
+import com.devsda.platform.shepherdcore.service.cacheservice.RedisCache;
+import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
 import com.devsda.platform.shepherdcore.service.queueservice.RabbitMQOperation;
 import com.devsda.platform.shepherdcore.util.GraphUtil;
 import com.google.inject.Inject;
@@ -18,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Named;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -35,6 +39,15 @@ public class ExecuteWorkflowServiceHelper {
 
     @Inject
     private RabbitMQOperation rabbitMQOperation;
+
+    @Inject
+    private RedisCache redisCache;
+
+    @Inject
+    private ExecutionDocumentService executionDocumentService;
+
+    @Inject
+    private RegisterationDao registerationDao;
 
     public Boolean isNodeReadyToExecute(Node node) {
 
@@ -80,5 +93,48 @@ public class ExecuteWorkflowServiceHelper {
                     executeWorkflowRequest.getWorkflowExecutionState(), executeWorkflowRequest.getErrorMessage());
 
         }
+    }
+
+    /**
+     *
+     * 1. Check in cache if present then return.
+     * 2. Check in DB if present first save it in cache then return
+     * @param clientName
+     * @return EndpointDetails
+     */
+    public ClientDetails getClientDetailsAndSave(String clientName) {
+        String cacheKey = clientName;
+        String clientDetailsInCache = redisCache.get(cacheKey);
+        ClientDetails clientDetails= null;
+        try {
+            if(clientDetailsInCache == null){
+                log.error(String.format("client details not found in the cache, trying to get it from db"));
+                clientDetails = registerationDao.getClientDetails(clientName);
+
+                redisCache.put(cacheKey, JSONLoader.stringify(clientDetails));
+
+            }else{
+                clientDetails = JSONLoader.loadFromStringifiedObject(clientDetailsInCache,ClientDetails.class);
+            }
+
+        }catch(IOException ex){
+            log.error("can not serialize/desieralize Client details");
+        }
+        return clientDetails;
+    }
+
+    public EndpointDetails getEndpointDetailsAndSave(Integer clientId, String endPointName) throws IOException {
+
+        String cacheKey = Integer.toString(clientId)+ endPointName;
+        String endPointDetailsInCache = redisCache.get(cacheKey);
+
+        if(endPointDetailsInCache == null){
+            log.error(String.format("endpoints details not found in the cache, trying to get it from db"));
+            EndpointDetails endPointDetails = executionDocumentService.fetchEndPointDetails(clientId, endPointName);
+
+            redisCache.put(cacheKey, JSONLoader.stringify(endPointDetails));
+            return endPointDetails;
+        }
+        return  JSONLoader.loadFromStringifiedObject(endPointDetailsInCache, EndpointDetails.class);
     }
 }

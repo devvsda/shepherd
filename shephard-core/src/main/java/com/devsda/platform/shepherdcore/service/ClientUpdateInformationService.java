@@ -6,14 +6,19 @@ import com.devsda.platform.shepherd.model.EndpointDetails;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.util.DateUtil;
+import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
 import com.google.inject.Inject;
+
+import java.io.IOException;
 
 public class ClientUpdateInformationService {
 
     @Inject
     private RegisterationDao registerationDao;
 
-    public void updateWorkflowDetails(EndpointRequest endpointRequest) {
+    @Inject
+    private ExecutionDocumentService executionDocumentService;
+    public void updateWorkflowDetails(EndpointRequest endpointRequest) throws IOException {
 
         if (endpointRequest.getDAGGraph() == null) {
             throw new ClientInvalidRequestException("DAG field should not be null/empty.");
@@ -34,11 +39,12 @@ public class ClientUpdateInformationService {
 
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
         endpointDetails.setDAGGraph(endpointRequest.getDAGGraph());
-        registerationDao.updateWorkflowDetails(endpointDetails);
 
-    }
+        executionDocumentService.updateEndPointDetails(endpointDetails);
 
-    public void updateEndpointDetails(EndpointRequest endpointRequest) {
+}
+
+    public void updateEndpointDetails(EndpointRequest endpointRequest) throws IOException {
 
         if (endpointRequest.getEndpointDetails() == null) {
             throw new ClientInvalidRequestException("Endpoint Details field should not be null/empty.");
@@ -50,7 +56,7 @@ public class ClientUpdateInformationService {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), endpointRequest.getEndpointName());
+        EndpointDetails endpointDetails = executionDocumentService.fetchEndPointDetails(clientDetails.getClientId(), endpointRequest.getEndpointName());
 
         if (endpointDetails == null) {
             throw new ClientInvalidRequestException(String.format("Client : %s has not endpoint with name : %s",
@@ -60,7 +66,6 @@ public class ClientUpdateInformationService {
         endpointDetails.setUpdatedAt(DateUtil.currentDate());
         endpointDetails.setEndpointDetails(endpointRequest.getEndpointDetails());
         endpointDetails.setDAGGraph(endpointRequest.getDAGGraph());
-        registerationDao.updateEndpointDetails(endpointDetails);
-
+        executionDocumentService.updateEndPointDetails(endpointDetails);
     }
 }

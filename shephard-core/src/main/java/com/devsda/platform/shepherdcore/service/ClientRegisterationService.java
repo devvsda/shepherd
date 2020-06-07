@@ -8,9 +8,13 @@ import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.model.EndpointRequest;
 import com.devsda.platform.shepherd.model.RegisterClientRequest;
 import com.devsda.platform.shepherd.util.DateUtil;
+import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
 import com.google.inject.Inject;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 
 public class ClientRegisterationService {
@@ -19,6 +23,10 @@ public class ClientRegisterationService {
 
     @Inject
     public RegisterationDao registerationDao;
+
+
+    @Inject
+    public ExecutionDocumentService executionDocumentService;
 
     public Integer registerClient(RegisterClientRequest registerClientRequest) {
 
@@ -39,7 +47,7 @@ public class ClientRegisterationService {
         return clientId;
     }
 
-    public Integer registerEndpoint(EndpointRequest registerEndpointRequest) {
+    public String registerEndpoint(EndpointRequest registerEndpointRequest) throws IOException {
 
 
         ClientDetails clientDetails = registerationDao.getClientDetails(registerEndpointRequest.getClientName());
@@ -48,16 +56,17 @@ public class ClientRegisterationService {
             throw new ClientInvalidRequestException("Invalid client name");
         }
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientDetails.getClientId(), registerEndpointRequest.getEndpointName());
 
-        Integer endpointId = null;
+        EndpointDetails endpointDetails = executionDocumentService.fetchEndPointDetails(clientDetails.getClientId(), registerEndpointRequest.getEndpointName());
+
+        String endpointId = null;
 
         if (endpointDetails == null) {
 
             endpointDetails = convertToEndpointDetails(registerEndpointRequest);
             endpointDetails.setClientId(clientDetails.getClientId());
 
-            endpointId = registerationDao.registerEndpoint(endpointDetails);
+            endpointId = executionDocumentService.registerEndPointDetails(endpointDetails).toString();
 
         } else {
             throw new ClientInvalidRequestException(String.format("Endpoint with name : %s already exists for client %s",

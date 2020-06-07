@@ -3,6 +3,7 @@ package com.devsda.platform.shepherdcore.service;
 import com.devsda.platform.shepherdcore.dao.RegisterationDao;
 import com.devsda.platform.shepherdcore.dao.WorkflowOperationDao;
 import com.devsda.platform.shepherd.model.*;
+import com.devsda.platform.shepherdcore.service.documentservice.ExecutionDocumentService;
 import com.devsda.platform.shepherdcore.util.RequestValidator;
 import com.devsda.platform.shepherd.exception.ClientInvalidRequestException;
 import com.devsda.platform.shepherd.graphgenerator.DAGGenerator;
@@ -10,6 +11,7 @@ import com.google.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ClientDataRetrievelService {
@@ -25,6 +27,10 @@ public class ClientDataRetrievelService {
     @Inject
     private WorkflowOperationDao workflowOperationDao;
 
+
+    @Inject
+    private ExecutionDocumentService executionDocumentService;
+
     public List<ClientDetails> getAllClients() {
 
         return registerationDao.getAllClientDetails();
@@ -36,7 +42,7 @@ public class ClientDataRetrievelService {
     }
 
 
-    public List<EndpointDetails> getAllEndpoints(String clientName) {
+    public List<EndpointDetails> getAllEndpoints(String clientName) throws IOException {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(clientName);
 
@@ -47,12 +53,12 @@ public class ClientDataRetrievelService {
         int clientId = clientDetails.getClientId();
 
 
-        List<EndpointDetails> endpointDetails = registerationDao.getAllEndpoints(clientId);
+        List<EndpointDetails> endpointDetails = executionDocumentService.fetchAllEndPointDetails(clientId);
 
         return endpointDetails;
     }
 
-    public EndpointDetails getEndpointDetails(String clientName, String endpointName) {
+    public EndpointDetails getEndpointDetails(String clientName, String endpointName) throws IOException {
 
         ClientDetails clientDetails = registerationDao.getClientDetails(clientName);
 
@@ -62,7 +68,7 @@ public class ClientDataRetrievelService {
 
         int clientId = clientDetails.getClientId();
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointName);
+        EndpointDetails endpointDetails = executionDocumentService.fetchEndPointDetails(clientId, endpointName);
 
         return endpointDetails;
     }
@@ -78,7 +84,7 @@ public class ClientDataRetrievelService {
         int clientId = clientDetails.getClientId();
 
 
-        EndpointDetails endpointDetails = registerationDao.getEndpointDetails(clientId, endpointName);
+        EndpointDetails endpointDetails = executionDocumentService.fetchEndPointDetails(clientId, endpointName);
 
         String stringifyGRaph = endpointDetails.getDAGGraph();
 

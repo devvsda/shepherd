@@ -8,11 +8,22 @@ public class ExecutionDetailsMetaData implements Serializable {
     private String executionId;
     private String objectId;
 
+    public String getInitialPayload() {
+        return initialPayload;
+    }
+
+    public void setInitialPayload(String initialPayload) {
+        this.initialPayload = initialPayload;
+    }
+
+    private String initialPayload;
+
     @Override
     public String toString() {
         return "ExecutionDetailsMetaData{" +
                 "executionId='" + executionId + '\'' +
                 ", objectId='" + objectId + '\'' +
+                ", initialPayload='" + initialPayload + '\'' +
                 ", clientId=" + clientId +
                 ", executionStartDateTime=" + executionStartDateTime +
                 ", numberOfUpdatesAfterInsertion=" + numberOfUpdatesAfterInsertion +

@@ -8,6 +8,10 @@ public class ExecutionDocumentConstants {
         public static final String OBJECT_ID = "objectId";
         public static final String LAST_MODIFIED_DATE = "lastModifiedDate";
         public static final String UPDATE_COUNT = "numberOfUpdatesAfterInsertion";
+        public static final String CLIENT_ID = "clientId";
+        public static final String ENDPOINT_NAME = "endPointName";
+        public static final String GRAPH_DETAILS = "graphDetails";
+        public static final String ENDPOINT_DETAILS = "endPointDetails";
     }
 
     public static final class Operations{
